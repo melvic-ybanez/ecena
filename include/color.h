@@ -6,8 +6,8 @@
 #define RAYTRACER_COLOR_H
 
 #include <fstream>
-#include "vec3.h"
+#include "tuple.h"
 
-void write_color(std::ofstream &out, color pixel_color);
+void write_color(std::ofstream &out, tuples::Color pixel_color);
 
 #endif //RAYTRACER_COLOR_H

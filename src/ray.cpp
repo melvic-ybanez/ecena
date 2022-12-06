@@ -6,12 +6,12 @@
 
 Ray::Ray() = default;
 
-Ray::Ray(const tuples::Point &origin, const tuples::Vec &direction) : orig(origin), dir(direction) {}
+Ray::Ray(const rt::Point &origin, const rt::Vec &direction) : orig(origin), dir(direction) {}
 
-tuples::Point Ray::origin() const { return orig; }
+rt::Point Ray::origin() const { return orig; }
 
-tuples::Vec Ray::direction() const { return dir; }
+rt::Vec Ray::direction() const { return dir; }
 
-tuples::Point Ray::at(double t) const {
+rt::Point Ray::at(double t) const {
     return orig + t * dir;
 }

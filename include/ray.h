@@ -9,16 +9,16 @@
 
 class Ray {
 public:
-    tuples::Point orig;
-    tuples::Vec dir;
+    rt::Point orig;
+    rt::Vec dir;
 
     Ray();
-    Ray(const tuples::Point& origin, const tuples::Vec &direction);
+    Ray(const rt::Point& origin, const rt::Vec &direction);
 
-    tuples::Point origin() const;
-    tuples::Vec direction() const;
+    rt::Point origin() const;
+    rt::Vec direction() const;
 
-    tuples::Point at(double t) const;
+    rt::Point at(double t) const;
 };
 
 #endif //RAYTRACER_RAY_H

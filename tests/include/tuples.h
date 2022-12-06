@@ -6,7 +6,11 @@
 #define RAYTRACER_TUPLES_H
 
 namespace tests {
-    void tuples();
+    namespace tuples {
+        void all();
+        void identities();
+        void operations();
+    }
 }
 
 #endif //RAYTRACER_TUPLES_H

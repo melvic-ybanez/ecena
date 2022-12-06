@@ -8,16 +8,16 @@
 #include <cmath>
 #include <iostream>
 
-namespace tuples {
+namespace rt {
     using real = double;
 
-    template<int w>
+    template<int W>
     class Tuple {
         double elems[4];
     public:
-        Tuple() : elems{0, 0, 0, w} {}
+        Tuple() : elems{0, 0, 0, W} {}
 
-        Tuple(real x, real y, real z) : elems{x, y, z, w} {}
+        Tuple(real x, real y, real z) : elems{x, y, z, W} {}
 
         real x() const {
             return elems[0];
@@ -31,8 +31,12 @@ namespace tuples {
             return elems[2];
         }
 
-        Tuple<w> operator-() const {
-            return {-x(), -y(), -z(), w};
+        real w() const {
+            return W;
+        }
+
+        Tuple<W> operator-() const {
+            return {-x(), -y(), -z(), W};
         }
 
         real operator[](int i) const {
@@ -51,22 +55,23 @@ namespace tuples {
                     && (elems[3] == other.elems[3]);
         }
 
-        Tuple<w> &operator+=(const Tuple<w> &v) {
+        Tuple<W> &operator+=(const Tuple<W> &v) {
             elems[0] += v.x();
             elems[1] += v.y();
             elems[2] += v.z();
-            elems[3] += v.w();
+            elems[3] += v.type();
             return *this;
         }
 
-        Tuple<w> &operator*=(const real t) {
+        Tuple<W> &operator*=(const real t) {
             elems[0] *= t;
             elems[1] *= t;
             elems[2] *= t;
+            elems[3] *= t;
             return *this;
         }
 
-        Tuple<w> &operator/=(const real t) {
+        Tuple<W> &operator/=(const real t) {
             return *this *= 1 / t;
         }
 
@@ -78,7 +83,7 @@ namespace tuples {
             return x() * x() + y() * y() + z() * z();
         }
 
-        Tuple<w> unit() {
+        Tuple<W> unit() {
             return this / length();
         }
     };
@@ -87,13 +92,21 @@ namespace tuples {
     using Color = Tuple<0>;
     using Vec = Tuple<0>;
 
+    Point *point(real x, real y, real z) {
+        return new Tuple<1>(x, y, z);
+    }
+
+    Vec *vec(real x, real y, real z) {
+        return new Tuple<0>(x, y, z);
+    }
+
     template<int w>
     std::ostream &operator<<(std::ostream &out, const Tuple<w> &v) {
         return out << v.x() << ' ' << v.y() << ' ' << v.z();
     }
 
     template<int w0, int w1>
-    Tuple<w0> binop(const Tuple<w0> &u, const Tuple<w1> &v, std::function<double(double, double)> f) {
+    Tuple<w0> binop(const Tuple<w0> &u, const Tuple<w1> &v, std::function<double(double, double)> &&f) {
         return {f(u.x(), v.x()), f(u.y(), v.y()), f(u.z(), v.z())};
     }
 

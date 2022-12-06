@@ -8,6 +8,6 @@
 #include <fstream>
 #include "tuple.h"
 
-void write_color(std::ofstream &out, tuples::Color pixel_color);
+void write_color(std::ofstream &out, rt::Color pixel_color);
 
 #endif //RAYTRACER_COLOR_H

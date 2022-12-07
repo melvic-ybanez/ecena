@@ -9,51 +9,54 @@
 namespace tests::tuples {
     void all() {
         reset_counts();
-        tuples::identities();
-        tuples::operations();
+        set("Tuples", []() {
+            tuples::identities();
+            tuples::operations();
+        });
     }
 
     void identities() {
-        scenario("A tuple with W = 1.0 is a point", []() {
-            auto point = rt::point(4.3, -4.2, 3.1);
-            return point.w() == 1;
+        assert_equals("Default point", rt::Point(), rt::Tuple(0, 0, 0, 1));
+        assert_equals("Default vector", rt::Vec(), rt::Tuple(0, 0, 0, 0));
+        assert_with("A tuple with W = 1.0 is a point", [](const std::string &msg) {
+            auto point = rt::Point(4.3, -4.2, 3.1);
+            assert_equals(msg, point.w(), 1);
         });
-
-        scenario("A tuple with W = 0.0 is a vector", []() {
-            auto vector = rt::vec(4.3, -4.2, 3.1);
-            return vector.w() == 0;
+        assert_with("A tuple with W = 0.0 is a vector", [](const std::string &msg) {
+            auto vector = rt::Vec(4.3, -4.2, 3.1);
+            assert_equals(msg, vector.w(), 0);
         });
     }
 
     void operations() {
-        scenario("Adding two tuples", []() {
-            rt::Tuple<1> t1 = {3, -2, 5};
-            rt::Tuple<0> t2 = {-2, 3, 1};
-            return t1 + t2 == rt::Tuple<1>(1, 1, 6);
+        assert_with("Adding two tuples", [](const std::string &msg) {
+            rt::Point t1 = {3, -2, 5};
+            rt::Vec t2 = {-2, 3, 1};
+            assert_equals(msg, t1 + t2, rt::Point(1, 1, 6));
         });
-        scenario("Adding two vectors", []() {
+        assert_with("Adding two vectors", [](const std::string &msg) {
             rt::Vec v1 = {3, -2, 5};
             rt::Vec v2 = {-2, 3, 1};
-            return v1 + v2 == rt::vec(1, 1, 6);
+            assert_equals(msg, v1 + v2, rt::Vec(1, 1, 6));
         });
-        scenario("Subtracting two points", []() {
+        assert_with("Subtracting two points", [](const std::string &msg) {
             rt::Point p1 = {3, 2, 1};
             rt::Point p2 = {5, 6, 7};
-            return p1 - p2 == rt::vec(-2, -4, -6);
+            assert_equals(msg, p1 - p2, rt::Vec(-2, -4, -6));
         });
-        scenario("Subtracting a vector from a point", []() {
+        assert_with("Subtracting a vector from a point", [](const std::string &msg) {
             rt::Point p = {3, 2, 1};
             rt::Vec v = {5, 6, 7};
-            return p - v == rt::point(-2, -4, -6);
+            assert_equals(msg, p - v, rt::Point(-2, -4, -6));
         });
-        scenario("Subtracting two vectors", []() {
+        assert_with("Subtracting two vectors", [](const std::string &msg) {
             rt::Vec v1 = {3, 2, 1};
             rt::Vec v2 = {5, 6, 7};
-            return v1 - v2 == rt::vec(-2, -4, -6);
+            assert_equals(msg, v1 - v2, rt::Vec(-2, -4, -6));
         });
-        scenario("Negating a tuple", []() {
-            auto t = rt::Tuple<-4>(1, -2, 3);
-            return -t == rt::Tuple<4>(-1, 2, -3);
+        assert_with("Negating a tuple", [](const std::string &msg) {
+            auto t = rt::Tuple(1, -2, 3, -4);
+            assert_equals(msg, -t, rt::Tuple(-1, 2, -3, 4));
         });
     }
 }

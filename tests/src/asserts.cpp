@@ -7,19 +7,18 @@
 namespace tests {
     int test_count;
     int success_count;
-    int scenario_level;
+    int set_level;
 
     void reset_counts() {
         test_count = 0;
         success_count = 0;
-        scenario_level = 0;
+        set_level = 0;
     }
 
     void assert_true(const std::string &message, bool cond) {
-        for (int i = 0; i < scenario_level; i++) {
-            std::cout << " ";
-        }
+        indent_set();
         std::cout << "- ";
+
         if (cond) {
             std::cout << "[Successful] " << message << ".";
             success_count++;
@@ -37,9 +36,17 @@ namespace tests {
     }
 
     void set(const std::string &message, const std::function<void()> &f) {
-        std::cout << message << std::endl;
-        scenario_level++;
+        indent_set();
+        std::cout << "- " << message << std::endl;
+
+        set_level++;
         f();
-        scenario_level--;
+        set_level--;
+    }
+
+    void indent_set() {
+        for (int i = 0; i < set_level; i++) {
+            std::cout << "  ";
+        }
     }
 }

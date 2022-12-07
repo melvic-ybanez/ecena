@@ -12,7 +12,7 @@
 namespace tests {
     extern int test_count;
     extern int success_count;
-    extern int scenario_level;
+    extern int set_level;
 
     void reset_counts();
 
@@ -39,6 +39,8 @@ namespace tests {
     }
 
     void set(const std::string &message, const std::function<void()> &f);
+
+    void indent_set();
 }
 
 #endif //RAYTRACER_ASSERTS_H

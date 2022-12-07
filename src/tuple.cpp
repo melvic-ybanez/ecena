@@ -29,6 +29,10 @@ namespace rt {
         return {-x(), -y(), -z(), -w()};
     }
 
+    Tuple Tuple::operator*(real scalar) const {
+        return {scalar * x(), scalar * y(), scalar * z(), scalar * w()};
+    }
+
     bool Tuple::operator==(const Tuple &other) {
         for (int i = 0; i < 4; i++) {
             if (elems[i] != other.elems[i]) return false;

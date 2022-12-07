@@ -8,6 +8,11 @@ namespace tests {
     int test_count = 0;
     int success_count = 0;
 
+    void reset_counts() {
+        test_count = 0;
+        success_count = 0;
+    }
+
     void assert_true(const std::string &message, bool cond) {
         if (cond) {
             std::cout << "[Successful] " << message << ".";

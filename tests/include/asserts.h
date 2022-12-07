@@ -12,6 +12,8 @@ namespace tests {
     extern int test_count;
     extern int success_count;
 
+    void reset_counts();
+
     void assert_true(const std::string &message, bool cond);
 
     void scenario(const std::string &message, const std::function<bool()> &pred);

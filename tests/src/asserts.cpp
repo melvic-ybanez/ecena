@@ -31,10 +31,6 @@ namespace tests {
         std::cout << std::endl;
     }
 
-    void assert_with(const std::string &message, const std::function<void(const std::string &)> &f) {
-        f(message);
-    }
-
     void set(const std::string &message, const std::function<void()> &f) {
         indent_set();
         std::cout << "- " << message << std::endl;

@@ -18,14 +18,6 @@ namespace tests {
 
     void assert_true(const std::string &message, bool cond);
 
-    /**
-     * Performs an assertion from a function.
-     * Note: I decided not to make the function parameter map to another function that takes the message and
-     * use a variant of `assert_equals` that aligns with the returned signature (which
-     * could have made the usage more ergonomic).
-     */
-    void assert_with(const std::string &message, const std::function<void(const std::string &)> &f);
-
     template<typename T1, typename T2>
     void assert_equals(const std::string &message, T1 t1, T2 t2) {
         std::ostringstream msg_stream;

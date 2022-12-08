@@ -51,6 +51,10 @@ namespace rt {
     public:
         Vec(real x, real y, real z);
         Vec();
+
+        real magnitude() const;
+
+        Vec normalize() const;
     };
 
     class Color : public Tuple {

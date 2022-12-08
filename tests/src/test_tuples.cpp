@@ -10,8 +10,10 @@ namespace tests::tuples {
     void all() {
         reset();
         set("Tuples", []() {
-            tuples::identities();
-            tuples::operations();
+            identities();
+            operations();
+            magnitude();
+            normalize();
         });
     }
 
@@ -67,6 +69,24 @@ namespace tests::tuples {
                           rt::Tuple(3.5, -7, 10.5, -14));
             assert_equals("Multiplying a tuple by a fraction", rt::Tuple(1, -2, 3, -4) * 0.5, rt::Tuple(0.5, -1, 1.5, -2));
             assert_equals("Dividing a tuple by a scalar", rt::Tuple(1, -2, 3, -4) / 2, rt::Tuple(0.5, -1, 1.5, -2));
+        });
+    }
+
+    void magnitude() {
+        set("Magnitude", []() {
+            assert_equals("(1, 0, 0)", rt::Vec(1, 0, 0).magnitude(), 1);
+            assert_equals("(0, 1, 0)", rt::Vec(0, 1, 0).magnitude(), 1);
+            assert_equals("(0, 0, 1)", rt::Vec(0, 0, 1).magnitude(), 1);
+            assert_equals("(1, 2, 3)", rt::Vec(1, 2, 3).magnitude(), std::sqrt(14));
+            assert_equals("(-1, -2, -3)", rt::Vec(-1, -2, -3).magnitude(), std::sqrt(14));
+        });
+    }
+
+    void normalize() {
+        set("Normalize", []() {
+            assert_equals("(4, 0, 0)", rt::Vec(4, 0, 0).normalize(), rt::Vec(1, 0, 0));
+            assert_equals("(1, 2, 3)", rt::Vec(1, 2, 3).normalize(), rt::Vec(1 / std::sqrt(14), 2 / std::sqrt(14), 3 / std::sqrt(14)));
+            assert_equals("The magnitude of normalized vector", rt::Vec(1, 2, 3).normalize().magnitude(), 1);
         });
     }
 }

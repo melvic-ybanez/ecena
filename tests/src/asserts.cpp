@@ -22,15 +22,14 @@ namespace tests {
         std::cout << "- ";
 
         if (cond) {
-            std::cout << "[Successful] " << message << ".";
+            std::cout << "[Successful] ";
             success_count++;
         } else {
-            std::cout << "[Failed] " << message << "." << std::endl;
-            std::cout << "at " << __FUNCTION__ << ", line " << __LINE__;
+            std::cout << "[Failed] ";
         }
 
         test_count++;
-        std::cout << std::endl;
+        std::cout << message << "." << std::endl;
     }
 
     void scenario(const std::string &message, const std::function<void()> &f) {

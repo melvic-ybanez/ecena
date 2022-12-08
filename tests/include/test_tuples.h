@@ -8,8 +8,14 @@
 namespace tests {
     namespace tuples {
         void all();
+
         void identities();
+
         void operations();
+
+        void magnitude();
+
+        void normalize();
     }
 }
 

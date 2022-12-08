@@ -52,19 +52,28 @@ namespace rt {
         return {u.x() + v.x(), u.y() + v.y(), u.z() + v.z(), u.w() + v.w()};
     }
 
-    Tuple operator-(const Tuple &u, const Tuple & v) {
+    Tuple operator-(const Tuple &u, const Tuple &v) {
         return {u.x() - v.x(), u.y() - v.y(), u.z() - v.z(), u.w() - v.w()};
     }
 
-    Point::Point(): Tuple(0, 0, 0, 1) {}
+    Point::Point() : Tuple(0, 0, 0, 1) {}
 
     Point::Point(real x, real y, real z) : Tuple(x, y, z, 1) {}
 
-    Vec::Vec(): Tuple(0, 0, 0, 0) {}
+    Vec::Vec() : Tuple(0, 0, 0, 0) {}
 
     Vec::Vec(real x, real y, real z) : Tuple(x, y, z, 0) {}
 
-    Color::Color(): Tuple(0, 0, 0, 0) {}
+    real Vec::magnitude() const {
+        return std::sqrt(x() * x() + y() * y() + z() * z() + w() * w());
+    }
 
-    Color::Color(real x, real y, real z): Tuple(x, y, z, 0) {}
+    Vec Vec::normalize() const {
+        auto m = magnitude();
+        return {x() / m, y() / m, z() / m};
+    }
+
+    Color::Color() : Tuple(0, 0, 0, 0) {}
+
+    Color::Color(real x, real y, real z) : Tuple(x, y, z, 0) {}
 }

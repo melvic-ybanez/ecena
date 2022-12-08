@@ -77,6 +77,14 @@ namespace rt {
         return x() * other.x() + y() * other.y() + z() * other.z() + w() * other.w();
     }
 
+    Vec Vec::cross(const Vec &other) const {
+        return {
+                y() * other.z() - z() * other.y(),
+                z() * other.x() - x() * other.z(),
+                x() * other.y() - y() * other.x()
+        };
+    }
+
     Color::Color() : Tuple(0, 0, 0, 0) {}
 
     Color::Color(real x, real y, real z) : Tuple(x, y, z, 0) {}

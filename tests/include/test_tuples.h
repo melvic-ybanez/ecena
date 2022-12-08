@@ -17,7 +17,7 @@ namespace tests {
 
         void normalize();
 
-        void dot();
+        void products();
     }
 }
 

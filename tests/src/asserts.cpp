@@ -22,10 +22,12 @@ namespace tests {
         std::cout << "- ";
 
         if (cond) {
-            std::cout << "[Successful] " << message << ".";
+            std::cout << "[Successful] " << message;
             success_count++;
         } else {
-            std::cout << "[Failed] " << message << ", at " << function_name << ", line " << line_no << ".";
+            std::cout << "[Failed] " << message << ", " << std::endl;
+            indent_set();
+            std::cout << "  at " << function_name << ", line " << line_no;
         }
 
         test_count++;

@@ -14,7 +14,7 @@ namespace tests::tuples {
             operations();
             magnitude();
             normalize();
-            dot();
+            products();
         });
     }
 
@@ -68,7 +68,8 @@ namespace tests::tuples {
         set("Multiplication/Division", []() {
             ASSERT_EQ_MSG("Multiplying a tuple by a scalar", rt::Tuple(1, -2, 3, -4) * 3.5,
                           rt::Tuple(3.5, -7, 10.5, -14));
-            ASSERT_EQ_MSG("Multiplying a tuple by a fraction", rt::Tuple(1, -2, 3, -4) * 0.5, rt::Tuple(0.5, -1, 1.5, -2));
+            ASSERT_EQ_MSG("Multiplying a tuple by a fraction", rt::Tuple(1, -2, 3, -4) * 0.5,
+                          rt::Tuple(0.5, -1, 1.5, -2));
             ASSERT_EQ_MSG("Dividing a tuple by a scalar", rt::Tuple(1, -2, 3, -4) / 2, rt::Tuple(0.5, -1, 1.5, -2));
         });
     }
@@ -86,16 +87,26 @@ namespace tests::tuples {
     void normalize() {
         set("Normalize", []() {
             ASSERT_EQ_MSG("(4, 0, 0)", rt::Vec(4, 0, 0).normalize(), rt::Vec(1, 0, 0));
-            ASSERT_EQ_MSG("(1, 2, 3)", rt::Vec(1, 2, 3).normalize(), rt::Vec(1 / std::sqrt(14), 2 / std::sqrt(14), 3 / std::sqrt(14)));
+            ASSERT_EQ_MSG("(1, 2, 3)", rt::Vec(1, 2, 3).normalize(),
+                          rt::Vec(1 / std::sqrt(14), 2 / std::sqrt(14), 3 / std::sqrt(14)));
             ASSERT_EQ_MSG("The magnitude of normalized vector", rt::Vec(1, 2, 3).normalize().magnitude(), 1);
         });
     }
 
-    void dot() {
-        set("Dot product", []{
-            rt::Vec v1 = {1, 2, 3};
-            rt::Vec v2 = {2, 3, 4};
-            ASSERT_EQ(v1.dot(v2), 20);
+    void products() {
+        set("Products", []() {
+            scenario("Dot", []() {
+                rt::Vec v1 = {1, 2, 3};
+                rt::Vec v2 = {2, 3, 4};
+                ASSERT_EQ(v1.dot(v2), 20);
+            });
+
+            set("Cross", []() {
+                rt::Vec v1 = {1, 2, 3};
+                rt::Vec v2 = {2, 3, 4};
+                ASSERT_EQ_MSG("First with Second", v1.cross(v2), rt::Vec(-1, 2, -1));
+                ASSERT_EQ_MSG("Second with First", v2.cross(v1), rt::Vec(1, -2, 1));
+            });
         });
     }
 }

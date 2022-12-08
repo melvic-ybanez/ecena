@@ -1,2 +1,2 @@
-# ecena
+# Ecena
 A ray tracer written in C++

@@ -68,7 +68,11 @@ namespace rt {
         real red() const;
         real green() const;
         real blue() const;
+
+        void write_to(std::ofstream &out) const;
     };
+
+    Color operator*(const Color &c1, const Color &c2);
 }
 
 #endif //RAYTRACER_TUPLES_H

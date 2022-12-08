@@ -3,6 +3,7 @@
 //
 
 #include <iomanip>
+#include <fstream>
 #include "../include/tuples.h"
 
 namespace rt {
@@ -100,5 +101,21 @@ namespace rt {
 
     real Color::blue() const {
         return z();
+    }
+
+    Color operator*(const Color &c1, const Color &c2) {
+        return {
+                c1.red() * c2.red(),
+                c1.green() * c2.green(),
+                c1.blue() * c2.blue()
+        };
+    }
+
+    void Color::write_to(std::ofstream &out) const {
+        auto r = static_cast<int>(255.999 * red());
+        auto g = static_cast<int>(255.999 * green());
+        auto b = static_cast<int>(255.999 * blue());
+
+        out << r << ' ' << g << ' ' << b << std::endl;
     }
 }

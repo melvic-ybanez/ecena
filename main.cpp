@@ -1,6 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include "include/image.h"
-#include "include/color.h"
+#include "include/tuples.h"
 #include <ctime>
 
 int main() {
@@ -24,7 +25,7 @@ int main() {
             auto g = static_cast<double>(j) / (image::height - 1);
             auto b = 0.25;
 
-            write_color(out_img, {r, g, b});
+            rt::Color(r, g, b).write_to(out_img);
         }
     }
 

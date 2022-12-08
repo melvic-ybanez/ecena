@@ -125,6 +125,11 @@ namespace tests::tuples {
                 ASSERT_EQ_MSG("Addition", c1 + c2, rt::Color(1.6, 0.7, 1.0));
                 ASSERT_EQ_MSG("Subtraction", c1 - c2, rt::Color(0.2, 0.5, 0.5));
                 ASSERT_EQ_MSG("Multiplication", rt::Color(0.2, 0.3, 0.4) * 2, rt::Color(0.4, 0.6, 0.8));
+                scenario("Hadamard product", []() {
+                    rt::Color c1 = {1, 0.2, 0.4};
+                    rt::Color c2 = {0.9, 1, 0.1};
+                    ASSERT_EQ(c1 * c2, rt::Color(0.9, 0.2, 0.04));
+                });
             });
         });
     }

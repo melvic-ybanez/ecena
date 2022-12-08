@@ -2,7 +2,7 @@
 // Created by Melvic Ybanez on 12/8/22.
 //
 
-#include "../include/tuple.h"
+#include "../include/tuples.h"
 
 namespace rt {
     Tuple::Tuple() : elems{0, 0, 0, 0} {}
@@ -59,4 +59,8 @@ namespace rt {
     Vec::Vec(): Tuple(0, 0, 0, 0) {}
 
     Vec::Vec(real x, real y, real z) : Tuple(x, y, z, 0) {}
+
+    Color::Color(): Tuple(0, 0, 0, 0) {}
+
+    Color::Color(real x, real y, real z): Tuple(x, y, z, 0) {}
 }

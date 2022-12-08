@@ -2,8 +2,8 @@
 // Created by Melvic Ybanez on 12/4/22.
 //
 
-#ifndef RAYTRACER_TUPLE_H
-#define RAYTRACER_TUPLE_H
+#ifndef RAYTRACER_TUPLES_H
+#define RAYTRACER_TUPLES_H
 
 #include <cmath>
 #include <iostream>
@@ -50,6 +50,12 @@ namespace rt {
         Vec(real x, real y, real z);
         Vec();
     };
+
+    class Color : public Tuple {
+    public:
+        Color(real x, real y, real z);
+        Color();
+    };
 }
 
-#endif //RAYTRACER_TUPLE_H
+#endif //RAYTRACER_TUPLES_H

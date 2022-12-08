@@ -2,8 +2,8 @@
 // Created by Melvic Ybanez on 12/5/22.
 //
 
-#ifndef RAYTRACER_TUPLES_H
-#define RAYTRACER_TUPLES_H
+#ifndef RAYTRACER_TEST_TUPLES_H
+#define RAYTRACER_TEST_TUPLES_H
 
 namespace tests {
     namespace tuples {
@@ -13,4 +13,4 @@ namespace tests {
     }
 }
 
-#endif //RAYTRACER_TUPLES_H
+#endif //RAYTRACER_TEST_TUPLES_H

@@ -5,7 +5,7 @@
 #ifndef RAYTRACER_RAY_H
 #define RAYTRACER_RAY_H
 
-#include "tuple.h"
+#include "tuples.h"
 
 class Ray {
 public:

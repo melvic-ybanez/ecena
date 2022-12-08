@@ -87,5 +87,17 @@ namespace rt {
 
     Color::Color() : Tuple(0, 0, 0, 0) {}
 
-    Color::Color(real x, real y, real z) : Tuple(x, y, z, 0) {}
+    Color::Color(real r, real g, real b) : Tuple(r, g, b, 0) {}
+
+    real Color::red() const {
+        return x();
+    }
+
+    real Color::green() const {
+        return y();
+    }
+
+    real Color::blue() const {
+        return z();
+    }
 }

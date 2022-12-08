@@ -18,6 +18,8 @@ namespace tests {
         void normalize();
 
         void products();
+
+        void colors();
     }
 }
 

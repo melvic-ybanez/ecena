@@ -15,6 +15,7 @@ namespace tests::tuples {
             magnitude();
             normalize();
             products();
+            colors();
         });
     }
 
@@ -106,6 +107,17 @@ namespace tests::tuples {
                 rt::Vec v2 = {2, 3, 4};
                 ASSERT_EQ_MSG("First with Second", v1.cross(v2), rt::Vec(-1, 2, -1));
                 ASSERT_EQ_MSG("Second with First", v2.cross(v1), rt::Vec(1, -2, 1));
+            });
+        });
+    }
+
+    void colors() {
+        set("Colors", []{
+            set("Components", [] {
+                rt::Color color = {-0.5, 0.4, 1.7};
+                ASSERT_EQ_MSG("Red", color.red(), -0.5);
+                ASSERT_EQ_MSG("Green", color.green(), 0.4);
+                ASSERT_EQ_MSG("Blue", color.blue(), 1.7);
             });
         });
     }

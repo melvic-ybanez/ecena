@@ -63,8 +63,12 @@ namespace rt {
 
     class Color : public Tuple {
     public:
-        Color(real x, real y, real z);
+        Color(real r, real g, real b);
         Color();
+
+        real red() const;
+        real green() const;
+        real blue() const;
     };
 }
 

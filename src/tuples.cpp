@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 12/8/22.
 //
 
+#include <iomanip>
 #include "../include/tuples.h"
 
 namespace rt {
@@ -39,7 +40,7 @@ namespace rt {
 
     bool Tuple::operator==(const Tuple &other) {
         for (int i = 0; i < 4; i++) {
-            if (elems[i] != other.elems[i]) return false;
+            if (!rt::compare_reals(elems[i], other.elems[i])) return false;
         }
         return true;
     }

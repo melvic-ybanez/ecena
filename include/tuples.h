@@ -7,10 +7,9 @@
 
 #include <cmath>
 #include <iostream>
+#include "../include/rtmath.h"
 
 namespace rt {
-    using real = double;
-
     class Tuple {
         double elems[4];
     public:

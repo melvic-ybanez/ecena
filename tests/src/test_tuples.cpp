@@ -119,6 +119,13 @@ namespace tests::tuples {
                 ASSERT_EQ_MSG("Green", color.green(), 0.4);
                 ASSERT_EQ_MSG("Blue", color.blue(), 1.7);
             });
+            set("Operations", []() {
+                rt::Color c1 = {0.9, 0.6, 0.75};
+                rt::Color c2 = {0.7, 0.1, 0.25};
+                ASSERT_EQ_MSG("Addition", c1 + c2, rt::Color(1.6, 0.7, 1.0));
+                ASSERT_EQ_MSG("Subtraction", c1 - c2, rt::Color(0.2, 0.5, 0.5));
+                ASSERT_EQ_MSG("Multiplication", rt::Color(0.2, 0.3, 0.4) * 2, rt::Color(0.4, 0.6, 0.8));
+            });
         });
     }
 }

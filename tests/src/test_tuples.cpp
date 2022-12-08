@@ -14,6 +14,7 @@ namespace tests::tuples {
             operations();
             magnitude();
             normalize();
+            dot();
         });
     }
 
@@ -87,6 +88,14 @@ namespace tests::tuples {
             ASSERT_EQ_MSG("(4, 0, 0)", rt::Vec(4, 0, 0).normalize(), rt::Vec(1, 0, 0));
             ASSERT_EQ_MSG("(1, 2, 3)", rt::Vec(1, 2, 3).normalize(), rt::Vec(1 / std::sqrt(14), 2 / std::sqrt(14), 3 / std::sqrt(14)));
             ASSERT_EQ_MSG("The magnitude of normalized vector", rt::Vec(1, 2, 3).normalize().magnitude(), 1);
+        });
+    }
+
+    void dot() {
+        set("Dot product", []{
+            rt::Vec v1 = {1, 2, 3};
+            rt::Vec v2 = {2, 3, 4};
+            ASSERT_EQ(v1.dot(v2), 20);
         });
     }
 }

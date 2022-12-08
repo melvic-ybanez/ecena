@@ -16,6 +16,8 @@ namespace tests {
         void magnitude();
 
         void normalize();
+
+        void dot();
     }
 }
 

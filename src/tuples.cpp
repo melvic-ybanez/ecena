@@ -73,6 +73,10 @@ namespace rt {
         return {x() / m, y() / m, z() / m};
     }
 
+    real Vec::dot(const Vec &other) const {
+        return x() * other.x() + y() * other.y() + z() * other.z() + w() * other.w();
+    }
+
     Color::Color() : Tuple(0, 0, 0, 0) {}
 
     Color::Color(real x, real y, real z) : Tuple(x, y, z, 0) {}

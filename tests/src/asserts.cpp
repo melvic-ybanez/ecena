@@ -17,19 +17,19 @@ namespace tests {
         scenario_msg = "";
     }
 
-    void assert_true(const std::string &message, bool cond) {
+    void assert_true(const std::string &message, bool cond, const char *function_name, int line_no) {
         indent_set();
         std::cout << "- ";
 
         if (cond) {
-            std::cout << "[Successful] ";
+            std::cout << "[Successful] " << message << ".";
             success_count++;
         } else {
-            std::cout << "[Failed] ";
+            std::cout << "[Failed] " << message << ", at " << function_name << ", line " << line_no << ".";
         }
 
         test_count++;
-        std::cout << message << "." << std::endl;
+        std::cout << std::endl;
     }
 
     void scenario(const std::string &message, const std::function<void()> &f) {

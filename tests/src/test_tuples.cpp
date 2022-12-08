@@ -62,9 +62,11 @@ namespace tests::tuples {
             auto t = rt::Tuple(1, -2, 3, -4);
             assert_equals(-t, rt::Tuple(-1, 2, -3, 4));
         });
-        set("Multiplication", []() {
+        set("Multiplication/Division", []() {
             assert_equals("Multiplying a tuple by a scalar", rt::Tuple(1, -2, 3, -4) * 3.5,
                           rt::Tuple(3.5, -7, 10.5, -14));
+            assert_equals("Multiplying a tuple by a fraction", rt::Tuple(1, -2, 3, -4) * 0.5, rt::Tuple(0.5, -1, 1.5, -2));
+            assert_equals("Dividing a tuple by a scalar", rt::Tuple(1, -2, 3, -4) / 2, rt::Tuple(0.5, -1, 1.5, -2));
         });
     }
 }

@@ -30,6 +30,8 @@ namespace rt {
 
         Tuple operator*(real scalar) const;
 
+        Tuple operator/(real scalar) const;
+
         bool operator==(const Tuple &other);
     };
 

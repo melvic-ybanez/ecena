@@ -23,11 +23,11 @@ namespace tests::tuples {
         ASSERT_EQ_MSG("Default point", rt::Point(), rt::Tuple(0, 0, 0, 1));
         ASSERT_EQ_MSG("Default vector", rt::Vec(), rt::Tuple(0, 0, 0, 0));
         scenario("A tuple with W = 1.0 is a point", [] {
-            auto point = rt::Point(4.3, -4.2, 3.1);
+            rt::Point point{4.3, -4.2, 3.1};
             ASSERT_EQ(point.w(), 1);
         });
         scenario("A tuple with W = 0.0 is a vector", []() {
-            auto vector = rt::Vec(4.3, -4.2, 3.1);
+            rt::Vec vector{4.3, -4.2, 3.1};
             ASSERT_EQ(vector.w(), 0);
         });
     }
@@ -35,35 +35,35 @@ namespace tests::tuples {
     void operations() {
         set("Addition", []() {
             scenario("Two tuples", []() {
-                rt::Point t1 = {3, -2, 5};
-                rt::Vec t2 = {-2, 3, 1};
+                rt::Point t1{3, -2, 5};
+                rt::Vec t2{-2, 3, 1};
                 ASSERT_EQ(t1 + t2, rt::Point(1, 1, 6));
             });
             scenario("Two vectors", []() {
-                rt::Vec v1 = {3, -2, 5};
-                rt::Vec v2 = {-2, 3, 1};
+                rt::Vec v1{3, -2, 5};
+                rt::Vec v2{-2, 3, 1};
                 ASSERT_EQ(v1 + v2, rt::Vec(1, 1, 6));
             });
         });
         set("Subtraction", []() {
             scenario("Subtracting two points", []() {
-                rt::Point p1 = {3, 2, 1};
-                rt::Point p2 = {5, 6, 7};
+                rt::Point p1{3, 2, 1};
+                rt::Point p2{5, 6, 7};
                 ASSERT_EQ(p1 - p2, rt::Vec(-2, -4, -6));
             });
             scenario("Subtracting a vector from a point", []() {
-                rt::Point p = {3, 2, 1};
-                rt::Vec v = {5, 6, 7};
+                rt::Point p{3, 2, 1};
+                rt::Vec v{5, 6, 7};
                 ASSERT_EQ(p - v, rt::Point(-2, -4, -6));
             });
             scenario("Subtracting two vectors", []() {
-                rt::Vec v1 = {3, 2, 1};
-                rt::Vec v2 = {5, 6, 7};
+                rt::Vec v1{3, 2, 1};
+                rt::Vec v2{5, 6, 7};
                 ASSERT_EQ(v1 - v2, rt::Vec(-2, -4, -6));
             });
         });
         scenario("Negating a tuple", []() {
-            auto t = rt::Tuple(1, -2, 3, -4);
+            rt::Tuple t{1, -2, 3, -4};
             ASSERT_EQ(-t, rt::Tuple(-1, 2, -3, 4));
         });
         set("Multiplication/Division", []() {
@@ -97,14 +97,14 @@ namespace tests::tuples {
     void products() {
         set("Products", []() {
             scenario("Dot", []() {
-                rt::Vec v1 = {1, 2, 3};
-                rt::Vec v2 = {2, 3, 4};
+                rt::Vec v1{1, 2, 3};
+                rt::Vec v2{2, 3, 4};
                 ASSERT_EQ(v1.dot(v2), 20);
             });
 
             set("Cross", []() {
-                rt::Vec v1 = {1, 2, 3};
-                rt::Vec v2 = {2, 3, 4};
+                rt::Vec v1{1, 2, 3};
+                rt::Vec v2{2, 3, 4};
                 ASSERT_EQ_MSG("First with Second", v1.cross(v2), rt::Vec(-1, 2, -1));
                 ASSERT_EQ_MSG("Second with First", v2.cross(v1), rt::Vec(1, -2, 1));
             });
@@ -112,22 +112,22 @@ namespace tests::tuples {
     }
 
     void colors() {
-        set("Colors", []{
+        set("Colors", [] {
             set("Components", [] {
-                rt::Color color = {-0.5, 0.4, 1.7};
+                rt::Color color{-0.5, 0.4, 1.7};
                 ASSERT_EQ_MSG("Red", color.red(), -0.5);
                 ASSERT_EQ_MSG("Green", color.green(), 0.4);
                 ASSERT_EQ_MSG("Blue", color.blue(), 1.7);
             });
             set("Operations", []() {
-                rt::Color c1 = {0.9, 0.6, 0.75};
-                rt::Color c2 = {0.7, 0.1, 0.25};
+                rt::Color c1{0.9, 0.6, 0.75};
+                rt::Color c2{0.7, 0.1, 0.25};
                 ASSERT_EQ_MSG("Addition", c1 + c2, rt::Color(1.6, 0.7, 1.0));
                 ASSERT_EQ_MSG("Subtraction", c1 - c2, rt::Color(0.2, 0.5, 0.5));
                 ASSERT_EQ_MSG("Multiplication", rt::Color(0.2, 0.3, 0.4) * 2, rt::Color(0.4, 0.6, 0.8));
                 scenario("Hadamard product", []() {
-                    rt::Color c1 = {1, 0.2, 0.4};
-                    rt::Color c2 = {0.9, 1, 0.1};
+                    rt::Color c1{1, 0.2, 0.4};
+                    rt::Color c2{0.9, 1, 0.1};
                     ASSERT_EQ(c1 * c2, rt::Color(0.9, 0.2, 0.04));
                 });
             });

@@ -9,9 +9,9 @@
 #include <iostream>
 #include <sstream>
 
-#define ASSERT_TRUE(message, cond) { assert_true(message, cond, __PRETTY_FUNCTION__, __LINE__); }
-#define ASSERT_EQ_MSG(message, a, b) { assert_equals(message, a, b, __PRETTY_FUNCTION__, __LINE__); }
-#define ASSERT_EQ(a, b) { assert_equals(a, b, __PRETTY_FUNCTION__, __LINE__); }
+#define ASSERT_TRUE(message, cond) assert_true(message, cond, __PRETTY_FUNCTION__, __LINE__)
+#define ASSERT_EQ_MSG(message, a, b) assert_equals(message, a, b, __PRETTY_FUNCTION__, __LINE__)
+#define ASSERT_EQ(a, b) assert_equals(a, b, __PRETTY_FUNCTION__, __LINE__)
 
 namespace tests {
     extern int test_count;

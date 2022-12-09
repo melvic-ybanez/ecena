@@ -18,8 +18,11 @@ namespace tests::canvas {
     void init() {
         set("Creating a Canvas", [] {
             rt::Canvas canvas{10, 20};
+
             ASSERT_EQ_MSG("Width", canvas.width(), 10);
             ASSERT_EQ_MSG("Height", canvas.height(), 20);
+            ASSERT_EQ_MSG("Canvas height is the number of rows", canvas.height(), canvas.pixels().size());
+            ASSERT_EQ_MSG("Canvas width is the number of columns", canvas.width(), canvas.pixels()[0].size());
 
             bool all_black = true;
             for (const auto &row: canvas.pixels()) {
@@ -31,6 +34,7 @@ namespace tests::canvas {
                 }
                 if (!all_black) break;
             }
+
             ASSERT_TRUE("Every pixel is black", all_black);
         });
     }
@@ -40,6 +44,7 @@ namespace tests::canvas {
             rt::Canvas canvas{10, 20};
             rt::Color color{rt::Color::red_};
             canvas.write_pixel(2, 3, color);
+
             ASSERT_EQ(canvas.pixel_at(2, 3), color);
         });
     }

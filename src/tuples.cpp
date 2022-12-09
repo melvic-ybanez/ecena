@@ -95,7 +95,9 @@ namespace rt {
 
     Color::Color(real r, real g, real b) : Tuple(r, g, b, 0) {}
 
-    const Color Color::black{0, 0, 0};
+    const Color Color::black_{0, 0, 0};
+
+    const Color Color::red_{1, 0, 0};
 
     real Color::red() const {
         return x();

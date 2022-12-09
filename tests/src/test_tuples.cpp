@@ -8,7 +8,6 @@
 
 namespace tests::tuples {
     void all() {
-        reset();
         set("Tuples", []() {
             identities();
             operations();

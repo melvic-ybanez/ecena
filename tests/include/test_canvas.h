@@ -7,6 +7,10 @@
 
 namespace tests::canvas {
     void all();
+
+    void init();
+
+    void access();
 }
 
 #endif //ECENA_TEST_CANVAS_H

@@ -12,6 +12,7 @@
 namespace rt {
     using PixelRow = std::vector<Color>;
     using PixelTable = std::vector<PixelRow>;
+
     class Canvas {
         PixelTable pixels_;
         int width_;
@@ -24,6 +25,10 @@ namespace rt {
         int height() const;
 
         PixelTable &pixels();
+
+        Color &pixel_at(int row, int col);
+
+        void write_pixel(int row, int col, const Color &color);
     };
 }
 

@@ -68,7 +68,9 @@ namespace rt {
         Color(real r, real g, real b);
         Color();
 
-        static const Color black;
+        static const Color black_;
+
+        static const Color red_;
 
         real red() const;
         real green() const;

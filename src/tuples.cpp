@@ -39,11 +39,15 @@ namespace rt {
         return *this * (1 / scalar);
     }
 
-    bool Tuple::operator==(const Tuple &other) {
-        for (int i = 0; i < 4; i++) {
+    bool Tuple::operator==(const Tuple &other) const {
+        for (int i = 0; i < elems.size(); i++) {
             if (!rt::compare_reals(elems[i], other.elems[i])) return false;
         }
         return true;
+    }
+
+    bool Tuple::operator!=(const Tuple &other) const {
+        return !(*this == other);
     }
 
     std::ostream &operator<<(std::ostream &out, const Tuple &t) {
@@ -90,6 +94,8 @@ namespace rt {
     Color::Color() : Tuple(0, 0, 0, 0) {}
 
     Color::Color(real r, real g, real b) : Tuple(r, g, b, 0) {}
+
+    const Color Color::black{0, 0, 0};
 
     real Color::red() const {
         return x();

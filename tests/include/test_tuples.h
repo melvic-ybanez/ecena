@@ -5,22 +5,20 @@
 #ifndef RAYTRACER_TEST_TUPLES_H
 #define RAYTRACER_TEST_TUPLES_H
 
-namespace tests {
-    namespace tuples {
-        void all();
+namespace tests::tuples {
+    void all();
 
-        void identities();
+    void identities();
 
-        void operations();
+    void operations();
 
-        void magnitude();
+    void magnitude();
 
-        void normalize();
+    void normalize();
 
-        void products();
+    void products();
 
-        void colors();
-    }
+    void colors();
 }
 
 #endif //RAYTRACER_TEST_TUPLES_H

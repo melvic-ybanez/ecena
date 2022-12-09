@@ -5,9 +5,11 @@
 #include <iostream>
 #include "../include/test_tuples.h"
 #include "../include/asserts.h"
+#include "../include/test_canvas.h"
 
 int main() {
     tests::tuples::all();
+    tests::canvas::all();
     std::cout << "Ran " << tests::test_count << " tests. Successful: " << tests::success_count << ". Failed: "
               << tests::test_count - tests::success_count << ".";
 }

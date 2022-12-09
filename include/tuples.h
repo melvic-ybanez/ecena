@@ -7,11 +7,12 @@
 
 #include <cmath>
 #include <iostream>
+#include <vector>
 #include "../include/rtmath.h"
 
 namespace rt {
     class Tuple {
-        double elems[4];
+        std::vector<real> elems;
     public:
         Tuple();
 
@@ -31,7 +32,9 @@ namespace rt {
 
         Tuple operator/(real scalar) const;
 
-        bool operator==(const Tuple &other);
+        bool operator==(const Tuple &other) const;
+
+        bool operator!=(const Tuple &other) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Tuple &t);
@@ -64,6 +67,8 @@ namespace rt {
     public:
         Color(real r, real g, real b);
         Color();
+
+        static const Color black;
 
         real red() const;
         real green() const;

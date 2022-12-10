@@ -1,2 +1,2 @@
 # Ecena
-A ray tracer written in C++
+A 3D Scene Renderer written in C++

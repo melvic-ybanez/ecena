@@ -6,6 +6,8 @@
 #include "../include/ppm.h"
 
 namespace rt {
+    const int Ppm::max_line_width = 70;
+
     Ppm::Ppm(const Canvas &canvas, const std::string &identifier, int max_color) :
             identifier_{identifier}, canvas{canvas}, max_color_{max_color} {}
 
@@ -19,22 +21,49 @@ namespace rt {
     }
 
     std::string Ppm::pixel_data() const {
-        std::ostringstream out;
-        for (const auto &row : canvas.pixels()) {
+        std::string out;
+        for (const auto &row: canvas.pixels()) {
+            std::vector<std::string> color_strs;
+
             int count = 0;
-            for (const auto &pixel : row) {
+            for (const auto &pixel: row) {
                 auto r = math::scale(pixel.red(), max_color_);
                 auto g = math::scale(pixel.green(), max_color_);
                 auto b = math::scale(pixel.blue(), max_color_);
 
-                out << r << ' ' << g << ' ' << b;
+                color_strs.push_back(std::to_string(r));
+                color_strs.push_back(std::to_string(g));
+                color_strs.push_back(std::to_string(b));
 
                 count++;
-                if (count < width()) out << ' ';
+                if (count == width()) color_strs.emplace_back("\n");
             }
-            out << std::endl;
+
+            // make sure the rows don't go beyond the max line width
+            size_t len = 0;
+            for (const auto &color_str: color_strs) {
+                if (color_str == "\n") {
+                    out += color_str;
+                    len = 0;
+                    continue;
+                }
+
+                size_t color_size = color_str.size();
+
+                if ((Ppm::max_line_width - len) < color_size + 1) {
+                    out += "\n" + color_str;
+                    len = color_size;
+                } else if (len == 0) {
+                    out += color_str;
+                    len = color_size;
+                } else {
+                    out += " " + color_str;
+                    len += color_size + 1;
+                }
+            }
         }
-        return out.str();
+
+        return out;
     }
 
     int Ppm::width() const {

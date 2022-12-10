@@ -13,7 +13,7 @@ namespace rt::math {
     }
 
     int scale(real value, int max_value) {
-        auto result = static_cast<int>(std::round((max_value + 1) * value));
+        auto result = static_cast<int>(std::floor((max_value + 1) * value));
         if (result > max_value) return max_value;
         if (result < 0) return 0;
         return result;

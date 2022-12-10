@@ -71,10 +71,25 @@ namespace tests::canvas {
 
                 rt::Ppm ppm{canvas};
 
-                ASSERT_EQ(ppm.pixel_data(),
-                          "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n"
+                ASSERT_EQ("255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n"
                           "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0\n"
-                          "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n");
+                          "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n",
+                          ppm.pixel_data());
+            });
+            scenario("Splitting long lines", []() {
+                rt::Canvas canvas{10, 2};
+                for (int r = 0; r < 2; r++) {
+                    for (int c = 0; c < 10; c++) {
+                        canvas.write_pixel(r, c, rt::Color{1, 0.8, 0.6});
+                    }
+                }
+                rt::Ppm ppm{canvas};
+
+                ASSERT_EQ("255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n"
+                          "153 255 204 153 255 204 153 255 204 153 255 204 153\n"
+                          "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n"
+                          "153 255 204 153 255 204 153 255 204 153 255 204 153\n",
+                          ppm.pixel_data());
             });
         });
     }

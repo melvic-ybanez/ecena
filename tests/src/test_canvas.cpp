@@ -91,6 +91,11 @@ namespace tests::canvas {
                           "153 255 204 153 255 204 153 255 204 153 255 204 153\n",
                           ppm.pixel_data());
             });
+            scenario("PPM files are terminated by a newline character", []() {
+                rt::Canvas canvas{5, 3};
+                rt::Ppm ppm{canvas};
+                ASSERT_EQ('\n', ppm.pixel_data().back());
+            });
         });
     }
 }

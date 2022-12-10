@@ -21,7 +21,7 @@ namespace rt {
         return pixels_;
     }
 
-    const Color &Canvas::pixel_at(int row, int col) {
+    const Color &Canvas::pixel_at(int row, int col) const {
         return pixels()[row][col];
     }
 

@@ -26,7 +26,7 @@ namespace rt {
 
         const PixelTable & pixels() const;
 
-        const Color &pixel_at(int row, int col);
+        const Color &pixel_at(int row, int col) const;
 
         void write_pixel(int row, int col, const Color &color);
     };

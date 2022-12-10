@@ -5,7 +5,7 @@
 #include "../include/canvas.h"
 
 namespace rt {
-    Canvas::Canvas(int width, int height): width_(width), height_(height) {
+    Canvas::Canvas(int width, int height) : width_(width), height_(height) {
         pixels_.insert(pixels_.end(), height, PixelRow(width, Color::black_));
     }
 
@@ -17,19 +17,15 @@ namespace rt {
         return height_;
     }
 
-    PixelTable &Canvas::pixels() {
+    const PixelTable &Canvas::pixels() const {
         return pixels_;
     }
 
-    Color &Canvas::pixel_at(int row, int col) {
+    const Color &Canvas::pixel_at(int row, int col) {
         return pixels()[row][col];
     }
 
     void Canvas::write_pixel(int row, int col, const Color &color) {
-        pixel_at(row, col) = color;
-    }
-
-    Ppm Canvas::to_ppm() const {
-        return Ppm{width(), height()};
+        pixels_[row][col] = color;
     }
 }

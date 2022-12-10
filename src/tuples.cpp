@@ -41,7 +41,7 @@ namespace rt {
 
     bool Tuple::operator==(const Tuple &other) const {
         for (int i = 0; i < elems.size(); i++) {
-            if (!rt::compare_reals(elems[i], other.elems[i])) return false;
+            if (!math::compare_reals(elems[i], other.elems[i])) return false;
         }
         return true;
     }

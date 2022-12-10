@@ -2,15 +2,19 @@
 // Created by Melvic Ybanez on 12/8/22.
 //
 
-#ifndef ECENA_RTMATH_H
-#define ECENA_RTMATH_H
+#ifndef ECENA_MATH_UTILS_H
+#define ECENA_MATH_UTILS_H
 
 namespace rt {
     using real = double;
+}
 
+namespace rt::math {
     const double EPSILON = 0.000001;
 
     bool compare_reals(real a, real b);
+
+    int scale(real value, int max_value);
 }
 
-#endif //ECENA_RTMATH_H
+#endif //ECENA_MATH_UTILS_H

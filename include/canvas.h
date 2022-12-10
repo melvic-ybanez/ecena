@@ -6,9 +6,8 @@
 #define ECENA_CANVAS_H
 
 #include <vector>
-#include "rtmath.h"
+#include "math_utils.h"
 #include "tuples.h"
-#include "ppm.h"
 
 namespace rt {
     using PixelRow = std::vector<Color>;
@@ -25,13 +24,11 @@ namespace rt {
 
         int height() const;
 
-        PixelTable &pixels();
+        const PixelTable & pixels() const;
 
-        Color &pixel_at(int row, int col);
+        const Color &pixel_at(int row, int col);
 
         void write_pixel(int row, int col, const Color &color);
-
-         Ppm to_ppm() const;
     };
 }
 

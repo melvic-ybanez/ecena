@@ -6,6 +6,7 @@
 #include "../include/asserts.h"
 #include "../../include/canvas.h"
 #include "../../include/tuples.h"
+#include "../../include/ppm.h"
 
 namespace tests::canvas {
     void all() {
@@ -51,10 +52,30 @@ namespace tests::canvas {
     }
 
     void ppm() {
-        scenario("Constructing the PPM header", []() {
-            rt::Canvas canvas{5, 3};
-            auto ppm = canvas.to_ppm();
-            ASSERT_EQ(ppm.header(), "P3\n5 3\n255");
+        set("PPM", []() {
+            scenario("Constructing the header", []() {
+                rt::Canvas canvas{5, 3};
+                rt::Ppm ppm{canvas};
+                ASSERT_EQ(ppm.header(), "P3\n5 3\n255");
+            });
+            scenario("Constructing the pixel data", []() {
+                rt::Canvas canvas{5, 3};
+
+                rt::Color c1{1.5, 0, 0};
+                rt::Color c2{0, 0.5, 0};
+                rt::Color c3{-0.5, 0, 1};
+
+                canvas.write_pixel(0, 0, c1);
+                canvas.write_pixel(1, 2, c2);
+                canvas.write_pixel(2, 4, c3);
+
+                rt::Ppm ppm{canvas};
+
+                ASSERT_EQ(ppm.pixel_data(),
+                          "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n"
+                          "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0\n"
+                          "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n");
+            });
         });
     }
 }

@@ -28,4 +28,8 @@ namespace rt {
     void Canvas::write_pixel(int row, int col, const Color &color) {
         pixel_at(row, col) = color;
     }
+
+    Ppm Canvas::to_ppm() const {
+        return Ppm{width(), height()};
+    }
 }

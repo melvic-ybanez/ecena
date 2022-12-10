@@ -12,6 +12,7 @@ namespace tests::canvas {
         set("Canvas", []() {
             init();
             access();
+            ppm();
         });
     }
 
@@ -46,6 +47,14 @@ namespace tests::canvas {
             canvas.write_pixel(2, 3, color);
 
             ASSERT_EQ(canvas.pixel_at(2, 3), color);
+        });
+    }
+
+    void ppm() {
+        scenario("Constructing the PPM header", []() {
+            rt::Canvas canvas{5, 3};
+            auto ppm = canvas.to_ppm();
+            ASSERT_EQ(ppm.header(), "P3\n5 3\n255");
         });
     }
 }

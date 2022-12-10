@@ -11,6 +11,8 @@ namespace tests::canvas {
     void init();
 
     void access();
+
+    void ppm();
 }
 
 #endif //ECENA_TEST_CANVAS_H

@@ -8,6 +8,7 @@
 #include <vector>
 #include "rtmath.h"
 #include "tuples.h"
+#include "ppm.h"
 
 namespace rt {
     using PixelRow = std::vector<Color>;
@@ -29,6 +30,8 @@ namespace rt {
         Color &pixel_at(int row, int col);
 
         void write_pixel(int row, int col, const Color &color);
+
+         Ppm to_ppm() const;
     };
 }
 

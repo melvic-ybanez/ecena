@@ -37,7 +37,7 @@ namespace tests::canvas {
                 if (!all_black) break;
             }
 
-            ASSERT_TRUE("Every pixel is black", all_black);
+            ASSERT_TRUE_MSG("Every pixel is black", all_black);
         });
     }
 

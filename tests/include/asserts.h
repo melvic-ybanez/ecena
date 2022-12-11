@@ -9,9 +9,10 @@
 #include <iostream>
 #include <sstream>
 
-#define ASSERT_TRUE(message, cond) assert_true(message, cond, __PRETTY_FUNCTION__, __LINE__)
+#define ASSERT_TRUE_MSG(message, cond) assert_true(message, cond, __PRETTY_FUNCTION__, __LINE__)
+#define ASSERT_TRUE(cond) ASSERT_TRUE_MSG(scenario_msg, cond)
 #define ASSERT_EQ_MSG(message, a, b) assert_equals(message, a, b, __PRETTY_FUNCTION__, __LINE__)
-#define ASSERT_EQ(a, b) assert_equals(a, b, __PRETTY_FUNCTION__, __LINE__)
+#define ASSERT_EQ(a, b) ASSERT_EQ_MSG(scenario_msg, a, b)
 
 namespace tests {
     extern int test_count;
@@ -33,11 +34,6 @@ namespace tests {
             msg_stream << message << ". Expected: " << t1 << ". Got: " << t2;
         }
         assert_true(msg_stream.str(), t1 == t2, function_name, line_no);
-    }
-
-    template<typename T1, typename T2>
-    void assert_equals(T1 t1, T2 t2, const char *function_name, int line_no) {
-        assert_equals(scenario_msg, t1, t2, function_name, line_no);
     }
 
     void scenario(const std::string &message, const std::function<void()> &f);

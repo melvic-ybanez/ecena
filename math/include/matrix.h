@@ -13,13 +13,21 @@ namespace rt::math {
     using MatrixTable = std::vector<MatrixRow>;
 
     class Matrix {
-        MatrixTable &elems;
+        MatrixTable &elems_;
 
     public:
         explicit Matrix(MatrixTable &elems);
 
         MatrixRow &operator[](int row);
+
+        bool operator==(const Matrix &other) const;
+
+        bool operator!=(const Matrix &other) const;
+
+        const MatrixTable &elems() const;
     };
+
+    std::ostream &operator<<(std::ostream &out, const Matrix &matrix);
 }
 
 #endif //ECENA_MATRIX_H

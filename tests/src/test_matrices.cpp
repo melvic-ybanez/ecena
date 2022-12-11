@@ -12,6 +12,7 @@ namespace tests::matrices {
     void all() {
         set("Matrices", [] {
             init();
+            compare();
         });
     }
 
@@ -33,7 +34,7 @@ namespace tests::matrices {
             ASSERT_EQ_MSG("[3, 0]", 13.5, matrix[3][0]);
             ASSERT_EQ_MSG("[3, 2]", 15.5, matrix[3][2]);
         });
-        set("2 x 2 Matrix", []() {
+        set("2 x 2 Matrix", [] {
             math::MatrixTable table{
                     {-3, 5},
                     {1,  -2}
@@ -45,7 +46,7 @@ namespace tests::matrices {
             ASSERT_EQ_MSG("[1, 0]", 1, matrix[1][0]);
             ASSERT_EQ_MSG("[1, 1]", -2, matrix[1][1]);
         });
-        set("3 x 3 Matrix", []() {
+        set("3 x 3 Matrix", [] {
             math::MatrixTable table{
                     {-3, 5,  0},
                     {1,  -2, -7},
@@ -56,6 +57,41 @@ namespace tests::matrices {
             ASSERT_EQ_MSG("[0, 0]", -3, matrix[0][0]);
             ASSERT_EQ_MSG("[1, 1]", -2, matrix[1][1]);
             ASSERT_EQ_MSG("[2, 2]", 1, matrix[2][2]);
+        });
+    }
+
+    void compare() {
+        set("Comparing matrices", [] {
+            scenario("Identical matrices", [] {
+                math::MatrixTable table1{
+                        {1, 2, 3, 4},
+                        {5, 6, 7, 8},
+                        {9, 8, 7, 6},
+                        {5, 4, 3, 2}
+                };
+                math::MatrixTable table2{
+                        {1, 2, 3, 4},
+                        {5, 6, 7, 8},
+                        {9, 8, 7, 6},
+                        {5, 4, 3, 2}
+                };
+                ASSERT_EQ(math::Matrix{table1}, math::Matrix{table2});
+            });
+            scenario("Non-identical matrices", [] {
+                math::MatrixTable table1{
+                        {1, 2, 3, 4},
+                        {5, 6, 7, 8},
+                        {9, 8, 7, 6},
+                        {5, 4, 3, 2}
+                };
+                math::MatrixTable table2{
+                        {2, 3, 4, 5},
+                        {6, 7, 8, 9},
+                        {8, 7, 6, 5},
+                        {4, 3, 2, 1}
+                };
+                ASSERT_TRUE(math::Matrix{table1} != math::Matrix{table2});
+            });
         });
     }
 }

@@ -9,6 +9,8 @@ namespace tests::matrices {
     void all();
 
     void init();
+
+    void compare();
 }
 
 #endif //ECENA_TEST_MATRICES_H

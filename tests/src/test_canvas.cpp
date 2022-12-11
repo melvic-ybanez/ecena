@@ -45,9 +45,9 @@ namespace tests::canvas {
         scenario("Accessing pixels", []() {
             rt::Canvas canvas{10, 20};
             rt::Color color{rt::Color::red_};
-            canvas.write_pixel(2, 3, color);
+            canvas[2][3] = color;
 
-            ASSERT_EQ(canvas.pixel_at(2, 3), color);
+            ASSERT_EQ(canvas[2][3], color);
         });
     }
 
@@ -65,9 +65,9 @@ namespace tests::canvas {
                 rt::Color c2{0, 0.5, 0};
                 rt::Color c3{-0.5, 0, 1};
 
-                canvas.write_pixel(0, 0, c1);
-                canvas.write_pixel(1, 2, c2);
-                canvas.write_pixel(2, 4, c3);
+                canvas[0][0] = c1;
+                canvas[1][2] = c2;
+                canvas[2][4] = c3;
 
                 rt::Ppm ppm{canvas};
 
@@ -80,7 +80,7 @@ namespace tests::canvas {
                 rt::Canvas canvas{10, 2};
                 for (int r = 0; r < 2; r++) {
                     for (int c = 0; c < 10; c++) {
-                        canvas.write_pixel(r, c, rt::Color{1, 0.8, 0.6});
+                        canvas[r][c] = rt::Color{1, 0.8, 0.6};
                     }
                 }
                 rt::Ppm ppm{canvas};

@@ -21,11 +21,7 @@ namespace rt {
         return pixels_;
     }
 
-    const Color &Canvas::pixel_at(int row, int col) const {
-        return pixels()[row][col];
-    }
-
-    void Canvas::write_pixel(int row, int col, const Color &color) {
-        pixels_[row][col] = color;
+    PixelRow &Canvas::operator[](int row){
+        return pixels_[row];
     }
 }

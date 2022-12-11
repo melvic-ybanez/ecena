@@ -16,7 +16,7 @@ namespace tests::matrices {
     }
 
     void init() {
-        set("Constructing and inspecting a 4x4 matrix", [] {
+        set("4 x 4 Matrix", [] {
             math::MatrixTable table{
                     {1,    2,    3,    4},
                     {5.5,  6.5,  7.5,  8.5},
@@ -32,6 +32,30 @@ namespace tests::matrices {
             ASSERT_EQ_MSG("[2, 2]", 11, matrix[2][2]);
             ASSERT_EQ_MSG("[3, 0]", 13.5, matrix[3][0]);
             ASSERT_EQ_MSG("[3, 2]", 15.5, matrix[3][2]);
+        });
+        set("2 x 2 Matrix", []() {
+            math::MatrixTable table{
+                    {-3, 5},
+                    {1,  -2}
+            };
+            math::Matrix matrix{table};
+
+            ASSERT_EQ_MSG("[0, 0]", -3, matrix[0][0]);
+            ASSERT_EQ_MSG("[0, 1]", 5, matrix[0][1]);
+            ASSERT_EQ_MSG("[1, 0]", 1, matrix[1][0]);
+            ASSERT_EQ_MSG("[1, 1]", -2, matrix[1][1]);
+        });
+        set("3 x 3 Matrix", []() {
+            math::MatrixTable table{
+                    {-3, 5,  0},
+                    {1,  -2, -7},
+                    {0,  1,  1}
+            };
+            math::Matrix matrix{table};
+
+            ASSERT_EQ_MSG("[0, 0]", -3, matrix[0][0]);
+            ASSERT_EQ_MSG("[1, 1]", -2, matrix[1][1]);
+            ASSERT_EQ_MSG("[2, 2]", 1, matrix[2][2]);
         });
     }
 }

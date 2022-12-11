@@ -10,7 +10,7 @@
 
 namespace tests::canvas {
     void all() {
-        set("Canvas", []() {
+        set("Canvas", [] {
             init();
             access();
             ppm();
@@ -42,7 +42,7 @@ namespace tests::canvas {
     }
 
     void access() {
-        scenario("Accessing pixels", []() {
+        scenario("Accessing pixels", [] {
             rt::Canvas canvas{10, 20};
             rt::Color color{rt::Color::red_};
             canvas[2][3] = color;
@@ -52,13 +52,13 @@ namespace tests::canvas {
     }
 
     void ppm() {
-        set("PPM", []() {
-            scenario("Constructing the header", []() {
+        set("PPM", [] {
+            scenario("Constructing the header", [] {
                 rt::Canvas canvas{5, 3};
                 rt::Ppm ppm{canvas};
                 ASSERT_EQ(ppm.header(), "P3\n5 3\n255");
             });
-            scenario("Constructing the pixel data", []() {
+            scenario("Constructing the pixel data", [] {
                 rt::Canvas canvas{5, 3};
 
                 rt::Color c1{1.5, 0, 0};
@@ -76,7 +76,7 @@ namespace tests::canvas {
                           "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n",
                           ppm.pixel_data());
             });
-            scenario("Splitting long lines", []() {
+            scenario("Splitting long lines", [] {
                 rt::Canvas canvas{10, 2};
                 for (int r = 0; r < 2; r++) {
                     for (int c = 0; c < 10; c++) {
@@ -91,7 +91,7 @@ namespace tests::canvas {
                           "153 255 204 153 255 204 153 255 204 153 255 204 153\n",
                           ppm.pixel_data());
             });
-            scenario("PPM files are terminated by a newline character", []() {
+            scenario("PPM files are terminated by a newline character", [] {
                 rt::Canvas canvas{5, 3};
                 rt::Ppm ppm{canvas};
                 ASSERT_EQ('\n', ppm.pixel_data().back());

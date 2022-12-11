@@ -11,6 +11,8 @@ namespace tests::matrices {
     void init();
 
     void compare();
+
+    void multiplication();
 }
 
 #endif //ECENA_TEST_MATRICES_H

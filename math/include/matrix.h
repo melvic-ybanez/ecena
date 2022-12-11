@@ -5,7 +5,6 @@
 #ifndef ECENA_MATRIX_H
 #define ECENA_MATRIX_H
 
-#include <vector>
 #include "utils.h"
 
 namespace rt::math {
@@ -17,10 +16,10 @@ namespace rt::math {
 
     template<int R, int C>
     class Matrix {
-        MatrixTable<R, C> &elems_;
+        MatrixTable<R, C> elems_;
 
     public:
-        explicit Matrix(MatrixTable<R, C> &elems) : elems_{elems} {}
+        explicit Matrix(MatrixTable<R, C> elems) : elems_{elems} {}
 
         MatrixRow<C> &operator[](int row) {
             return elems_[row];
@@ -49,23 +48,19 @@ namespace rt::math {
             return elems_;
         }
 
-    private:
-        template<int R0, int C0>
-        static Matrix<R0, C0> init_zero() {
-            MatrixTable<R0, C0> table;
-            for (int r = 0; r < R0; r++) {
-                MatrixRow<C> row;
-                for (int c = 0; c < C0; c++) {
-                    row.push_back(0);
+        Matrix<R, C> operator*(const Matrix<R, C> &other) const {
+            Matrix<R, C> product{{}};
+            for (int r = 0; r < R; r++) {
+                for (int c = 0; c < C; c++) {
+                    real sum = 0;
+                    for (int j = 0; j < other.elems_.size(); j++) {
+                        sum += elems_[r][j] * other.elems_[j][c];
+                    }
+                    product[r][c] = sum;
                 }
-                table.push_back(row);
             }
-            return Matrix{table};
+            return product;
         }
-
-    public:
-        template<int R0, int C0>
-        static Matrix<R0, C0> zero{init_zero<R0, C0>()};
     };
 
     template<int R, int C>

@@ -14,6 +14,7 @@ namespace tests::matrices {
         set("Matrices", [] {
             init();
             compare();
+            multiplication();
         });
     }
 
@@ -93,6 +94,36 @@ namespace tests::matrices {
                 math::Matrix<4, 4> m2{t2};
 
                 ASSERT_TRUE(m1 != m2);
+            });
+        });
+    }
+
+    void multiplication() {
+        set("Multiplication", [] {
+            scenario("Two matrices", [] {
+                math::MatrixTable<4, 4> t1{
+                        {{1, 2, 3, 4},
+                         {5, 6, 7, 8},
+                         {9, 8, 7, 6},
+                         {5, 4, 3, 2}}
+                };
+                math::MatrixTable<4, 4> t2{
+                        {{-2, 1, 2, 3},
+                         {3, 2, 1, -1},
+                         {4, 3, 6, 5},
+                         {1, 2, 7, 8}}
+                };
+
+                math::MatrixTable<4, 4> et{
+                        {{20, 22, 50, 48},
+                         {44, 54, 114, 108},
+                         {40, 58, 110, 102},
+                         {16, 26, 46, 42}}
+                };
+                math::Matrix<4, 4> expected{et};
+                math::Matrix<4, 4> product = math::Matrix<4, 4>{t1} * math::Matrix<4, 4>{t2};
+
+                ASSERT_EQ(expected, product);
             });
         });
     }

@@ -9,25 +9,75 @@
 #include "utils.h"
 
 namespace rt::math {
-    using MatrixRow = std::vector<real>;
-    using MatrixTable = std::vector<MatrixRow>;
+    template<int S>
+    using MatrixRow = std::array<real, S>;
 
+    template<int R, int C>
+    using MatrixTable = std::array<MatrixRow<C>, R>;
+
+    template<int R, int C>
     class Matrix {
-        MatrixTable &elems_;
+        MatrixTable<R, C> &elems_;
 
     public:
-        explicit Matrix(MatrixTable &elems);
+        explicit Matrix(MatrixTable<R, C> &elems) : elems_{elems} {}
 
-        MatrixRow &operator[](int row);
+        MatrixRow<C> &operator[](int row) {
+            return elems_[row];
+        }
 
-        bool operator==(const Matrix &other) const;
+        bool operator==(const Matrix<R, C> &other) const {
+            bool equals = true;
+            for (int r = 0; r < R; r++) {
+                for (int c = 0; c < C; c++) {
+                    if (!compare_reals(this->elems_[r][c], other.elems_[r][c])) {
+                        equals = false;
+                        break;
+                    }
+                }
+                if (!equals) break;
+            }
+            return equals;
+        }
 
-        bool operator!=(const Matrix &other) const;
+        template<int R1, int C1>
+        bool operator!=(const Matrix<R1, C1> &other) const {
+            return !(*this == other);
+        }
 
-        const MatrixTable &elems() const;
+        const MatrixTable<R, C> &elems() const {
+            return elems_;
+        }
+
+    private:
+        template<int R0, int C0>
+        static Matrix<R0, C0> init_zero() {
+            MatrixTable<R0, C0> table;
+            for (int r = 0; r < R0; r++) {
+                MatrixRow<C> row;
+                for (int c = 0; c < C0; c++) {
+                    row.push_back(0);
+                }
+                table.push_back(row);
+            }
+            return Matrix{table};
+        }
+
+    public:
+        template<int R0, int C0>
+        static Matrix<R0, C0> zero{init_zero<R0, C0>()};
     };
 
-    std::ostream &operator<<(std::ostream &out, const Matrix &matrix);
+    template<int R, int C>
+    std::ostream &operator<<(std::ostream &out, const Matrix<R, C> &matrix) {
+        for (const auto &row: matrix.elems()) {
+            for (const auto &elem: row) {
+                out << elem << ' ';
+            }
+            out << std::endl;
+        }
+        return out;
+    }
 }
 
 #endif //ECENA_MATRIX_H

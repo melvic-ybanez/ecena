@@ -19,7 +19,7 @@ namespace rt::math {
         MatrixTable<R, C> elems_;
 
     public:
-        explicit Matrix(MatrixTable<R, C> elems) : elems_{elems} {}
+        explicit Matrix(MatrixTable<R, C> elems) : elems_{std::move(elems)} {}
 
         MatrixRow<C> &operator[](int row) {
             return elems_[row];

@@ -2,7 +2,7 @@
 // Created by Melvic Ybanez on 12/8/22.
 //
 
-#include "../include/math_utils.h"
+#include "../include/utils.h"
 #include <cstdlib>
 #include <cmath>
 

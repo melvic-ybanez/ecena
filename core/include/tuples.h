@@ -8,7 +8,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-#include "../include/math_utils.h"
+#include "../../math/include/utils.h"
 
 namespace rt {
     class Tuple {

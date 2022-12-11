@@ -2,8 +2,8 @@
 // Created by Melvic Ybanez on 12/8/22.
 //
 
-#ifndef ECENA_MATH_UTILS_H
-#define ECENA_MATH_UTILS_H
+#ifndef ECENA_UTILS_H
+#define ECENA_UTILS_H
 
 namespace rt {
     using real = double;
@@ -17,4 +17,4 @@ namespace rt::math {
     int scale(real value, int max_value);
 }
 
-#endif //ECENA_MATH_UTILS_H
+#endif //ECENA_UTILS_H

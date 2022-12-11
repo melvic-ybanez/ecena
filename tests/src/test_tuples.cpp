@@ -4,7 +4,7 @@
 
 #include "../include/test_tuples.h"
 #include "../include/asserts.h"
-#include "../../include/tuples.h"
+#include "../../core/include/tuples.h"
 
 namespace tests::tuples {
     void all() {

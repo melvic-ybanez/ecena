@@ -6,6 +6,7 @@
 #define ECENA_MATRIX_H
 
 #include "utils.h"
+#include "../../core/include/tuples.h"
 
 namespace rt::math {
     template<int S>
@@ -48,7 +49,12 @@ namespace rt::math {
             return elems_;
         }
 
-        Matrix<R, C> operator*(const Matrix<R, C> &other) const {
+        /**
+         * Multiply this matrix by another matrix, provided that the former's number of columns
+         * is the same as the latter's number of rows.
+         */
+        template<int C0>
+        Matrix<R, C> operator*(const Matrix<C, C0> &other) const {
             Matrix<R, C> product{{}};
             for (int r = 0; r < R; r++) {
                 for (int c = 0; c < C; c++) {

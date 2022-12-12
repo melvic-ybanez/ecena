@@ -28,8 +28,8 @@ namespace rt::math {
 
         bool operator==(const Matrix<R, C> &other) const {
             bool equals = true;
-            for (int r = 0; r < R; r++) {
-                for (int c = 0; c < C; c++) {
+            for (auto r = 0; r < R; r++) {
+                for (auto c = 0; c < C; c++) {
                     if (!compare_reals(this->elems_[r][c], other.elems_[r][c])) {
                         equals = false;
                         break;
@@ -56,10 +56,10 @@ namespace rt::math {
         template<size_t C0>
         Matrix<R, C0> operator*(const Matrix<C, C0> &other) const {
             Matrix<R, C0> product{{}};
-            for (int r = 0; r < R; r++) {
-                for (int c = 0; c < C0; c++) {
+            for (auto r = 0; r < R; r++) {
+                for (auto c = 0; c < C0; c++) {
                     real sum = 0;
-                    for (int j = 0; j < C; j++) {
+                    for (auto j = 0; j < C; j++) {
                         sum += elems()[r][j] * other.elems()[j][c];
                     }
                     product[r][c] = sum;
@@ -85,6 +85,29 @@ namespace rt::math {
         Matrix<4, 1> other{{{{tuple.x()}, {tuple.y()}, {tuple.z()}, {tuple.w()}}}};
         Matrix<R, 1> result = matrix * other;
         return Tuple{result[0][0], result[0][1], result[0][2], result[0][3]};
+    }
+
+    namespace {
+        template<size_t R, size_t C>
+        Matrix<R, C> identity_value{{}};
+    }
+
+    template<size_t R, size_t C>
+    Matrix<R, C> identity() {
+        // If it has a 1, then it's already initialized. Just return it immediately.
+        if (identity_value<R, C>[0][0] == 1) return identity_value<R, C>;
+
+        MatrixTable<R, C> table{};
+
+        // set all the elements along the diagonal to 1
+        for (auto r = 0; r < R; r++) {
+            for (auto c = 0; c < C; c++) {
+                if (r == c) table[r][c] = 1;
+            }
+        }
+
+        identity_value<R, C> = Matrix{table};
+        return identity_value<R, C>;
     }
 }
 

@@ -98,7 +98,7 @@ namespace tests::matrices {
 
     void multiplication() {
         set("Multiplication", [] {
-            scenario("Two matrices", [] {
+            scenario("Matrix-matrix", [] {
                 math::MatrixTable<4, 4> t1{
                         {{1, 2, 3, 4},
                          {5, 6, 7, 8},
@@ -117,11 +117,11 @@ namespace tests::matrices {
                           {40, 58, 110, 102},
                           {16, 26, 46, 42}}}
                 };
-                math::Matrix<4, 4> product = math::Matrix<4, 4>{t1} * math::Matrix<4, 4>{t2};
+                auto product = math::Matrix<4, 4>{t1} * math::Matrix<4, 4>{t2};
 
                 ASSERT_EQ(expected, product);
             });
-            scenario("A matrix and a tuple", [] {
+            scenario("Matrix-tuple", [] {
                 math::Matrix<4, 4> matrix{
                         {{{1, 2, 3, 4},
                           {2, 4, 4, 2},
@@ -133,6 +133,16 @@ namespace tests::matrices {
                 rt::Tuple expected{18, 24, 33, 1};
 
                 ASSERT_EQ(expected, matrix * tuple);
+            });
+            scenario("Matrix-Id", [] {
+                math::Matrix<4, 4> matrix{
+                        {{{0, 1, 2, 4},
+                          {1, 2, 4, 8},
+                          {2, 4, 8, 6},
+                          {4, 8, 16, 32}}}
+                };
+                auto result = matrix * math::identity<4, 4>();
+                ASSERT_EQ(matrix, result);
             });
         });
     }

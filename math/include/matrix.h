@@ -9,13 +9,13 @@
 #include "../../core/include/tuples.h"
 
 namespace rt::math {
-    template<int S>
+    template<size_t S>
     using MatrixRow = std::array<real, S>;
 
-    template<int R, int C>
+    template<size_t R, size_t C>
     using MatrixTable = std::array<MatrixRow<C>, R>;
 
-    template<int R, int C>
+    template<size_t R, size_t C>
     class Matrix {
         MatrixTable<R, C> elems_;
 
@@ -40,7 +40,7 @@ namespace rt::math {
             return equals;
         }
 
-        template<int R1, int C1>
+        template<size_t R1, size_t C1>
         bool operator!=(const Matrix<R1, C1> &other) const {
             return !(*this == other);
         }
@@ -53,7 +53,7 @@ namespace rt::math {
          * Multiply this matrix by another matrix, provided that the former's number of columns
          * is the same as the latter's number of rows.
          */
-        template<int C0>
+        template<size_t C0>
         Matrix<R, C0> operator*(const Matrix<C, C0> &other) const {
             Matrix<R, C0> product{{}};
             for (int r = 0; r < R; r++) {
@@ -69,7 +69,7 @@ namespace rt::math {
         }
     };
 
-    template<int R, int C>
+    template<size_t R, size_t C>
     std::ostream &operator<<(std::ostream &out, const Matrix<R, C> &matrix) {
         for (const auto &row: matrix.elems()) {
             for (const auto &elem: row) {
@@ -80,7 +80,7 @@ namespace rt::math {
         return out;
     }
 
-    template<int R>
+    template<size_t R>
     Tuple operator*(const Matrix<R, 4> &matrix, const Tuple &tuple) {
         Matrix<4, 1> other{{{{tuple.x()}, {tuple.y()}, {tuple.z()}, {tuple.w()}}}};
         Matrix<R, 1> result = matrix * other;

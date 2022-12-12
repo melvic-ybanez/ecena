@@ -54,13 +54,13 @@ namespace rt::math {
          * is the same as the latter's number of rows.
          */
         template<int C0>
-        Matrix<R, C> operator*(const Matrix<C, C0> &other) const {
-            Matrix<R, C> product{{}};
+        Matrix<R, C0> operator*(const Matrix<C, C0> &other) const {
+            Matrix<R, C0> product{{}};
             for (int r = 0; r < R; r++) {
-                for (int c = 0; c < C; c++) {
+                for (int c = 0; c < C0; c++) {
                     real sum = 0;
-                    for (int j = 0; j < other.elems_.size(); j++) {
-                        sum += elems_[r][j] * other.elems_[j][c];
+                    for (int j = 0; j < C; j++) {
+                        sum += elems()[r][j] * other.elems()[j][c];
                     }
                     product[r][c] = sum;
                 }
@@ -78,6 +78,13 @@ namespace rt::math {
             out << std::endl;
         }
         return out;
+    }
+
+    template<int R>
+    Tuple operator*(const Matrix<R, 4> &matrix, const Tuple &tuple) {
+        Matrix<4, 1> other{{{{tuple.x()}, {tuple.y()}, {tuple.z()}, {tuple.w()}}}};
+        Matrix<R, 1> result = matrix * other;
+        return Tuple{result[0][0], result[0][1], result[0][2], result[0][3]};
     }
 }
 

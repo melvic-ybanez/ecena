@@ -121,6 +121,19 @@ namespace tests::matrices {
 
                 ASSERT_EQ(expected, product);
             });
+            scenario("A matrix and a tuple", [] {
+                math::Matrix<4, 4> matrix{
+                        {{{1, 2, 3, 4},
+                          {2, 4, 4, 2},
+                          {8, 6, 4, 1},
+                          {0, 0, 0, 1}}}
+                };
+                rt::Tuple tuple{1, 2, 3, 1};
+
+                rt::Tuple expected{18, 24, 33, 1};
+
+                ASSERT_EQ(expected, matrix * tuple);
+            });
         });
     }
 }

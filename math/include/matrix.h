@@ -8,7 +8,7 @@
 #include "utils.h"
 #include "../../core/include/tuples.h"
 
-namespace rt::math {
+namespace rt::math::matrix {
     template<size_t S>
     using MatrixRow = std::array<real, S>;
 
@@ -27,6 +27,10 @@ namespace rt::math {
         explicit Matrix() : elems_({}) {}
 
         MatrixRow<C> &operator[](size_t row) {
+            return elems_[row];
+        }
+
+        const MatrixRow<C> &operator[](size_t row) const {
             return elems_[row];
         }
 
@@ -71,16 +75,6 @@ namespace rt::math {
             }
             return product;
         }
-
-        Matrix<R, C> transpose() const {
-            Matrix<R, C> result;
-            for (auto r = 0; r < R; r++) {
-                for (auto c = 0; c < C; c++) {
-                    result[r][c] = elems_[c][r];
-                }
-            }
-            return result;
-        }
     };
 
     template<size_t R, size_t C>
@@ -123,6 +117,22 @@ namespace rt::math {
         identity_value<R, C> = Matrix{table};
         return identity_value<R, C>;
     }
+
+    template<size_t S>
+    Matrix<S, S> transpose(const Matrix<S, S> &matrix) {
+        Matrix<S, S> result;
+        for (auto r = 0; r < S; r++) {
+            for (auto c = 0; c < S; c++) {
+                result[r][c] = matrix[c][r];
+            }
+        }
+        return result;
+    }
+}
+
+namespace rt::math {
+    template<size_t R, size_t C>
+    using Matrix = rt::math::matrix::Matrix<R, C>;
 }
 
 #endif //ECENA_MATRIX_H

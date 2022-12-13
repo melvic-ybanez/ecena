@@ -100,17 +100,17 @@ namespace tests::matrices {
     void multiplication() {
         set("Multiplication", [] {
             scenario("Matrix-matrix", [] {
-                math::MatrixTable<4, 4> t1{
-                        {{1, 2, 3, 4},
-                         {5, 6, 7, 8},
-                         {9, 8, 7, 6},
-                         {5, 4, 3, 2}}
+                math::Matrix<4, 4> m1{
+                        {{{1, 2, 3, 4},
+                          {5, 6, 7, 8},
+                          {9, 8, 7, 6},
+                          {5, 4, 3, 2}}}
                 };
-                math::MatrixTable<4, 4> t2{
-                        {{-2, 1, 2, 3},
-                         {3, 2, 1, -1},
-                         {4, 3, 6, 5},
-                         {1, 2, 7, 8}}
+                math::Matrix<4, 4> m2{
+                        {{{-2, 1, 2, 3},
+                          {3, 2, 1, -1},
+                          {4, 3, 6, 5},
+                          {1, 2, 7, 8}}}
                 };
                 math::Matrix<4, 4> expected{
                         {{{20, 22, 50, 48},
@@ -118,9 +118,8 @@ namespace tests::matrices {
                           {40, 58, 110, 102},
                           {16, 26, 46, 42}}}
                 };
-                auto product = math::Matrix<4, 4>{t1} * math::Matrix<4, 4>{t2};
 
-                ASSERT_EQ(expected, product);
+                ASSERT_EQ(expected, m1 * m2);
             });
             scenario("Matrix-tuple", [] {
                 math::Matrix<4, 4> matrix{
@@ -142,7 +141,7 @@ namespace tests::matrices {
                           {2, 4, 8, 6},
                           {4, 8, 16, 32}}}
                 };
-                auto result = matrix * math::identity<4, 4>();
+                auto result = matrix * math::matrix::identity<4, 4>();
                 ASSERT_EQ(matrix, result);
             });
         });
@@ -163,11 +162,11 @@ namespace tests::matrices {
                           {3, 0, 5, 5},
                           {0, 8, 3, 8}}}
                 };
-                ASSERT_EQ(expected, matrix.transpose());
+                ASSERT_EQ(expected, math::matrix::transpose(matrix));
             });
             scenario("An identity matrix", [] {
-               auto idm = math::identity<4, 4>();
-                ASSERT_EQ(idm, idm.transpose());
+                auto idm = math::matrix::identity<4, 4>();
+                ASSERT_EQ(idm, math::matrix::transpose(idm));
             });
         });
     }

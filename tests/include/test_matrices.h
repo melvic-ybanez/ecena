@@ -13,6 +13,8 @@ namespace tests::matrices {
     void compare();
 
     void multiplication();
+
+    void transpose();
 }
 
 #endif //ECENA_TEST_MATRICES_H

@@ -15,6 +15,7 @@ namespace tests::matrices {
             init();
             compare();
             multiplication();
+            transpose();
         });
     }
 
@@ -143,6 +144,30 @@ namespace tests::matrices {
                 };
                 auto result = matrix * math::identity<4, 4>();
                 ASSERT_EQ(matrix, result);
+            });
+        });
+    }
+
+    void transpose() {
+        set("Transpose", [] {
+            scenario("A non-id matrix", [] {
+                math::Matrix<4, 4> matrix{
+                        {{{0, 9, 3, 0},
+                          {9, 8, 0, 8},
+                          {1, 8, 5, 3},
+                          {0, 0, 5, 8}}}
+                };
+                math::Matrix<4, 4> expected{
+                        {{{0, 9, 1, 0},
+                          {9, 8, 8, 0},
+                          {3, 0, 5, 5},
+                          {0, 8, 3, 8}}}
+                };
+                ASSERT_EQ(expected, matrix.transpose());
+            });
+            scenario("An identity matrix", [] {
+               auto idm = math::identity<4, 4>();
+                ASSERT_EQ(idm, idm.transpose());
             });
         });
     }

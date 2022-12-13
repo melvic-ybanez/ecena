@@ -22,7 +22,11 @@ namespace rt::math {
     public:
         explicit Matrix(MatrixTable<R, C> elems) : elems_{std::move(elems)} {}
 
-        MatrixRow<C> &operator[](int row) {
+        Matrix(const Matrix<R, C> &from) : elems_{from.elems_} {}
+
+        explicit Matrix() : elems_({}) {}
+
+        MatrixRow<C> &operator[](size_t row) {
             return elems_[row];
         }
 
@@ -55,7 +59,7 @@ namespace rt::math {
          */
         template<size_t C0>
         Matrix<R, C0> operator*(const Matrix<C, C0> &other) const {
-            Matrix<R, C0> product{{}};
+            Matrix<R, C0> product;
             for (auto r = 0; r < R; r++) {
                 for (auto c = 0; c < C0; c++) {
                     real sum = 0;
@@ -66,6 +70,16 @@ namespace rt::math {
                 }
             }
             return product;
+        }
+
+        Matrix<R, C> transpose() const {
+            Matrix<R, C> result;
+            for (auto r = 0; r < R; r++) {
+                for (auto c = 0; c < C; c++) {
+                    result[r][c] = elems_[c][r];
+                }
+            }
+            return result;
         }
     };
 

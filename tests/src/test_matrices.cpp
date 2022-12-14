@@ -20,6 +20,7 @@ namespace tests::matrices {
             submatrices();
             minors();
             cofactors();
+            inversion();
         });
     }
 
@@ -265,6 +266,31 @@ namespace tests::matrices {
             ASSERT_EQ_MSG("Cofactor(0, 0)", -12, matrix.cofactor(0, 0));
             ASSERT_EQ_MSG("Minor(1, 0)", 25, matrix.minor(1, 0));
             ASSERT_EQ_MSG("Cofactor(1, 0)", -25, matrix.cofactor(1, 0));
+        });
+    }
+
+    void inversion() {
+        set("Inversion", [] {
+            set("Testing an invertible matrix for invertibility", [] {
+                math::Matrix<4, 4> matrix{
+                        {{{6, 4, 4, 4},
+                          {5, 5, 7, 6},
+                          {4, -9, 3, -7},
+                          {9, 1, 7, -6}}}
+                };
+                ASSERT_EQ_MSG("Determinant", -2120, matrix.determinant());
+                ASSERT_TRUE_MSG("Is invertible", matrix.is_invertible());
+            });
+            set("Testing a non-invertible matrix for invertibility", [] {
+                math::Matrix<4, 4> matrix{
+                        {{{-4, 2, -2, -3},
+                          {9, 6, 2, 6},
+                          {0, -5, 1, -5},
+                          {0, 0, 0, 0}}}
+                };
+                ASSERT_EQ_MSG("Derterminant", 0, matrix.determinant());
+                ASSERT_TRUE_MSG("Is not invertible", !matrix.is_invertible());
+            });
         });
     }
 }

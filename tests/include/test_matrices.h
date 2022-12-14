@@ -23,6 +23,8 @@ namespace tests::matrices {
     void minors();
 
     void cofactors();
+
+    void inversion();
 }
 
 #endif //ECENA_TEST_MATRICES_H

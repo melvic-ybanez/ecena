@@ -92,6 +92,11 @@ namespace rt::math::matrix {
             return result;
         }
 
+        /**
+         * Computes the determinant of the matrix assuming the dimensions
+         * are above 2x2.
+         * Note: 2x2 matrices are template-specialized.
+         */
         real determinant() const {
             auto determinant = 0;
             for (auto c = 0; c < C; c++) {
@@ -120,6 +125,10 @@ namespace rt::math::matrix {
             auto m = minor(row, col);
             if ((row + col) % 2 != 0) return -m;
             return m;
+        }
+
+        bool is_invertible() const {
+            return determinant() != 0;
         }
     };  // end of Matrix
 

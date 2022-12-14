@@ -14,8 +14,12 @@ namespace tests::matrices {
         set("Matrices", [] {
             init();
             compare();
-            multiplication();
+            multiplications();
             transpose();
+            determinants();
+            submatrices();
+            minors();
+            cofactors();
         });
     }
 
@@ -97,7 +101,7 @@ namespace tests::matrices {
         });
     }
 
-    void multiplication() {
+    void multiplications() {
         set("Multiplication", [] {
             scenario("Matrix-matrix", [] {
                 math::Matrix<4, 4> m1{
@@ -168,6 +172,99 @@ namespace tests::matrices {
                 auto idm = math::matrix::identity<4, 4>();
                 ASSERT_EQ(idm, math::matrix::transpose(idm));
             });
+        });
+    }
+
+    void determinants() {
+        set("Determinants", [] {
+            scenario("2x2", [] {
+                math::Matrix<2, 2> matrix{
+                        {{{1, 5},
+                          {-3, 2}}}
+                };
+                ASSERT_EQ(17, matrix.determinant());
+            });
+            set("3x3", [] {
+                math::Matrix<3, 3> matrix{
+                        {{{1, 2, 6},
+                          {-5, 8, -4},
+                          {2, 6, 4}}}
+                };
+                ASSERT_EQ_MSG("Cofactor(0, 0)", 56, matrix.cofactor(0, 0));
+                ASSERT_EQ_MSG("Cofactor(0, 1)", 12, matrix.cofactor(0, 1));
+                ASSERT_EQ_MSG("Cofactor(0, 2)", -46, matrix.cofactor(0, 2));
+                ASSERT_EQ_MSG("Determinant", -196, matrix.determinant());
+            });
+            set("4z4", [] {
+                math::Matrix<4, 4> matrix{
+                        {{{-2, -8, 3, 5},
+                          {-3, 1, 7, 3},
+                          {1, 2, -9, 6},
+                          {-6, 7, 7, -9}}}
+                };
+                ASSERT_EQ_MSG("Cofactor(0, 0)", 690, matrix.cofactor(0, 0));
+                ASSERT_EQ_MSG("Cofactor(0, 1)", 447, matrix.cofactor(0, 1));
+                ASSERT_EQ_MSG("Cofactor(0, 2)", 210, matrix.cofactor(0, 2));
+                ASSERT_EQ_MSG("Cofactor(0, 2)", 51, matrix.cofactor(0, 3));
+                ASSERT_EQ_MSG("Determinant", -4071, matrix.determinant());
+            });
+        });
+    }
+
+    void submatrices() {
+        set("Submatrices", [] {
+            scenario("3x3", [] {
+                math::Matrix<3, 3> matrix{
+                        {{{1, 5, 0},
+                          {-3, 2, 7},
+                          {0, 6, -3}}}
+                };
+                math::Matrix<2, 2> expected{
+                        {{{-3, 2},
+                          {0, 6}}}
+                };
+                ASSERT_EQ(expected, matrix.submatrix(0, 2));
+            });
+            scenario("4x4", [] {
+                math::Matrix<4, 4> matrix{
+                        {{{-6, 1, 1, 6},
+                          {-8, 5, 8, 6},
+                          {-1, 0, 8, 2},
+                          {-7, 1, -1, 1}}}
+                };
+                math::Matrix<3, 3> expected{
+                        {{{-6, 1, 6},
+                          {-8, 8, 6},
+                          {-7, -1, 1}}}
+                };
+                ASSERT_EQ(expected, matrix.submatrix(2, 1));
+            });
+        });
+    }
+
+    void minors() {
+        set("Computing a minor of a 3x3 matrix", [] {
+            math::Matrix<3, 3> matrix{
+                    {{{3, 5, 0},
+                      {2, -1, -7},
+                      {6, -1, 5}}}
+            };
+            ASSERT_EQ_MSG("Determinant", 25, matrix.submatrix(1, 0).determinant());
+            ASSERT_EQ_MSG("Minor(1, 0)", 25, matrix.minor(1, 0));
+        });
+    }
+
+    void cofactors() {
+        set("Calculating the cofactor of a 3x3 matrix", [] {
+            math::Matrix<3, 3> matrix{
+                    {{{3, 5, 0},
+                      {2, -1, -7},
+                      {6, -1, 5}}}
+            };
+            ASSERT_EQ_MSG("Minor(0, 0)", -12, matrix.minor(0, 0));
+            ASSERT_EQ_MSG("Cofactor(0, 0)", -12, matrix.cofactor(0, 0));
+            ASSERT_EQ_MSG("Minor(1, 0)", 25, matrix.minor(1, 0));
+            ASSERT_EQ_MSG("Cofactor(1, 0)", -25, matrix.cofactor(1, 0));
         });
     }
 }

@@ -27,7 +27,7 @@ namespace tests {
         } else {
             std::cout << "[Failed] " << message << ", " << std::endl;
             indent_set();
-            std::cout << "  atRow " << function_name << ", line " << line_no;
+            std::cout << "  at " << function_name << ", line " << line_no;
         }
 
         test_count++;

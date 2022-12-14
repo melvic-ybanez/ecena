@@ -12,9 +12,17 @@ namespace tests::matrices {
 
     void compare();
 
-    void multiplication();
+    void multiplications();
 
     void transpose();
+
+    void determinants();
+
+    void submatrices();
+
+    void minors();
+
+    void cofactors();
 }
 
 #endif //ECENA_TEST_MATRICES_H

@@ -75,7 +75,53 @@ namespace rt::math::matrix {
             }
             return product;
         }
-    };
+
+        Matrix<R - 1, C - 1> submatrix(size_t row, size_t col) const {
+            Matrix<R - 1, C - 1> result;
+            auto r0 = 0;
+            for (auto r = 0; r < R; r++) {
+                if (r == row) continue;
+                auto c0 = 0;
+                for (auto c = 0; c < C; c++) {
+                    if (c == col) continue;
+                    result[r0][c0] = (*this)[r][c];
+                    c0++;
+                }
+                r0++;
+            }
+            return result;
+        }
+
+        real determinant() const {
+            auto determinant = 0;
+            for (auto c = 0; c < C; c++) {
+                determinant += (*this)[0][c] * cofactor(0, c);
+            }
+            return determinant;
+        }
+
+        /**
+         * Computes the determinants of the submatrix
+         */
+        real minor(size_t row, size_t col) const {
+            return submatrix(row, col).determinant();
+        }
+
+        /**
+         * A cofactor is a minor that has its sign possibly flipped according to the
+         * following table
+         * [+ - +]
+         * [- + -]
+         * [+ - +]
+         * If the minor lands on a positive spot, it gets to keep its value. Otherwise, its
+         * sign is negated.
+         */
+        real cofactor(size_t row, size_t col) const {
+            auto m = minor(row, col);
+            if ((row + col) % 2 != 0) return -m;
+            return m;
+        }
+    };  // end of Matrix
 
     template<size_t R, size_t C>
     std::ostream &operator<<(std::ostream &out, const Matrix<R, C> &matrix) {
@@ -128,6 +174,12 @@ namespace rt::math::matrix {
         }
         return result;
     }
+
+    /**
+     * Computes the determinants of any 2x2 matrix.
+     */
+    template<>
+    real Matrix<2, 2>::determinant() const;
 }
 
 namespace rt::math {

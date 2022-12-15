@@ -10,27 +10,27 @@
 
 namespace rt::math::matrix {
     template<size_t S>
-    using MatrixRow = std::array<real, S>;
+    using Row = std::array<real, S>;
 
     template<size_t R, size_t C>
-    using MatrixTable = std::array<MatrixRow<C>, R>;
+    using Table = std::array<Row<C>, R>;
 
     template<size_t R, size_t C>
     class Matrix {
-        MatrixTable<R, C> elems_;
+        Table<R, C> elems_;
 
     public:
-        explicit Matrix(MatrixTable<R, C> elems) : elems_{std::move(elems)} {}
+        explicit Matrix(Table<R, C> elems) : elems_{std::move(elems)} {}
 
         Matrix(const Matrix<R, C> &from) : elems_{from.elems_} {}
 
         explicit Matrix() : elems_({}) {}
 
-        MatrixRow<C> &operator[](size_t row) {
+        Row<C> &operator[](size_t row) {
             return elems_[row];
         }
 
-        const MatrixRow<C> &operator[](size_t row) const {
+        const Row<C> &operator[](size_t row) const {
             return elems_[row];
         }
 
@@ -53,7 +53,7 @@ namespace rt::math::matrix {
             return !(*this == other);
         }
 
-        const MatrixTable<R, C> &elems() const {
+        const Table<R, C> &elems() const {
             return elems_;
         }
 
@@ -130,6 +130,41 @@ namespace rt::math::matrix {
         bool is_invertible() const {
             return determinant() != 0;
         }
+
+        Matrix<C, R> transpose() const {
+            Matrix<C, R> result;
+            for (auto r = 0; r < R; r++) {
+                for (auto c = 0; c < C; c++) {
+                    result[c][r] = (*this)[r][c];
+                }
+            }
+            return result;
+        }
+
+        Matrix<C, R> inverse() const {
+            Matrix<R, C> cofactors;
+            for (auto r = 0; r < R; r++) {
+                 for (auto c = 0; c < C; c++) {
+                     cofactors[r][c] = cofactor(r, c);
+                 }
+            }
+
+            Matrix<C, R> transpose{cofactors.transpose()};
+            auto d{determinant()};
+
+            Matrix<C, R> result;
+
+            // Divide each transposed cofactor by the original's determinant.
+            // Note that we need to reverse the column and row in the loop condition
+            // to account for the result of the transposition.
+            for (auto r = 0; r < C; r++) {
+                for (auto c = 0; c < R; c++) {
+                    result[r][c] = transpose[r][c] / d;
+                }
+            }
+
+            return result;
+        }
     };  // end of Matrix
 
     template<size_t R, size_t C>
@@ -160,7 +195,7 @@ namespace rt::math::matrix {
         // If it has a 1, then it's already initialized. Just return it immediately.
         if (identity_value<R, C>[0][0] == 1) return identity_value<R, C>;
 
-        MatrixTable<R, C> table{};
+        Table<R, C> table{};
 
         // set all the elements along the diagonal to 1
         for (auto r = 0; r < R; r++) {
@@ -171,17 +206,6 @@ namespace rt::math::matrix {
 
         identity_value<R, C> = Matrix{table};
         return identity_value<R, C>;
-    }
-
-    template<size_t S>
-    Matrix<S, S> transpose(const Matrix<S, S> &matrix) {
-        Matrix<S, S> result;
-        for (auto r = 0; r < S; r++) {
-            for (auto c = 0; c < S; c++) {
-                result[r][c] = matrix[c][r];
-            }
-        }
-        return result;
     }
 
     /**

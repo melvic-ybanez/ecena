@@ -167,11 +167,11 @@ namespace tests::matrices {
                           {3, 0, 5, 5},
                           {0, 8, 3, 8}}}
                 };
-                ASSERT_EQ(expected, math::matrix::transpose(matrix));
+                ASSERT_EQ(expected, matrix.transpose());
             });
             scenario("An identity matrix", [] {
                 auto idm = math::matrix::identity<4, 4>();
-                ASSERT_EQ(idm, math::matrix::transpose(idm));
+                ASSERT_EQ(idm, idm.transpose());
             });
         });
     }
@@ -250,7 +250,7 @@ namespace tests::matrices {
                       {2, -1, -7},
                       {6, -1, 5}}}
             };
-            ASSERT_EQ_MSG("Determinant", 25, matrix.submatrix(1, 0).determinant());
+            ASSERT_EQ_MSG("Check determinant", 25, matrix.submatrix(1, 0).determinant());
             ASSERT_EQ_MSG("Minor(1, 0)", 25, matrix.minor(1, 0));
         });
     }
@@ -278,7 +278,7 @@ namespace tests::matrices {
                           {4, -9, 3, -7},
                           {9, 1, 7, -6}}}
                 };
-                ASSERT_EQ_MSG("Determinant", -2120, matrix.determinant());
+                ASSERT_EQ_MSG("Check determinant", -2120, matrix.determinant());
                 ASSERT_TRUE_MSG("Is invertible", matrix.is_invertible());
             });
             set("Testing a non-invertible matrix for invertibility", [] {
@@ -288,8 +288,32 @@ namespace tests::matrices {
                           {0, -5, 1, -5},
                           {0, 0, 0, 0}}}
                 };
-                ASSERT_EQ_MSG("Derterminant", 0, matrix.determinant());
+                ASSERT_EQ_MSG("Check determinant", 0, matrix.determinant());
                 ASSERT_TRUE_MSG("Is not invertible", !matrix.is_invertible());
+            });
+            set("Calculating the inverse of a matrix", [] {
+                math::Matrix<4, 4> matrix{
+                        {{{-5, 2, 6, -8},
+                          {1, -5, 1, 8},
+                          {7, 7, -6, -7},
+                          {1, -3, 7, 4}}}
+                };
+                math::Matrix<4, 4> inv{matrix.inverse()};
+
+                ASSERT_EQ_MSG("Check determinant", 532, matrix.determinant());
+                ASSERT_EQ_MSG("Cofactor(2, 3)", -160, matrix.cofactor(2, 3));
+                ASSERT_EQ_MSG("Inverse(3, 2)", -160.0 / 532, inv[3][2]);
+                ASSERT_EQ_MSG("Cofactor(3, 2)", 105, matrix.cofactor(3, 2));
+                ASSERT_EQ_MSG("Inverse(2, 3)", 105.0 / 532, inv[2][3]);
+
+                math::Matrix<4, 4> expected_inverse{
+                        {{{0.21805, 0.45113, 0.24060, -0.04511},
+                          {-0.80827, -1.45677, -0.44361, 0.52068},
+                          {-0.07895, -0.22368, -0.05263, 0.19737},
+                          {-0.52256, -0.81391, -0.30075, 0.30639}}}
+                };
+
+                ASSERT_EQ_MSG("Check inverse", expected_inverse, inv);
             });
         });
     }

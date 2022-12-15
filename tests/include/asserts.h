@@ -2,8 +2,8 @@
 // Created by Melvic Ybanez on 12/5/22.
 //
 
-#ifndef RAYTRACER_ASSERTS_H
-#define RAYTRACER_ASSERTS_H
+#ifndef ECENA_ASSERTS_H
+#define ECENA_ASSERTS_H
 
 #include <string>
 #include <iostream>
@@ -43,4 +43,4 @@ namespace tests {
     void indent_set();
 }
 
-#endif //RAYTRACER_ASSERTS_H
+#endif //ECENA_ASSERTS_H

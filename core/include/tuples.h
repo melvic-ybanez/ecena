@@ -2,8 +2,8 @@
 // Created by Melvic Ybanez on 12/4/22.
 //
 
-#ifndef RAYTRACER_TUPLES_H
-#define RAYTRACER_TUPLES_H
+#ifndef ECENA_TUPLES_H
+#define ECENA_TUPLES_H
 
 #include <cmath>
 #include <iostream>
@@ -82,4 +82,4 @@ namespace rt {
     Color operator*(const Color &c1, const Color &c2);
 }
 
-#endif //RAYTRACER_TUPLES_H
+#endif //ECENA_TUPLES_H

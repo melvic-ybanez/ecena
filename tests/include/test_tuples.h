@@ -2,8 +2,8 @@
 // Created by Melvic Ybanez on 12/5/22.
 //
 
-#ifndef RAYTRACER_TEST_TUPLES_H
-#define RAYTRACER_TEST_TUPLES_H
+#ifndef ECENA_TEST_TUPLES_H
+#define ECENA_TEST_TUPLES_H
 
 namespace tests::tuples {
     void all();
@@ -21,4 +21,4 @@ namespace tests::tuples {
     void colors();
 }
 
-#endif //RAYTRACER_TEST_TUPLES_H
+#endif //ECENA_TEST_TUPLES_H

@@ -142,6 +142,8 @@ namespace rt::math::matrix {
         }
 
         Matrix<C, R> inverse() const {
+            if (!is_invertible()) return *this;
+
             Matrix<R, C> cofactors;
             for (auto r = 0; r < R; r++) {
                  for (auto c = 0; c < C; c++) {

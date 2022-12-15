@@ -149,6 +149,23 @@ namespace tests::matrices {
                 auto result = matrix * math::matrix::identity<4, 4>();
                 ASSERT_EQ(matrix, result);
             });
+            scenario("A product and its inverse", [] {
+                math::Matrix<4, 4> matrix{
+                        {{{3, -9, 7, 3},
+                          {3, -8, 2, -9},
+                          {-4, 4, 4, 1},
+                          {-6, 5, -1, 1}}}
+                };
+                math::Matrix<4, 4> matrix2{
+                        {{{8, 2, 2, 2},
+                          {3, -1, 7, 0},
+                          {7, 0, 5, 4},
+                          {6, -2, 0, 5}}}
+                };
+                const auto &product{matrix * matrix2};
+
+                ASSERT_EQ(matrix, product * matrix2.inverse());
+            });
         });
     }
 

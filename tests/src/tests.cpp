@@ -7,12 +7,14 @@
 #include "../include/asserts.h"
 #include "../include/test_canvas.h"
 #include "../include/test_matrices.h"
+#include "../include/test_transformations.h"
 
 int main() {
     tests::reset();
     tests::tuples::all();
     tests::canvas::all();
     tests::matrices::all();
+    tests::transformations::all();
     std::cout << "Ran " << tests::test_count << " tests. Successful: " << tests::success_count << ". Failed: "
               << tests::test_count - tests::success_count << ".";
 }

@@ -8,7 +8,7 @@
 #include "../../math/include/matrix.h"
 
 namespace tests::matrices {
-    using namespace rt;
+    namespace math = rt::math;
 
     void all() {
         set("Matrices", [] {

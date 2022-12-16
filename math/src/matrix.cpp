@@ -20,4 +20,13 @@ namespace rt::math::matrix {
         auto d = (*this)[1][1];
         return a * d - b * c;
     }
+
+    Matrix<4, 4> translation(real x, real y, real z) {
+        return Matrix<4, 4>{
+                {{{1, 0, 0, x},
+                  {0, 1, 0, y},
+                  {0, 0, 1, z},
+                  {0, 0, 0, 1}}}
+        };
+    }
 }

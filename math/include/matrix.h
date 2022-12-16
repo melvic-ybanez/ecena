@@ -24,6 +24,12 @@ namespace rt::math::matrix {
 
         Matrix(const Matrix<R, C> &from) : elems_{from.elems_} {}
 
+        Matrix<R, C> &operator=(const Matrix<R, C> &from) {
+            if (this == &from) return *this;
+            elems_ = from.elems_;
+            return *this;
+        }
+
         explicit Matrix() : elems_({}) {}
 
         Row<C> &operator[](size_t row) {
@@ -146,9 +152,9 @@ namespace rt::math::matrix {
 
             Matrix<R, C> cofactors;
             for (auto r = 0; r < R; r++) {
-                 for (auto c = 0; c < C; c++) {
-                     cofactors[r][c] = cofactor(r, c);
-                 }
+                for (auto c = 0; c < C; c++) {
+                    cofactors[r][c] = cofactor(r, c);
+                }
             }
 
             Matrix<C, R> transpose{cofactors.transpose()};
@@ -189,26 +195,25 @@ namespace rt::math::matrix {
 
     namespace {
         template<size_t R, size_t C>
-        Matrix<R, C> identity_value{{}};
+        Matrix<R, C> identity_;
     }
 
     template<size_t R, size_t C>
     Matrix<R, C> identity() {
         // If it has a 1, then it's already initialized. Just return it immediately.
-        if (identity_value<R, C>[0][0] == 1) return identity_value<R, C>;
-
-        Table<R, C> table{};
+        if (identity_<R, C>[0][0] == 1) return identity_<R, C>;
 
         // set all the elements along the diagonal to 1
         for (auto r = 0; r < R; r++) {
             for (auto c = 0; c < C; c++) {
-                if (r == c) table[r][c] = 1;
+                if (r == c) identity_<R, C>[r][c] = 1;
             }
         }
 
-        identity_value<R, C> = Matrix{table};
-        return identity_value<R, C>;
+        return identity_<R, C>;
     }
+
+    Matrix<4, 4> translation(real x, real y, real z);
 
     /**
      * Computes the determinants of any 2x2 matrix.

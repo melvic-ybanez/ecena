@@ -213,13 +213,15 @@ namespace rt::math::matrix {
         return identity_<R, C>;
     }
 
-    Matrix<4, 4> translation(real x, real y, real z);
-
     /**
      * Computes the determinants of any 2x2 matrix.
      */
     template<>
     real Matrix<2, 2>::determinant() const;
+
+    Matrix<4, 4> translation(real x, real y, real z);
+
+    Matrix<4, 4> scaling(real x, real y, real z);
 }
 
 namespace rt::math {

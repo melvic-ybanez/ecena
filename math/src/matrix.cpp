@@ -29,4 +29,13 @@ namespace rt::math::matrix {
                   {0, 0, 0, 1}}}
         };
     }
+
+    Matrix<4, 4> scaling(real x, real y, real z) {
+        return Matrix<4, 4>{
+                {{{x, 0, 0, 0},
+                  {0, y, 0, 0},
+                  {0, 0, z, 0},
+                  {0, 0, 0, 1}}}
+        };
+    }
 }

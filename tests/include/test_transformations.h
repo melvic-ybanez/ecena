@@ -9,6 +9,8 @@ namespace tests::transformations {
     void all();
 
     void translations();
+
+    void scaling();
 }
 
 #endif //ECENA_TEST_TRANSFORMATIONS_H

@@ -104,7 +104,7 @@ namespace rt::math::matrix {
          * Note: 2x2 matrices are template-specialized.
          */
         real determinant() const {
-            auto determinant = 0;
+            real determinant = 0;
             for (auto c = 0; c < C; c++) {
                 determinant += (*this)[0][c] * cofactor(0, c);
             }
@@ -222,6 +222,8 @@ namespace rt::math::matrix {
     Matrix<4, 4> translation(real x, real y, real z);
 
     Matrix<4, 4> scaling(real x, real y, real z);
+
+    Matrix<4, 4> rotation_x(real r);
 }
 
 namespace rt::math {

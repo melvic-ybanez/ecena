@@ -9,7 +9,7 @@
 namespace rt::math {
     bool compare_reals(real a, real b) {
         auto result = std::abs(a - b);
-        return std::isnan(result) || result < EPSILON;
+        return std::isnan(result) || result < epsilon;
     }
 
     int scale(real value, int max_value) {

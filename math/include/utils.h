@@ -10,7 +10,9 @@ namespace rt {
 }
 
 namespace rt::math {
-    const double EPSILON = 0.0001;
+    constexpr double epsilon = 0.0001;
+
+    constexpr double pi = 3.14159265358979323846;
 
     bool compare_reals(real a, real b);
 

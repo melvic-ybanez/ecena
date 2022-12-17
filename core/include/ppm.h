@@ -11,7 +11,7 @@
 namespace rt {
     class Ppm {
         static const int max_line_width;
-        const std::string &identifier_;
+        std::string identifier_;
         Canvas canvas;
         int max_color_;
 

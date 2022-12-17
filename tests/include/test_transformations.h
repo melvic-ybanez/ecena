@@ -15,6 +15,8 @@ namespace tests::transformations {
     void rotations();
 
     void shearing();
+
+    void multiple_transformations();
 }
 
 #endif //ECENA_TEST_TRANSFORMATIONS_H

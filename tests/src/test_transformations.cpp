@@ -17,6 +17,7 @@ namespace tests::transformations {
             scaling();
             rotations();
             shearing();
+            multiple_transformations();
         });
     }
 
@@ -106,6 +107,28 @@ namespace tests::transformations {
             ASSERT_EQ_MSG("Moves y in the proportion to z", point.shear(0, 0, 0, 1, 0, 0), rt::Point(2, 7, 4));
             ASSERT_EQ_MSG("Moves z in the proportion to x", point.shear(0, 0, 0, 0, 1, 0), rt::Point(2, 3, 6));
             ASSERT_EQ_MSG("Moves z in the proportion to y", point.shear(0, 0, 0, 0, 0, 1), rt::Point(2, 3, 7));
+        });
+    }
+
+    void multiple_transformations() {
+        rt::Point point{1, 0, 1};
+        auto rotation_x{math::matrix::rotation_x(math::pi / 2)};
+        auto scaling{math::matrix::scaling(5, 5, 5)};
+        auto translation{math::matrix::translation(10, 5, 7)};
+
+        set("Individual transformations are applied in sequence", [=] {
+            auto rotated{rotation_x * point};
+            ASSERT_EQ_MSG("Apply rotation first", rotated, rt::Point(1, -1, 0));
+
+            auto scaled{scaling * rotated};
+            ASSERT_EQ_MSG("Then apply scaling", scaled, rt::Point(5, -5, 0));
+
+            auto translated{translation * scaled};
+            ASSERT_EQ_MSG("Then apply translation", translated, rt::Point(15, 0, 7));
+        });
+        scenario("Chained transformations must be applied in reverse order", [=] {
+            auto transformation{translation * scaling * rotation_x};
+            ASSERT_EQ(transformation * point, rt::Point(15, 0, 7));
         });
     }
 }

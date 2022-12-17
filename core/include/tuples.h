@@ -10,6 +10,8 @@
 #include <vector>
 #include "../../math/include/utils.h"
 
+#define TRANSFORM(matrix) matrix * (*this)
+
 namespace rt {
     class Tuple {
         std::vector<real> elems;
@@ -35,6 +37,10 @@ namespace rt {
         bool operator==(const Tuple &other) const;
 
         bool operator!=(const Tuple &other) const;
+
+        Tuple translate(real x, real y, real z) const;
+
+        Tuple scale(real x, real y, real z) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Tuple &t);

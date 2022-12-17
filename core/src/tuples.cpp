@@ -2,9 +2,11 @@
 // Created by Melvic Ybanez on 12/8/22.
 //
 
+#include <array>
 #include <iomanip>
 #include <fstream>
 #include "../include/tuples.h"
+#include "../../math/include/matrix.h"
 
 namespace rt {
     Tuple::Tuple() : elems{0, 0, 0, 0} {}
@@ -60,6 +62,14 @@ namespace rt {
 
     Tuple operator-(const Tuple &u, const Tuple &v) {
         return {u.x() - v.x(), u.y() - v.y(), u.z() - v.z(), u.w() - v.w()};
+    }
+
+    Tuple Tuple::translate(real x, real y, real z) const {
+        return TRANSFORM(math::matrix::translation(x, y, z));
+    }
+
+    Tuple Tuple::scale(real x, real y, real z) const {
+        return TRANSFORM(math::matrix::scaling(x, y, z));
     }
 
     Point::Point() : Tuple(0, 0, 0, 1) {}

@@ -13,6 +13,8 @@ namespace tests::transformations {
     void scaling();
 
     void rotations();
+
+    void shearing();
 }
 
 #endif //ECENA_TEST_TRANSFORMATIONS_H

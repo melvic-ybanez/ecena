@@ -228,6 +228,13 @@ namespace rt::math::matrix {
     Matrix<4, 4> rotation_y(real r);
 
     Matrix<4, 4> rotation_z(real r);
+
+    /**
+     * Moves x in proportion to y and z.
+     * Moves y in proportion to x and z.
+     * Moves z in proportion to x and y.
+     */
+    Matrix<4, 4> shearing(real xy, real xz, real yx, real yz, real zx, real zy);
 }
 
 namespace rt::math {

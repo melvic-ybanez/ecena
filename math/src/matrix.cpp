@@ -61,7 +61,16 @@ namespace rt::math::matrix {
         return Matrix<4, 4>{
                 {{{std::cos(r), -std::sin(r), 0, 0},
                   {std::sin(r), std::cos(r), 0, 0},
-                  {0, 0, 1,0},
+                  {0, 0, 1, 0},
+                  {0, 0, 0, 1}}}
+        };
+    }
+
+    Matrix<4, 4> shearing(real xy, real xz, real yx, real yz, real zx, real zy) {
+        return Matrix<4, 4>{
+                {{{1, xy, xz, 0},
+                  {yx, 1, yz, 0},
+                  {zx, zy, 1, 0},
                   {0, 0, 0, 1}}}
         };
     }

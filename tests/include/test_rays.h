@@ -9,6 +9,8 @@ namespace tests::rays {
     void all();
 
     void init();
+
+    void distance();
 }
 
 #endif //ECENA_TEST_RAYS_H

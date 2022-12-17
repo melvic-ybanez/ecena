@@ -92,9 +92,19 @@ namespace rt {
 
     Point::Point(real x, real y, real z) : Tuple(x, y, z, 1) {}
 
+    Point::Point(const Point &from) : Point(from.x(), from.y(), from.z()) {}
+
+    Point::Point(Point &&from)  noexcept : Point(from.x(), from.y(), from.z()) {}
+
+    Point::Point(const Tuple &tuple) : Point(tuple.x(), tuple.y(), tuple.z()) {}
+
     Vec::Vec() : Tuple(0, 0, 0, 0) {}
 
     Vec::Vec(real x, real y, real z) : Tuple(x, y, z, 0) {}
+
+    Vec::Vec(const Vec &from) : Vec(from.x(), from.y(), from.z()) {}
+
+    Vec::Vec(Vec &&from) noexcept : Vec(from.x(), from.y(), from.z()) {}
 
     real Vec::magnitude() const {
         return std::sqrt(x() * x() + y() * y() + z() * z() + w() * w());

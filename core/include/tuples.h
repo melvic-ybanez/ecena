@@ -14,6 +14,7 @@
 
 namespace rt {
     class Tuple {
+    protected:
         std::vector<real> elems;
     public:
         Tuple();
@@ -61,12 +62,17 @@ namespace rt {
     public:
         Point(real x, real y, real z);
         Point();
+        Point(const Point &from);
+        Point(Point &&from) noexcept ;
+        explicit Point(const Tuple &tuple);
     };
 
     class Vec : public Tuple {
     public:
         Vec(real x, real y, real z);
         Vec();
+        Vec(const Vec &from);
+        Vec(Vec &&from) noexcept ;
 
         real magnitude() const;
 

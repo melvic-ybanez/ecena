@@ -11,6 +11,7 @@ namespace tests::rays {
     void all() {
         set("Rays", [] {
             init();
+            distance();
         });
     }
 
@@ -21,6 +22,16 @@ namespace tests::rays {
             rt::Ray ray{origin, direction};
             ASSERT_EQ_MSG("Origin", origin, ray.origin());
             ASSERT_EQ_MSG("Direction", direction, ray.direction());
+        });
+    }
+
+    void distance() {
+        set("Computing a point from a distance", [] {
+            rt::Ray ray{rt::Point{2, 3, 4}, rt::Vec{1, 0, 0}};
+            ASSERT_EQ_MSG("at(0)", ray.at(0), rt::Point(2, 3, 4));
+            ASSERT_EQ_MSG("at(1)", ray.at(1), rt::Point(3, 3, 4));
+            ASSERT_EQ_MSG("at(-1)", ray.at(-1), rt::Point(1, 3, 4));
+            ASSERT_EQ_MSG("at(2.5)", ray.at(2.5), rt::Point(4.5, 3, 4));
         });
     }
 }

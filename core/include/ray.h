@@ -9,15 +9,19 @@
 
 namespace rt {
     class Ray {
-        const Point &origin_;
-        const Vec &direction_;
+        Point origin_;
+        Vec direction_;
 
     public:
         Ray(const Point &origin, const Vec &direction);
 
+        Ray(Point &&origin, Vec &&direction);
+
         const Point &origin() const;
 
         const Vec &direction() const;
+
+        Point at(real t) const;
     };
 }
 

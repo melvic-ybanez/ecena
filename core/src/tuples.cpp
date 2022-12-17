@@ -72,6 +72,22 @@ namespace rt {
         return TRANSFORM(math::matrix::scaling(x, y, z));
     }
 
+    Tuple Tuple::rotate_x(real r) const {
+        return TRANSFORM(math::matrix::rotation_x(r));
+    }
+
+    Tuple Tuple::rotate_y(real r) const {
+        return TRANSFORM(math::matrix::rotation_y(r));
+    }
+
+    Tuple Tuple::rotate_z(real r) const {
+        return TRANSFORM(math::matrix::rotation_z(r));
+    }
+
+    Tuple Tuple::shear(real xy, real xz, real yx, real yz, real zx, real zy) const {
+        return TRANSFORM(math::matrix::shearing(xy, xz, yx, yz, zx, zy));
+    }
+
     Point::Point() : Tuple(0, 0, 0, 1) {}
 
     Point::Point(real x, real y, real z) : Tuple(x, y, z, 1) {}

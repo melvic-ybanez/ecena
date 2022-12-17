@@ -58,22 +58,22 @@ namespace tests::transformations {
                 ASSERT_EQ(inv * vector, rt::Vec(-2, 2, 2));
             });
             scenario("Reflection is scaling by a negative value", [] {
-                auto transform{matrix::scaling(-1, 1, 1)};
                 rt::Point point{2, 3, 4};
-                ASSERT_EQ(transform * point, rt::Point(-2, 3, 4));
+                ASSERT_EQ(point.scale(-1, 1, 1), rt::Point(-2, 3, 4));
             });
         });
     }
 
     void rotations() {
         set("Rotations", [] {
-            set("Around the x-axis", [] {
-                rt::Point point{0, 1, 0};
-                auto half_quarter{matrix::rotation_x(math::pi / 4)};
-                auto full_quarter{matrix::rotation_x(math::pi / 2)};
+            auto half_quarter = math::pi / 4;
+            auto full_quarter = math::pi / 2;
 
-                ASSERT_EQ_MSG("Half quarter", half_quarter * point, rt::Point(0, std::sqrt(2) / 2, std::sqrt(2) / 2));
-                ASSERT_EQ_MSG("Full quarter", full_quarter * point, rt::Point(0, 0, 1));
+            set("Around the x-axis", [=] {
+                rt::Point point{0, 1, 0};
+                ASSERT_EQ_MSG("Half quarter", point.rotate_x(half_quarter),
+                              rt::Point(0, std::sqrt(2) / 2, std::sqrt(2) / 2));
+                ASSERT_EQ_MSG("Full quarter", point.rotate_x(full_quarter), rt::Point(0, 0, 1));
             });
             scenario("The inverse of an x-rotation rotates in the opposite direction", [] {
                 rt::Point point{0, 1, 0};
@@ -81,21 +81,17 @@ namespace tests::transformations {
                 auto inv{half_quarter.inverse()};
                 ASSERT_EQ(inv * point, rt::Point(0, std::sqrt(2) / 2, -std::sqrt(2) / 2));
             });
-            set("Around the y-axis", [] {
+            set("Around the y-axis", [=] {
                 rt::Point point{0, 0, 1};
-                auto half_quarter{matrix::rotation_y(math::pi / 4)};
-                auto full_quarter{matrix::rotation_y(math::pi / 2)};
-
-                ASSERT_EQ_MSG("Half quarter", half_quarter * point, rt::Point(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
-                ASSERT_EQ_MSG("Full quarter", full_quarter * point, rt::Point(1, 0, 0));
+                ASSERT_EQ_MSG("Half quarter", point.rotate_y(half_quarter),
+                              rt::Point(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
+                ASSERT_EQ_MSG("Full quarter", point.rotate_y(full_quarter), rt::Point(1, 0, 0));
             });
-            set("Around the z-axis", [] {
+            set("Around the z-axis", [=] {
                 rt::Point point{0, 1, 0};
-                auto half_quarter{matrix::rotation_z(math::pi / 4)};
-                auto full_quarter{matrix::rotation_z(math::pi / 2)};
-
-                ASSERT_EQ_MSG("Half quarter", half_quarter * point, rt::Point(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
-                ASSERT_EQ_MSG("Full quarter", full_quarter * point, rt::Point(-1, 0, 0));
+                ASSERT_EQ_MSG("Half quarter", point.rotate_z(half_quarter),
+                              rt::Point(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
+                ASSERT_EQ_MSG("Full quarter", point.rotate_z(full_quarter), rt::Point(-1, 0, 0));
             });
         });
     }
@@ -104,30 +100,12 @@ namespace tests::transformations {
         set("Shearing", [] {
             rt::Point point{2, 3, 4};
 
-            scenario("Moves x in proportion to y", [=] {
-                auto transform{matrix::shearing(1, 0, 0, 0, 0, 0)};
-                ASSERT_EQ(transform * point, rt::Point(5, 3, 4));
-            });
-            scenario("Moves x in proportion to z", [=] {
-                auto transform{matrix::shearing(0, 1, 0, 0, 0, 0)};
-                ASSERT_EQ(transform * point, rt::Point(6, 3, 4));
-            });
-            scenario("Moves y in the proportion to x", [=] {
-                auto transform{matrix::shearing(0, 0, 1, 0, 0, 0)};
-                ASSERT_EQ(transform * point, rt::Point(2, 5, 4));
-            });
-            scenario("Moves y in the proportion to z", [=] {
-                auto transform{matrix::shearing(0, 0, 0, 1, 0, 0)};
-                ASSERT_EQ(transform * point, rt::Point(2, 7, 4));
-            });
-            scenario("Moves z in the proportion to x", [=] {
-                auto transform{matrix::shearing(0, 0, 0, 0, 1, 0)};
-                ASSERT_EQ(transform * point, rt::Point(2, 3, 6));
-            });
-            scenario("Moves z in the proportion to y", [=] {
-                auto transform{matrix::shearing(0, 0, 0, 0, 0, 1)};
-                ASSERT_EQ(transform * point, rt::Point(2, 3, 7));
-            });
+            ASSERT_EQ_MSG("Moves x in proportion to y", point.shear(1, 0, 0, 0, 0, 0), rt::Point(5, 3, 4));
+            ASSERT_EQ_MSG("Moves x in proportion to z", point.shear(0, 1, 0, 0, 0, 0), rt::Point(6, 3, 4));
+            ASSERT_EQ_MSG("Moves y in the proportion to x", point.shear(0, 0, 1, 0, 0, 0), rt::Point(2, 5, 4));
+            ASSERT_EQ_MSG("Moves y in the proportion to z", point.shear(0, 0, 0, 1, 0, 0), rt::Point(2, 7, 4));
+            ASSERT_EQ_MSG("Moves z in the proportion to x", point.shear(0, 0, 0, 0, 1, 0), rt::Point(2, 3, 6));
+            ASSERT_EQ_MSG("Moves z in the proportion to y", point.shear(0, 0, 0, 0, 0, 1), rt::Point(2, 3, 7));
         });
     }
 }

@@ -41,6 +41,14 @@ namespace rt {
         Tuple translate(real x, real y, real z) const;
 
         Tuple scale(real x, real y, real z) const;
+
+        Tuple rotate_x(real r) const;
+
+        Tuple rotate_y(real r) const;
+
+        Tuple rotate_z(real r) const;
+
+        Tuple shear(real xy, real xz, real yx, real yz, real zx, real zy) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Tuple &t);

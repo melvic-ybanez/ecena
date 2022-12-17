@@ -224,6 +224,8 @@ namespace rt::math::matrix {
     Matrix<4, 4> scaling(real x, real y, real z);
 
     Matrix<4, 4> rotation_x(real r);
+
+    Matrix<4, 4> rotation_y(real r);
 }
 
 namespace rt::math {

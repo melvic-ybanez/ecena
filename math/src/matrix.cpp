@@ -47,4 +47,13 @@ namespace rt::math::matrix {
                   {0, 0, 0, 1}}}
         };
     }
+
+    Matrix<4, 4> rotation_y(real r) {
+        return Matrix<4, 4>{
+                {{{std::cos(r), 0, std::sin(r), 0},
+                  {0, 1, 0, 0},
+                  {-std::sin(r), 0, std::cos(r), 0},
+                  {0, 0, 0, 1}}}
+        };
+    }
 }

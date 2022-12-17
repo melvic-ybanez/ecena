@@ -67,7 +67,7 @@ namespace tests::transformations {
 
     void rotations() {
         set("Rotations", [] {
-            set("Rotating a point around the x-axis", [] {
+            set("Around the x-axis", [] {
                 rt::Point point{0, 1, 0};
                 auto half_quarter{matrix::rotation_x(math::pi / 4)};
                 auto full_quarter{matrix::rotation_x(math::pi / 2)};
@@ -80,6 +80,14 @@ namespace tests::transformations {
                 auto half_quarter{matrix::rotation_x(math::pi / 4)};
                 auto inv{half_quarter.inverse()};
                 ASSERT_EQ(inv * point, rt::Point(0, std::sqrt(2) / 2, -std::sqrt(2) / 2));
+            });
+            set("Around the y-axis", [] {
+                rt::Point point{0, 0, 1};
+                auto half_quarter{matrix::rotation_y(math::pi / 4)};
+                auto full_quarter{matrix::rotation_y(math::pi / 2)};
+
+                ASSERT_EQ_MSG("Half quarter", half_quarter * point, rt::Point(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
+                ASSERT_EQ_MSG("Full quarter", full_quarter * point, rt::Point(1, 0, 0));
             });
         });
     }

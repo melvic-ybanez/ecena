@@ -89,6 +89,14 @@ namespace tests::transformations {
                 ASSERT_EQ_MSG("Half quarter", half_quarter * point, rt::Point(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
                 ASSERT_EQ_MSG("Full quarter", full_quarter * point, rt::Point(1, 0, 0));
             });
+            set("Around the z-axis", [] {
+                rt::Point point{0, 1, 0};
+                auto half_quarter{matrix::rotation_z(math::pi / 4)};
+                auto full_quarter{matrix::rotation_z(math::pi / 2)};
+
+                ASSERT_EQ_MSG("Half quarter", half_quarter * point, rt::Point(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
+                ASSERT_EQ_MSG("Full quarter", full_quarter * point, rt::Point(-1, 0, 0));
+            });
         });
     }
 }

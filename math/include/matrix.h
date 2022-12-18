@@ -193,24 +193,21 @@ namespace rt::math::matrix {
         return Tuple{result[0][0], result[0][1], result[0][2], result[0][3]};
     }
 
-    namespace {
-        template<size_t R, size_t C>
-        Matrix<R, C> identity_;
-    }
-
     template<size_t R, size_t C>
     Matrix<R, C> identity() {
+        static Matrix<R, C> identity_;
+
         // If it has a 1, then it's already initialized. Just return it immediately.
-        if (identity_<R, C>[0][0] == 1) return identity_<R, C>;
+        if (identity_[0][0] == 1) return identity_;
 
         // set all the elements along the diagonal to 1
         for (auto r = 0; r < R; r++) {
             for (auto c = 0; c < C; c++) {
-                if (r == c) identity_<R, C>[r][c] = 1;
+                if (r == c) identity_[r][c] = 1;
             }
         }
 
-        return identity_<R, C>;
+        return identity_;
     }
 
     /**

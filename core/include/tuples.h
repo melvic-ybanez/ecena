@@ -8,7 +8,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-#include "../../math/include/utils.h"
+#include "../../math/include/math_utils.h"
 
 #define TRANSFORM(matrix) matrix * (*this)
 
@@ -73,12 +73,15 @@ namespace rt {
         Vec();
         Vec(const Vec &from);
         Vec(Vec &&from) noexcept ;
+        explicit Vec(const Tuple &tuple);
 
         real magnitude() const;
 
         Vec normalize() const;
 
         real dot(const Vec &other) const;
+
+        real dot(const Tuple &other) const;
 
         Vec cross(const Vec &other) const;
     };

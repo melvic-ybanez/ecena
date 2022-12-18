@@ -3,5 +3,49 @@ project(ecena)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(ecena main.cpp core/include/tuples.h core/src/tuples.cpp math/include/utils.h math/src/utils.cpp core/include/canvas.h core/src/canvas.cpp core/include/ppm.h core/src/ppm.cpp math/include/matrix.h math/src/matrix.cpp core/include/ray.h tests/include/test_rays.h core/src/ray.cpp)
-add_executable(ecena_tests tests/src/tests.cpp tests/include/asserts.h tests/src/asserts.cpp tests/include/test_tuples.h tests/src/test_tuples.cpp core/src/tuples.cpp math/include/utils.h math/src/utils.cpp core/include/canvas.h core/src/canvas.cpp tests/include/test_canvas.h tests/src/test_canvas.cpp core/include/ppm.h core/src/ppm.cpp math/include/matrix.h tests/src/test_matrices.cpp tests/include/test_matrices.h math/src/matrix.cpp tests/include/test_transformations.h tests/src/test_transformations.cpp core/include/ray.h tests/src/test_rays.cpp core/src/ray.cpp)
+add_executable(
+        ecena main.cpp
+        core/include/tuples.h
+        core/src/tuples.cpp
+        math/include/math_utils.h
+        math/src/math_utils.cpp
+        core/include/canvas.h
+        core/src/canvas.cpp
+        core/include/ppm.h
+        core/src/ppm.cpp
+        math/include/matrix.h
+        math/src/matrix.cpp
+        core/include/ray.h
+        core/src/ray.cpp
+        core/shapes/include/sphere.h
+        core/shapes/include/shape_utils.h
+        core/shapes/src/sphere.cpp core/include/world.h)
+add_executable(
+        ecena_tests
+        tests/src/tests.cpp
+        tests/include/asserts.h
+        tests/src/asserts.cpp
+        tests/include/test_tuples.h
+        tests/src/test_tuples.cpp
+        core/src/tuples.cpp
+        math/include/math_utils.h
+        math/src/math_utils.cpp
+        core/include/canvas.h
+        core/src/canvas.cpp
+        tests/include/test_canvas.h
+        tests/src/test_canvas.cpp
+        core/include/ppm.h
+        core/src/ppm.cpp
+        math/include/matrix.h
+        math/src/matrix.cpp
+        tests/src/test_matrices.cpp
+        tests/include/test_matrices.h
+        tests/include/test_transformations.h
+        tests/src/test_transformations.cpp
+        core/include/ray.h
+        core/src/ray.cpp
+        tests/include/test_rays.h
+        tests/src/test_rays.cpp
+        core/shapes/include/sphere.h
+        tests/include/test_spheres.h
+        tests/src/test_spheres.cpp core/shapes/include/shape_utils.h core/shapes/src/sphere.cpp)

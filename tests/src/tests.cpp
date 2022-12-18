@@ -9,6 +9,7 @@
 #include "../include/test_matrices.h"
 #include "../include/test_transformations.h"
 #include "../include/test_rays.h"
+#include "../include/test_spheres.h"
 
 int main() {
     tests::reset();
@@ -17,6 +18,7 @@ int main() {
     tests::matrices::all();
     tests::transformations::all();
     tests::rays::all();
+    tests::spheres::all();
     std::cout << "Ran " << tests::test_count << " tests. Successful: " << tests::success_count << ". Failed: "
               << tests::test_count - tests::success_count << ".";
 }

@@ -20,4 +20,8 @@ namespace rt {
     Point Ray::at(real t) const {
         return rt::Point{origin() + direction() * t};
     }
+
+    std::ostream &operator<<(std::ostream &out, const Ray &ray) {
+        return out << "origin: " << ray.origin() << "; direction " << ray.direction();
+    }
 }

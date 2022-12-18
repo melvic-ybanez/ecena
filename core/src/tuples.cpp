@@ -106,6 +106,8 @@ namespace rt {
 
     Vec::Vec(Vec &&from) noexcept : Vec(from.x(), from.y(), from.z()) {}
 
+    Vec::Vec(const Tuple &tuple) : Vec(tuple.x(), tuple.y(), tuple.z()) {}
+
     real Vec::magnitude() const {
         return std::sqrt(x() * x() + y() * y() + z() * z() + w() * w());
     }
@@ -117,6 +119,10 @@ namespace rt {
 
     real Vec::dot(const Vec &other) const {
         return x() * other.x() + y() * other.y() + z() * other.z() + w() * other.w();
+    }
+
+    real Vec::dot(const Tuple &other) const {
+        return dot(Vec{other});
     }
 
     Vec Vec::cross(const Vec &other) const {

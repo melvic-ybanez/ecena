@@ -23,6 +23,8 @@ namespace rt {
 
         Point at(real t) const;
     };
+
+    std::ostream &operator<<(std::ostream &out, const Ray &ray);
 }
 
 #endif //ECENA_RAY_H

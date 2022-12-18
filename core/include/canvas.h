@@ -6,7 +6,7 @@
 #define ECENA_CANVAS_H
 
 #include <vector>
-#include "../../math/include/utils.h"
+#include "../../math/include/math_utils.h"
 #include "tuples.h"
 
 namespace rt {

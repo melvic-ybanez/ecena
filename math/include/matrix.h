@@ -5,7 +5,7 @@
 #ifndef ECENA_MATRIX_H
 #define ECENA_MATRIX_H
 
-#include "utils.h"
+#include "math_utils.h"
 #include "../../core/include/tuples.h"
 
 namespace rt::math::matrix {

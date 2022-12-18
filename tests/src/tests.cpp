@@ -10,6 +10,7 @@
 #include "../include/test_transformations.h"
 #include "../include/test_rays.h"
 #include "../include/test_spheres.h"
+#include "../include/test_intersections.h"
 
 int main() {
     tests::reset();
@@ -19,6 +20,7 @@ int main() {
     tests::transformations::all();
     tests::rays::all();
     tests::spheres::all();
+    tests::intersections::all();
     std::cout << "Ran " << tests::test_count << " tests. Successful: " << tests::success_count << ". Failed: "
               << tests::test_count - tests::success_count << ".";
 }

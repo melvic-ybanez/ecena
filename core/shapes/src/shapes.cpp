@@ -1,12 +1,15 @@
 //
-// Created by Melvic Ybanez on 12/18/22.
+// Created by Melvic Ybanez on 12/19/22.
 //
 
-#include <array>
-#include "../include/sphere.h"
+#include "../include/shapes.h"
 #include "../../include/world.h"
 
 namespace rt::shapes {
+    Type Shape::type() const {
+        return Type::shape;
+    }
+
     Intersections Sphere::intersect(const Ray &ray) const {
         // compute the discriminant
         auto sphere_to_ray{ray.origin() - world::origin};
@@ -21,5 +24,9 @@ namespace rt::shapes {
         auto t2{(-b + std::sqrt(discriminant)) / (2 * a)};
 
         return {t1, t2};
+    }
+
+    Type Sphere::type() const {
+        return Type::sphere;
     }
 }

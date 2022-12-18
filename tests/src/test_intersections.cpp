@@ -18,7 +18,8 @@ namespace tests::intersections {
         scenario("An intersection encapsulates t and object", [] {
             auto *sphere = new rt::shapes::Sphere;
             rt::Intersection i{3.5, sphere};
-            ASSERT_EQ(3.5, i.t());
+            ASSERT_EQ_MSG("Inspect t", 3.5, i.t());
+            ASSERT_EQ_MSG("Inspect object", rt::shapes::Type::sphere, sphere->type());
         });
     }
 }

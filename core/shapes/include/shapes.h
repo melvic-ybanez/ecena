@@ -17,6 +17,8 @@ namespace rt::shapes {
         sphere
     };
 
+    std::ostream &operator<<(std::ostream &out, const Type &type);
+
     class Shape {
     public:
         virtual Intersections intersect(const Ray &ray) const = 0;

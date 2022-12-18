@@ -6,6 +6,15 @@
 #include "../../include/world.h"
 
 namespace rt::shapes {
+    std::ostream &operator<<(std::ostream &out, const Type &type) {
+        switch (type) {
+            case Type::sphere:
+                return out << "Sphere";
+            default:
+                return out << "Shape";
+        }
+    }
+
     Type Shape::type() const {
         return Type::shape;
     }

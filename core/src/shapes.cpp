@@ -3,7 +3,7 @@
 //
 
 #include "../include/shapes.h"
-#include "../../include/world.h"
+#include "../include/world.h"
 
 namespace rt::shapes {
     std::ostream &operator<<(std::ostream &out, const Type &type) {

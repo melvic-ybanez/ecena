@@ -6,8 +6,8 @@
 #define ECENA_SHAPES_H
 
 #include <vector>
-#include "../../../math/include/math_utils.h"
-#include "../../include/ray.h"
+#include "../../math/include/math_utils.h"
+#include "ray.h"
 
 namespace rt::shapes {
     using Intersections = std::vector<real>;

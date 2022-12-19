@@ -6,7 +6,7 @@
 #include "../include/test_spheres.h"
 #include "../include/asserts.h"
 #include "../../core/include/ray.h"
-#include "../../core/shapes/include/shapes.h"
+#include "../../core/include/shapes.h"
 
 namespace tests::spheres {
     void all() {

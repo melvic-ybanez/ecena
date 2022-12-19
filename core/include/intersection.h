@@ -6,7 +6,7 @@
 #define ECENA_INTERSECTION_H
 
 #include "../../math/include/math_utils.h"
-#include "../shapes/include/shapes.h"
+#include "shapes.h"
 
 namespace rt::intersections {
     class Intersection {

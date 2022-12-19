@@ -17,8 +17,8 @@ add_executable(
         math/src/matrix.cpp
         core/include/ray.h
         core/src/ray.cpp
-        core/shapes/include/shapes.h
-        core/include/world.h core/include/intersection.h tests/include/test_intersections.h tests/src/test_intersections.cpp core/shapes/src/shapes.cpp core/src/intersection.cpp)
+        core/include/shapes.h
+        core/include/world.h core/include/intersection.h tests/include/test_intersections.h tests/src/test_intersections.cpp core/src/shapes.cpp core/src/intersection.cpp)
 add_executable(
         ecena_tests
         tests/src/tests.cpp
@@ -46,4 +46,4 @@ add_executable(
         tests/include/test_rays.h
         tests/src/test_rays.cpp
         tests/include/test_spheres.h
-        tests/src/test_spheres.cpp core/shapes/include/shapes.h core/include/intersection.h tests/include/test_intersections.h tests/src/test_intersections.cpp core/shapes/src/shapes.cpp core/src/intersection.cpp)
+        tests/src/test_spheres.cpp core/include/shapes.h core/include/intersection.h tests/include/test_intersections.h tests/src/test_intersections.cpp core/src/shapes.cpp core/src/intersection.cpp)

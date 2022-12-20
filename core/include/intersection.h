@@ -24,12 +24,6 @@ namespace rt::intersections {
     public:
         Intersection(real t, const Shape *shape);
 
-        Intersection(const Intersection &from);
-
-        Intersection(Intersection &&from) noexcept;
-
-        ~Intersection();
-
         real t() const;
 
         const Shape *shape() const;

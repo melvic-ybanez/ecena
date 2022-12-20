@@ -23,15 +23,7 @@ namespace rt::math::matrix {
     public:
         explicit Matrix(Table<R, C> elems) : elems_{std::move(elems)} {}
 
-        Matrix(const Matrix<R, C> &from) : elems_{from.elems_} {}
-
-        Matrix<R, C> &operator=(const Matrix<R, C> &from) {
-            if (this == &from) return *this;
-            elems_ = from.elems_;
-            return *this;
-        }
-
-        explicit Matrix() : elems_({}) {}
+        Matrix() = default;
 
         Row<C> &operator[](size_t row) {
             return elems_[row];

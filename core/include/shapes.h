@@ -32,14 +32,14 @@ namespace rt::shapes {
 
         Shape &operator=(Shape &&shape) noexcept;
 
-        virtual intersections::Set intersect(const Ray &ray) const = 0;
+        virtual intersections::Aggregate intersect(const Ray &ray) const = 0;
 
         virtual Type type() const;
     };
 
     class Sphere : public Shape {
     public:
-        intersections::Set intersect(const Ray &ray) const override;
+        intersections::Aggregate intersect(const Ray &ray) const override;
 
         Type type() const override;
     };

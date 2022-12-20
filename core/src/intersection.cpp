@@ -15,34 +15,34 @@ namespace rt::intersections {
         return shape_;
     }
 
-    Set::Set(SetElems elems_) : elems_{std::move(elems_)} {}
+    Aggregate::Aggregate(AggregateData elems_) : elems_{std::move(elems_)} {}
 
-    Set::Set() = default;
+    Aggregate::Aggregate() = default;
 
-    Set::Set(const Set &set) = default;
+    Aggregate::Aggregate(const Aggregate &set) = default;
 
-    Set::Set(Set &&set) noexcept = default;
+    Aggregate::Aggregate(Aggregate &&set) noexcept = default;
 
-    Set &Set::operator=(const Set &other) = default;
+    Aggregate &Aggregate::operator=(const Aggregate &other) = default;
 
-    Set &Set::operator=(Set &&other)  noexcept = default;
+    Aggregate &Aggregate::operator=(Aggregate &&other)  noexcept = default;
 
-    Set::~Set() {
+    Aggregate::~Aggregate() {
         for (auto e : elems_) {
             delete e;
         }
         elems_.clear();
     }
 
-    size_t Set::size() const {
+    size_t Aggregate::count() const {
         return elems_.size();
     }
 
-    bool Set::empty() const {
+    bool Aggregate::empty() const {
         return elems_.empty();
     }
 
-    Intersection *Set::operator[](size_t i) {
+    Intersection *Aggregate::operator[](size_t i) {
         return elems_[i];
     }
 }

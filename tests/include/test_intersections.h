@@ -9,6 +9,8 @@ namespace tests::intersections {
     void all();
 
     void init();
+
+    void aggregations();
 }
 
 #endif //ECENA_TEST_INTERSECTIONS_H

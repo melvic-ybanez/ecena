@@ -32,7 +32,7 @@ namespace rt::shapes {
         return Type::shape;
     }
 
-    intersections::Set Sphere::intersect(const Ray &ray) const {
+    intersections::Aggregate Sphere::intersect(const Ray &ray) const {
         // compute the discriminant
         auto sphere_to_ray{ray.origin() - Point{0, 0, 0}};
         auto a{ray.direction().dot(ray.direction())};

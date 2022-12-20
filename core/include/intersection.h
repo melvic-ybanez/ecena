@@ -29,27 +29,27 @@ namespace rt::intersections {
         const Shape *shape() const;
     };
 
-    using SetElems = std::vector<Intersection *>;
+    using AggregateData = std::vector<Intersection *>;
 
-    class Set {
-        SetElems elems_;
+    class Aggregate {
+        AggregateData elems_;
 
     public:
-        Set(SetElems elems_);
+        Aggregate(AggregateData elems_);
 
-        Set();
+        Aggregate();
 
-        Set(const Set &set);
+        Aggregate(const Aggregate &set);
 
-        Set(Set &&set) noexcept;
+        Aggregate(Aggregate &&set) noexcept;
 
-        Set &operator=(const Set &other);
+        Aggregate &operator=(const Aggregate &other);
 
-        Set &operator=(Set &&other) noexcept;
+        Aggregate &operator=(Aggregate &&other) noexcept;
 
-        ~Set();
+        ~Aggregate();
 
-        size_t size() const;
+        size_t count() const;
 
         Intersection *operator[](size_t i);
 

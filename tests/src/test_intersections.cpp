@@ -36,5 +36,14 @@ namespace tests::intersections {
             ASSERT_EQ_MSG("Inspect first element", i1, agg[0]);
             ASSERT_EQ_MSG("Inspect second element", i2, agg[1]);
         });
+        set("Intersect sets the object on the intersection", [] {
+            rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+            rt::shapes::Sphere sphere;
+            auto agg = sphere.intersect(ray);
+
+            ASSERT_EQ_MSG("Inspect count", 2, agg.count());
+            ASSERT_EQ_MSG("Inspect first object", &sphere, agg[0]->shape());
+            ASSERT_EQ_MSG("Inspect second object", &sphere, agg[1]->shape());
+        });
     }
 }

@@ -27,12 +27,15 @@ namespace rt::intersections {
         real t() const;
 
         const Shape *shape() const;
+
+        bool operator<(const Intersection &that) const;
     };
 
     using AggregateData = std::vector<Intersection *>;
 
     class Aggregate {
         AggregateData elems_;
+        bool is_sorted;
 
     public:
         Aggregate(AggregateData elems_);
@@ -54,6 +57,8 @@ namespace rt::intersections {
         Intersection *operator[](size_t i);
 
         bool empty() const;
+
+        Intersection *hit();
     };
 }
 

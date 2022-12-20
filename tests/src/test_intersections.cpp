@@ -13,6 +13,7 @@ namespace tests::intersections {
         set("Intersections", [] {
             init();
             aggregations();
+            hits();
         });
     }
 
@@ -44,6 +45,39 @@ namespace tests::intersections {
             ASSERT_EQ_MSG("Inspect count", 2, agg.count());
             ASSERT_EQ_MSG("Inspect first object", &sphere, agg[0]->shape());
             ASSERT_EQ_MSG("Inspect second object", &sphere, agg[1]->shape());
+        });
+    }
+
+    void hits() {
+        set("Hit", [] {
+            rt::shapes::Sphere sphere;
+
+            scenario("When all intersections have positive ts", [=] {
+                auto i1 = new rt::Intersection{1, &sphere};
+                auto i2 = new rt::Intersection{2, &sphere};
+                rt::intersections::Aggregate agg{{i2, i1}};
+                ASSERT_EQ(i1, agg.hit());
+            });
+            scenario("When some intersections have negative ts", [=] {
+                auto i1 = new rt::Intersection{-1, &sphere};
+                auto i2 = new rt::Intersection {2, &sphere};
+                rt::intersections::Aggregate agg{{i2, i1}};
+                ASSERT_EQ(i2, agg.hit());
+            });
+            scenario("When all intersections have negative ts", [=] {
+                auto i1 = new rt::Intersection{-2, &sphere};
+                auto i2 = new rt::Intersection {-1, &sphere};
+                rt::intersections::Aggregate agg{{i2, i1}};
+                ASSERT_EQ(nullptr, agg.hit());
+            });
+            scenario("Always the lowest non-negative intersection", [=] {
+                auto i1 = new rt::Intersection{5, &sphere};
+                auto i2 = new rt::Intersection {7, &sphere};
+                auto i3 = new rt::Intersection{-3, &sphere};
+                auto i4 = new rt::Intersection {2, &sphere};
+                rt::intersections::Aggregate agg{{i1, i2, i3, i4}};
+                ASSERT_EQ(i4, agg.hit());
+            });
         });
     }
 }

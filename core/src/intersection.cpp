@@ -15,7 +15,13 @@ namespace rt::intersections {
         return shape_;
     }
 
-    Aggregate::Aggregate(AggregateData elems_) : elems_{std::move(elems_)} {}
+    bool Intersection::operator<(const Intersection &that) const {
+        return this->t() < that.t();
+    }
+
+    Aggregate::Aggregate(AggregateData elems_) : elems_{std::move(elems_)} {
+        is_sorted = false;
+    }
 
     Aggregate::Aggregate() = default;
 
@@ -25,10 +31,10 @@ namespace rt::intersections {
 
     Aggregate &Aggregate::operator=(const Aggregate &other) = default;
 
-    Aggregate &Aggregate::operator=(Aggregate &&other)  noexcept = default;
+    Aggregate &Aggregate::operator=(Aggregate &&other) noexcept = default;
 
     Aggregate::~Aggregate() {
-        for (auto e : elems_) {
+        for (auto e: elems_) {
             delete e;
         }
         elems_.clear();
@@ -44,5 +50,17 @@ namespace rt::intersections {
 
     Intersection *Aggregate::operator[](size_t i) {
         return elems_[i];
+    }
+
+    Intersection *Aggregate::hit() {
+        if (!is_sorted) {
+            std::sort(elems_.begin(), elems_.end(), [](Intersection *t1, Intersection *t2) { return *t1 < *t2; });
+            is_sorted = true;
+        }
+
+        for (auto e : elems_) {
+            if (e->t() >= 0) return e;
+        }
+        return nullptr;
     }
 }

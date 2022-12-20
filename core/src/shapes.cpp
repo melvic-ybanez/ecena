@@ -7,6 +7,18 @@
 #include "../include/shapes.h"
 
 namespace rt::shapes {
+    Shape::Shape() = default;
+
+    Shape::Shape(const Shape &) = default;
+
+    Shape::~Shape() = default;
+
+    Shape::Shape(Shape &&) noexcept = default;
+
+    Shape &Shape::operator=(const Shape &) = default;
+
+    Shape &Shape::operator=(Shape &&) noexcept = default;
+
     std::ostream &operator<<(std::ostream &out, const Type &type) {
         switch (type) {
             case Type::sphere:

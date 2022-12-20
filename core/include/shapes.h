@@ -20,11 +20,21 @@ namespace rt::shapes {
 
     class Shape {
     public:
+        Shape();
+
+        virtual ~Shape();
+
+        Shape(const Shape &shape);
+
+        Shape(Shape &&shape) noexcept;
+
+        Shape &operator=(const Shape &shape);
+
+        Shape &operator=(Shape &&shape) noexcept;
+
         virtual intersections::Set intersect(const Ray &ray) const = 0;
 
         virtual Type type() const;
-
-        virtual ~Shape() = default;
     };
 
     class Sphere : public Shape {

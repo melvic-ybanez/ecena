@@ -29,7 +29,32 @@ namespace rt::intersections {
         const Shape *shape() const;
     };
 
-    using Set = std::vector<Intersection *>;
+    using SetElems = std::vector<Intersection *>;
+
+    class Set {
+        SetElems elems_;
+
+    public:
+        Set(SetElems elems_);
+
+        Set();
+
+        Set(const Set &set);
+
+        Set(Set &&set) noexcept;
+
+        Set &operator=(const Set &other);
+
+        Set &operator=(Set &&other) noexcept;
+
+        ~Set();
+
+        size_t size() const;
+
+        Intersection *operator[](size_t i);
+
+        bool empty() const;
+    };
 }
 
 namespace rt {

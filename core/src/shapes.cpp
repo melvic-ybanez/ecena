@@ -45,7 +45,7 @@ namespace rt::shapes {
         auto t1{(-b - std::sqrt(discriminant)) / (2 * a)};
         auto t2{(-b + std::sqrt(discriminant)) / (2 * a)};
 
-        return {new Intersection{t1, this}, new Intersection{t2, this}};
+        return {{new Intersection{t1, this}, new Intersection{t2, this}}};
     }
 
     Type Sphere::type() const {

@@ -18,7 +18,9 @@ add_executable(
         core/include/ray.h
         core/src/ray.cpp
         core/include/shapes.h
-        core/include/intersection.h tests/include/test_intersections.h tests/src/test_intersections.cpp core/src/shapes.cpp core/src/intersection.cpp)
+        core/include/intersection.h
+        core/src/shapes.cpp
+        core/src/intersection.cpp)
 add_executable(
         ecena_tests
         tests/src/tests.cpp

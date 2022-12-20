@@ -5,23 +5,37 @@
 #ifndef ECENA_INTERSECTION_H
 #define ECENA_INTERSECTION_H
 
+#include <vector>
 #include "../../math/include/math_utils.h"
-#include "shapes.h"
+
+namespace rt::shapes {
+    class Shape;
+}
+
+namespace rt {
+    using Shape = shapes::Shape;
+}
 
 namespace rt::intersections {
     class Intersection {
         real t_;
-        Shape *shape_;
+        const Shape *shape_;
 
     public:
-        Intersection(real t, shapes::Shape *shape);
+        Intersection(real t, const Shape *shape);
+
+        Intersection(const Intersection &from);
+
+        Intersection(Intersection &&from) noexcept;
 
         ~Intersection();
 
         real t() const;
 
-        Shape *shape() const;
+        const Shape *shape() const;
     };
+
+    using Set = std::vector<Intersection *>;
 }
 
 namespace rt {

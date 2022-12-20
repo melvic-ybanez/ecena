@@ -5,6 +5,7 @@
 #ifndef ECENA_MATRIX_H
 #define ECENA_MATRIX_H
 
+#include <ostream>
 #include "math_utils.h"
 #include "../../core/include/tuples.h"
 

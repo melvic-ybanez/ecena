@@ -6,6 +6,7 @@
 #include "../include/test_intersections.h"
 #include "../include/asserts.h"
 #include "../../core/include/intersection.h"
+#include "../../core/include/shapes.h"
 
 namespace tests::intersections {
     void all() {

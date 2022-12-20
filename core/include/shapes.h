@@ -8,10 +8,9 @@
 #include <vector>
 #include "../../math/include/math_utils.h"
 #include "ray.h"
+#include "intersection.h"
 
 namespace rt::shapes {
-    using Intersections = std::vector<real>;
-
     enum class Type {
         shape,
         sphere
@@ -21,7 +20,7 @@ namespace rt::shapes {
 
     class Shape {
     public:
-        virtual Intersections intersect(const Ray &ray) const = 0;
+        virtual intersections::Set intersect(const Ray &ray) const = 0;
 
         virtual Type type() const;
 
@@ -30,7 +29,7 @@ namespace rt::shapes {
 
     class Sphere : public Shape {
     public:
-        Intersections intersect(const Ray &ray) const override;
+        intersections::Set intersect(const Ray &ray) const override;
 
         Type type() const override;
     };

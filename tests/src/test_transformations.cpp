@@ -3,6 +3,7 @@
 //
 
 #include <array>
+#include<cmath>
 #include "../include/asserts.h"
 #include "../include/test_transformations.h"
 #include "../../math/include/matrix.h"

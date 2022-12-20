@@ -2,6 +2,8 @@
 // Created by Melvic Ybanez on 12/19/22.
 //
 
+#include <cmath>
+#include <iostream>
 #include "../include/shapes.h"
 
 namespace rt::shapes {
@@ -18,7 +20,7 @@ namespace rt::shapes {
         return Type::shape;
     }
 
-    Intersections Sphere::intersect(const Ray &ray) const {
+    intersections::Set Sphere::intersect(const Ray &ray) const {
         // compute the discriminant
         auto sphere_to_ray{ray.origin() - Point{0, 0, 0}};
         auto a{ray.direction().dot(ray.direction())};
@@ -31,7 +33,7 @@ namespace rt::shapes {
         auto t1{(-b - std::sqrt(discriminant)) / (2 * a)};
         auto t2{(-b + std::sqrt(discriminant)) / (2 * a)};
 
-        return {t1, t2};
+        return {new Intersection{t1, this}, new Intersection{t2, this}};
     }
 
     Type Sphere::type() const {

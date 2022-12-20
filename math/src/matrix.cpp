@@ -3,6 +3,7 @@
 //
 
 #include <array>
+#include <cmath>
 #include "../include/matrix.h"
 
 namespace rt::math::matrix {

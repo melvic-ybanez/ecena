@@ -5,6 +5,7 @@
 #include <array>
 #include <iomanip>
 #include <fstream>
+#include <cmath>
 #include "../include/tuples.h"
 #include "../../math/include/matrix.h"
 

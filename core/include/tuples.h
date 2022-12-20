@@ -5,8 +5,6 @@
 #ifndef ECENA_TUPLES_H
 #define ECENA_TUPLES_H
 
-#include <cmath>
-#include <iostream>
 #include <vector>
 #include "../../math/include/math_utils.h"
 

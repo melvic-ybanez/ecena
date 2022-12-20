@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 12/5/22.
 //
 
+#include <cmath>
 #include "../include/test_tuples.h"
 #include "../include/asserts.h"
 #include "../../core/include/tuples.h"

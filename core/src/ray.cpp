@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 12/17/22.
 //
 
+#include <iostream>
 #include "../include/ray.h"
 
 namespace rt {

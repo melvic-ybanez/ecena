@@ -5,7 +5,7 @@
 #include "../include/test_canvas.h"
 #include "../include/asserts.h"
 #include "../../core/include/canvas.h"
-#include "../../core/include/tuples.h"
+#include "../../math/include/tuples.h"
 #include "../../core/include/ppm.h"
 
 namespace tests::canvas {

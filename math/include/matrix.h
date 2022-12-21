@@ -5,9 +5,10 @@
 #ifndef ECENA_MATRIX_H
 #define ECENA_MATRIX_H
 
+#include <array>
 #include <ostream>
 #include "math_utils.h"
-#include "../../core/include/tuples.h"
+#include "tuples.h"
 
 namespace rt::math::matrix {
     template<size_t S>

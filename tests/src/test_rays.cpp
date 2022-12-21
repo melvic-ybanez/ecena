@@ -4,7 +4,7 @@
 
 #include "../include/test_rays.h"
 #include "../include/asserts.h"
-#include "../../core/include/tuples.h"
+#include "../../math/include/tuples.h"
 #include "../../core/include/ray.h"
 
 namespace tests::rays {
@@ -12,6 +12,7 @@ namespace tests::rays {
         set("Rays", [] {
             init();
             distance();
+            transformations();
         });
     }
 
@@ -32,6 +33,24 @@ namespace tests::rays {
             ASSERT_EQ_MSG("at(1)", ray.at(1), rt::Point(3, 3, 4));
             ASSERT_EQ_MSG("at(-1)", ray.at(-1), rt::Point(1, 3, 4));
             ASSERT_EQ_MSG("at(2.5)", ray.at(2.5), rt::Point(4.5, 3, 4));
+        });
+    }
+
+    void transformations() {
+        set("Transformations", [] {
+            rt::Ray ray{rt::Point{1, 2, 3}, rt::Vec{0, 1, 0}};
+            scenario("Translation", [=] {
+                auto ray2 = ray.translate(3, 4, 5);
+                ASSERT_EQ(rt::Ray(rt::Point(4, 6, 8), rt::Vec(0, 1, 0)), ray2);
+            });
+            scenario("Scaling", [=] {
+                auto ray2 = ray.scale(2, 3, 4);
+                ASSERT_EQ(rt::Ray(rt::Point(2, 6, 12), rt::Vec(0, 3, 0)), ray2);
+            });
+            scenario("Scaling", [=] {
+                auto ray2 = ray.scale(2, 3, 4);
+                ASSERT_EQ(rt::Ray(rt::Point(2, 6, 12), rt::Vec(0, 3, 0)), ray2);
+            });
         });
     }
 }

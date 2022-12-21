@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(
         ecena main.cpp
-        core/include/tuples.h
-        core/src/tuples.cpp
+        math/include/tuples.h
+        math/src/tuples.cpp
         math/include/math_utils.h
         math/src/math_utils.cpp
         core/include/canvas.h
@@ -28,7 +28,7 @@ add_executable(
         tests/src/asserts.cpp
         tests/include/test_tuples.h
         tests/src/test_tuples.cpp
-        core/src/tuples.cpp
+        math/src/tuples.cpp
         math/include/math_utils.h
         math/src/math_utils.cpp
         core/include/canvas.h

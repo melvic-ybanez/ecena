@@ -7,10 +7,10 @@
 
 #include <vector>
 #include "../../math/include/math_utils.h"
-#include "tuples.h"
+#include "../../math/include/tuples.h"
 
 namespace rt {
-    using PixelRow = std::vector<Color>;
+    using PixelRow = std::vector<math::Color>;
     using PixelTable = std::vector<PixelRow>;
 
     class Canvas {

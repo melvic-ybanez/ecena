@@ -11,6 +11,8 @@ namespace tests::rays {
     void init();
 
     void distance();
+
+    void transformations();
 }
 
 #endif //ECENA_TEST_RAYS_H

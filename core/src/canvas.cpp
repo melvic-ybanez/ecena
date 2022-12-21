@@ -6,7 +6,7 @@
 
 namespace rt {
     Canvas::Canvas(int width, int height) : width_(width), height_(height) {
-        pixels_.insert(pixels_.end(), height, PixelRow(width, Color::black_));
+        pixels_.insert(pixels_.end(), height, PixelRow(width, math::Color::black_));
     }
 
     int Canvas::width() const {

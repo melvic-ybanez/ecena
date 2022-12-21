@@ -6,11 +6,11 @@
 #define ECENA_TUPLES_H
 
 #include <vector>
-#include "../../math/include/math_utils.h"
+#include "math_utils.h"
 
 #define TRANSFORM(matrix) matrix * (*this)
 
-namespace rt {
+namespace rt::math {
     class Tuple {
     protected:
         std::vector<real> elems;
@@ -101,6 +101,13 @@ namespace rt {
     };
 
     Color operator*(const Color &c1, const Color &c2);
+}
+
+namespace rt {
+    using Tuple = math::Tuple;
+    using Point = math::Point;
+    using Vec = math::Vec;
+    using Color = math::Color;
 }
 
 #endif //ECENA_TUPLES_H

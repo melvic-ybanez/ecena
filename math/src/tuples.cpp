@@ -7,9 +7,9 @@
 #include <fstream>
 #include <cmath>
 #include "../include/tuples.h"
-#include "../../math/include/matrix.h"
+#include "../include/matrix.h"
 
-namespace rt {
+namespace rt::math {
     Tuple::Tuple() : elems{0, 0, 0, 0} {}
 
     Tuple::Tuple(real x, real y, real z, real w) : elems{x, y, z, w} {}

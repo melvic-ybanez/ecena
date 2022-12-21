@@ -5,7 +5,7 @@
 #include <cmath>
 #include "../include/test_tuples.h"
 #include "../include/asserts.h"
-#include "../../core/include/tuples.h"
+#include "../../math/include/tuples.h"
 
 namespace tests::tuples {
     void all() {

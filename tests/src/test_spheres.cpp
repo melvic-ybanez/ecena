@@ -52,6 +52,22 @@ namespace tests::spheres {
                 ASSERT_EQ_MSG("First intersection", -6.0, xs[0]->t());
                 ASSERT_EQ_MSG("Second intersection", -4.0, xs[1]->t());
             });
+            set("A scaled sphere with a ray", [=] () mutable {
+                rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+                sphere.transformation = rt::math::matrix::scaling(2, 2, 2);
+                auto xs = sphere.intersect(ray);
+
+                ASSERT_EQ_MSG("Inspect count", 2, xs.count());
+                ASSERT_EQ_MSG("Inspect first t", 3, xs[0]->t());
+                ASSERT_EQ_MSG("Inspect second t", 7, xs[1]->t());
+            });
+            set("A translated sphere with a ray", [=] () mutable {
+                rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+                sphere.transformation = rt::math::matrix::translation(5, 0, 0);
+                auto xs = sphere.intersect(ray);
+
+                ASSERT_EQ_MSG("Inspect count", 0, xs.count());
+            });
         });
     }
 

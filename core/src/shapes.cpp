@@ -33,11 +33,13 @@ namespace rt::shapes {
     }
 
     intersections::Aggregate Sphere::intersect(const Ray &ray) const {
+        auto transformed_ray = ray.transform(transformation.inverse());
+
         // compute the discriminant
-        auto sphere_to_ray{ray.origin() - Point{0, 0, 0}};
-        auto a{ray.direction().dot(ray.direction())};
-        auto b{2 * ray.direction().dot(sphere_to_ray)};
-        auto c{Vec{sphere_to_ray}.dot(sphere_to_ray) - 1};
+        auto sphere_to_ray = transformed_ray.origin() - Point{0, 0, 0};
+        auto a = transformed_ray.direction().dot(transformed_ray.direction());
+        auto b = 2 * transformed_ray.direction().dot(sphere_to_ray);
+        auto c = Vec{sphere_to_ray}.dot(sphere_to_ray) - 1;
         auto discriminant{b * b - 4 * a * c};
 
         if (discriminant < 0) return {};

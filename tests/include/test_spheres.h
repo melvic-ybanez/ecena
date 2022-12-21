@@ -9,6 +9,8 @@ namespace tests::spheres {
     void all();
 
     void intersections();
+
+    void transformations();
 }
 
 #endif //ECENA_TEST_SPHERES_H

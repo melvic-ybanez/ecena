@@ -20,6 +20,8 @@ namespace rt::shapes {
 
     class Shape {
     public:
+        math::Matrix<4, 4> transformation;
+
         Shape();
 
         virtual ~Shape();

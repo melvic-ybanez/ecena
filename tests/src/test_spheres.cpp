@@ -11,6 +11,7 @@ namespace tests::spheres {
     void all() {
         set("Spheres", [] {
             intersections();
+            transformations();
         });
     }
 
@@ -50,6 +51,22 @@ namespace tests::spheres {
                 ASSERT_EQ_MSG("Number of intersections", 2, xs.count());
                 ASSERT_EQ_MSG("First intersection", -6.0, xs[0]->t());
                 ASSERT_EQ_MSG("Second intersection", -4.0, xs[1]->t());
+            });
+        });
+    }
+
+    void transformations() {
+        rt::shapes::Sphere sphere;
+
+        set("Transformations", [=] {
+            auto id = rt::math::matrix::identity<4, 4>();
+
+            ASSERT_EQ_MSG("Default", id, sphere.transformation);
+
+            scenario("Setting a different transformation", [=] () mutable {
+                auto t = rt::math::matrix::translation(2, 3, 4);
+                sphere.transformation = t;
+                ASSERT_EQ(t, sphere.transformation);
             });
         });
     }

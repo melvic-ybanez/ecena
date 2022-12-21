@@ -7,7 +7,7 @@
 #include "../include/shapes.h"
 
 namespace rt::shapes {
-    Shape::Shape() = default;
+    Shape::Shape() : transformation{math::matrix::identity<4, 4>()} {}
 
     Shape::Shape(const Shape &) = default;
 

@@ -18,8 +18,7 @@ namespace rt::shapes {
 
     std::ostream &operator<<(std::ostream &out, const Type &type);
 
-    class Shape {
-    public:
+    struct Shape {
         math::Matrix<4, 4> transformation;
 
         Shape();
@@ -53,8 +52,7 @@ namespace rt::shapes {
         Shape &shear(real xy, real xz, real yx, real yz, real zx, real zy);
     };
 
-    class Sphere : public Shape {
-    public:
+    struct Sphere : public Shape {
         intersections::Aggregate intersect(const Ray &ray) const override;
 
         Type type() const override;

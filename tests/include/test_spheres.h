@@ -11,6 +11,8 @@ namespace tests::spheres {
     void intersections();
 
     void transformations();
+
+    void normals();
 }
 
 #endif //ECENA_TEST_SPHERES_H

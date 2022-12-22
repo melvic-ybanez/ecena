@@ -60,8 +60,6 @@ namespace rt::math {
     public:
         Point(real x, real y, real z);
         Point();
-        Point(const Point &from);
-        Point(Point &&from) noexcept ;
         explicit Point(const Tuple &tuple);
     };
 
@@ -69,12 +67,13 @@ namespace rt::math {
     public:
         Vec(real x, real y, real z);
         Vec();
-        Vec(const Vec &from);
-        Vec(Vec &&from) noexcept ;
         explicit Vec(const Tuple &tuple);
 
         real magnitude() const;
 
+        /**
+         * Converts this vector into a unit vector.
+         */
         Vec normalize() const;
 
         real dot(const Vec &other) const;

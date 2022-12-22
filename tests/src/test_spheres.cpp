@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 12/18/22.
 //
 
+#include <cmath>
 #include "../include/test_spheres.h"
 #include "../include/asserts.h"
 #include "../../core/include/ray.h"
@@ -12,6 +13,7 @@ namespace tests::spheres {
         set("Spheres", [] {
             intersections();
             transformations();
+            normals();
         });
     }
 
@@ -52,7 +54,7 @@ namespace tests::spheres {
                 ASSERT_EQ_MSG("First intersection", -6.0, xs[0]->t());
                 ASSERT_EQ_MSG("Second intersection", -4.0, xs[1]->t());
             });
-            set("A scaled sphere with a ray", [=] () mutable {
+            set("A scaled sphere with a ray", [=]() mutable {
                 rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
                 sphere.transformation = rt::math::matrix::scaling(2, 2, 2);
                 auto xs = sphere.intersect(ray);
@@ -61,7 +63,7 @@ namespace tests::spheres {
                 ASSERT_EQ_MSG("Inspect first t", 3, xs[0]->t());
                 ASSERT_EQ_MSG("Inspect second t", 7, xs[1]->t());
             });
-            set("A translated sphere with a ray", [=] () mutable {
+            set("A translated sphere with a ray", [=]() mutable {
                 rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
                 sphere.transformation = rt::math::matrix::translation(5, 0, 0);
                 auto xs = sphere.intersect(ray);
@@ -79,10 +81,51 @@ namespace tests::spheres {
 
             ASSERT_EQ_MSG("Default", id, sphere.transformation);
 
-            scenario("Setting a different transformation", [=] () mutable {
+            scenario("Setting a different transformation", [=]() mutable {
                 auto t = rt::math::matrix::translation(2, 3, 4);
                 sphere.transformation = t;
                 ASSERT_EQ(t, sphere.transformation);
+            });
+        });
+    }
+
+    void normals() {
+        rt::shapes::Sphere sphere;
+
+        set("Normals", [=] {
+            scenario("The normal on a sphere at a point on the x-axis", [=] {
+                auto n = sphere.normal_at(rt::Point{1, 0, 0});
+                ASSERT_EQ(rt::Vec(1, 0, 0), n);
+            });
+            scenario("The normal on a sphere at a point on the y-axis", [=] {
+                auto n = sphere.normal_at(rt::Point{0, 1, 0});
+                ASSERT_EQ(rt::Vec(0, 1, 0), n);
+            });
+            scenario("The normal on a sphere at a point on the z-axis", [=] {
+                auto n = sphere.normal_at(rt::Point{0, 0, 1});
+                ASSERT_EQ(rt::Vec(0, 0, 1), n);
+            });
+            scenario("The normal on a sphere at a nonaxial point", [=] {
+                auto v = std::sqrt(3) / 3;
+                auto n = sphere.normal_at(rt::Point{v, v, v});
+                ASSERT_EQ(rt::Vec(v, v, v), n);
+            });
+            scenario("The normal is a normalized vector", [=] {
+                auto v = std::sqrt(3) / 3;
+                auto n = sphere.normal_at(rt::Point{v, v, v});
+                ASSERT_EQ(n.normalize(), n);
+            });
+            scenario("Computing the normal on a translated sphere", [] {
+                rt::shapes::Sphere sphere;
+                sphere.translate(0, 1, 0);
+                auto n = sphere.normal_at(rt::Point{0, 1.70711, -0.70711});
+                ASSERT_EQ(rt::Vec(0, 0.70711, -0.70711), n);
+            });
+            scenario("Computing the normal on a transformed sphere", [] {
+                rt::shapes::Sphere sphere;
+                sphere.rotate_z(rt::math::pi / 5).scale(1, 0.5, 1);
+                auto n = sphere.normal_at(rt::Point{0, std::sqrt(2) / 2, -std::sqrt(2) / 2});
+                ASSERT_EQ(rt::Vec(0, 0.97014, -0.24254), n);
             });
         });
     }

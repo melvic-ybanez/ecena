@@ -37,6 +37,20 @@ namespace rt::shapes {
         virtual intersections::Aggregate intersect(const Ray &ray) const = 0;
 
         virtual Type type() const;
+
+        virtual Vec normal_at(const Point &point) const = 0;
+
+        Shape &translate(real x, real y, real z);
+
+        Shape &scale(real x, real y, real z);
+
+        Shape &rotate_x(real r);
+
+        Shape &rotate_y(real r);
+
+        Shape &rotate_z(real r);
+
+        Shape &shear(real xy, real xz, real yx, real yz, real zx, real zy);
     };
 
     class Sphere : public Shape {
@@ -44,6 +58,8 @@ namespace rt::shapes {
         intersections::Aggregate intersect(const Ray &ray) const override;
 
         Type type() const override;
+
+        Vec normal_at(const Point &point) const override;
     };
 }
 

@@ -19,6 +19,8 @@ namespace tests::tuples {
     void products();
 
     void colors();
+
+    void reflections();
 }
 
 #endif //ECENA_TEST_TUPLES_H

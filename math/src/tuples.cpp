@@ -126,6 +126,10 @@ namespace rt::math {
         };
     }
 
+    Vec Vec::reflect(const Vec &normal) const {
+        return Vec{*this - normal * 2 * this->dot(normal)};
+    }
+
     Color::Color() : Tuple(0, 0, 0, 0) {}
 
     Color::Color(real r, real g, real b) : Tuple(r, g, b, 0) {}

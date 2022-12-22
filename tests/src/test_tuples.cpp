@@ -16,6 +16,7 @@ namespace tests::tuples {
             normalize();
             products();
             colors();
+            reflections();
         });
     }
 
@@ -130,6 +131,21 @@ namespace tests::tuples {
                     rt::Color c2{0.9, 1, 0.1};
                     ASSERT_EQ(c1 * c2, rt::Color(0.9, 0.2, 0.04));
                 });
+            });
+        });
+    }
+
+    void reflections() {
+        set("Reflections", [] {
+            scenario("Reflecting a vector approaching at 45 degrees", [] {
+                rt::Vec v{1, -1, 0};
+                rt::Vec n{0, 1, 0};
+                ASSERT_EQ(rt::Vec(1, 1, 0), v.reflect(n));
+            });
+            scenario("Reflecting a vector off a slanted surface ", [] {
+                rt::Vec v{0, -1, 0};
+                rt::Vec n{std::sqrt(2) / 2, std::sqrt(2) / 2, 0};
+                ASSERT_EQ(rt::Vec(1, 0, 0), v.reflect(n));
             });
         });
     }

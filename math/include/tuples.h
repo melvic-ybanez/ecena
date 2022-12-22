@@ -81,6 +81,8 @@ namespace rt::math {
         real dot(const Tuple &other) const;
 
         Vec cross(const Vec &other) const;
+
+        Vec reflect(const Vec &normal) const;
     };
 
     class Color : public Tuple {

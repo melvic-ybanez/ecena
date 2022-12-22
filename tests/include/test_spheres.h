@@ -13,6 +13,8 @@ namespace tests::spheres {
     void transformations();
 
     void normals();
+
+    void materials();
 }
 
 #endif //ECENA_TEST_SPHERES_H

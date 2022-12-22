@@ -14,6 +14,7 @@ namespace tests::spheres {
             intersections();
             transformations();
             normals();
+            materials();
         });
     }
 
@@ -126,6 +127,25 @@ namespace tests::spheres {
                 sphere.rotate_z(rt::math::pi / 5).scale(1, 0.5, 1);
                 auto n = sphere.normal_at(rt::Point{0, std::sqrt(2) / 2, -std::sqrt(2) / 2});
                 ASSERT_EQ(rt::Vec(0, 0.97014, -0.24254), n);
+            });
+        });
+    }
+
+    void materials() {
+        set("Materials", [] {
+            scenario("A sphere has a default material", [] {
+                rt::shapes::Sphere sphere;
+                ASSERT_EQ(sphere.material, rt::Material{});
+            });
+            set("A sphere may be assigned material", [] {
+                rt::shapes::Sphere sphere;
+                rt::Material mat;
+                mat.ambient = 1;
+
+                ASSERT_TRUE_MSG("Material is not equal to default", sphere.material != mat);
+
+                sphere.material = mat;
+                ASSERT_EQ_MSG("Material is equal to the sphere's material ", mat, sphere.material);
             });
         });
     }

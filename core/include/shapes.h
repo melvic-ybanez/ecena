@@ -9,6 +9,7 @@
 #include "../../math/include/math_utils.h"
 #include "ray.h"
 #include "intersection.h"
+#include "material.h"
 
 namespace rt::shapes {
     enum class Type {
@@ -20,6 +21,8 @@ namespace rt::shapes {
 
     struct Shape {
         math::Matrix<4, 4> transformation;
+
+        Material material;
 
         Shape();
 

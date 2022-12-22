@@ -17,7 +17,13 @@ namespace rt::materials {
         real shininess;
 
         Material();
+
+        bool operator==(const Material &other) const;
+
+        bool operator!=(const Material &other) const;
     };
+
+    std::ostream &operator<<(std::ostream &out, const Material &mat);
 }
 
 namespace rt {

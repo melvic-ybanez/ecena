@@ -94,6 +94,8 @@ namespace rt::math {
 
         static const Color red_;
 
+        static const Color white_;
+
         real red() const;
         real green() const;
         real blue() const;

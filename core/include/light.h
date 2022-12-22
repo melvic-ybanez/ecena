@@ -2,8 +2,8 @@
 // Created by Melvic Ybanez on 12/23/22.
 //
 
-#ifndef ECENA_LIGHTS_H
-#define ECENA_LIGHTS_H
+#ifndef ECENA_LIGHT_H
+#define ECENA_LIGHT_H
 
 #include "../../math/include/tuples.h"
 
@@ -18,4 +18,4 @@ namespace rt {
     using PointLight = lights::PointLight;
 }
 
-#endif //ECENA_LIGHTS_H
+#endif //ECENA_LIGHT_H

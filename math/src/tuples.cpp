@@ -138,6 +138,8 @@ namespace rt::math {
 
     const Color Color::red_{1, 0, 0};
 
+    const Color Color::white_{1, 1, 1};
+
     real Color::red() const {
         return x();
     }

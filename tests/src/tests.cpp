@@ -12,6 +12,7 @@
 #include "../include/test_spheres.h"
 #include "../include/test_intersections.h"
 #include "../include/test_lights.h"
+#include "../include/test_materials.h"
 
 int main() {
     tests::reset();
@@ -23,6 +24,7 @@ int main() {
     tests::spheres::all();
     tests::intersections::all();
     tests::lights::all();
+    tests::materials::all();
     std::cout << "Ran " << tests::test_count << " tests. Successful: " << tests::success_count << ". Failed: "
               << tests::test_count - tests::success_count << ".";
 }

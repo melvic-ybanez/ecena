@@ -88,6 +88,7 @@ namespace rt::math {
     class Color : public Tuple {
     public:
         Color(real r, real g, real b);
+        Color(const Tuple &tuple);
         Color();
 
         static const Color black_;

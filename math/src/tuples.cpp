@@ -132,6 +132,8 @@ namespace rt::math {
 
     Color::Color() : Tuple(0, 0, 0, 0) {}
 
+    Color::Color(const Tuple &tuple) : Color(tuple.x(), tuple.y(), tuple.z()) {}
+
     Color::Color(real r, real g, real b) : Tuple(r, g, b, 0) {}
 
     const Color Color::black_{0, 0, 0};

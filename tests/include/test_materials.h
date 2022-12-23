@@ -9,6 +9,8 @@ namespace tests::materials {
     void all();
 
     void init();
+
+    void lighting();
 }
 
 #endif //ECENA_TEST_MATERIALS_H

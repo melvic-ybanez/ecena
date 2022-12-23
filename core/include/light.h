@@ -6,12 +6,21 @@
 #define ECENA_LIGHT_H
 
 #include "../../math/include/tuples.h"
+#include "material.h"
 
 namespace rt::lights {
     struct PointLight {
         Point position;
         Color intensity;
     };
+
+    Color lighting(
+            const Material &material,
+            const PointLight &light,
+            const Point &point,
+            const Vec &eye_vec,
+            const Vec &normal_vec
+    );
 }
 
 namespace rt {

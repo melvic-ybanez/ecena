@@ -20,7 +20,7 @@ add_executable(
         core/include/shapes.h
         core/include/intersection.h
         core/src/shapes.cpp
-        core/src/intersection.cpp core/include/light.h core/include/material.h core/src/material.cpp core/src/light.cpp)
+        core/src/intersection.cpp core/include/light.h core/include/material.h core/src/material.cpp core/src/light.cpp dsl/include/tokens.h dsl/include/lexer.h dsl/src/lexer.cpp dsl/include/errors.h dsl/src/errors.cpp)
 add_executable(
         ecena_tests
         tests/src/tests.cpp
@@ -48,4 +48,4 @@ add_executable(
         tests/include/test_rays.h
         tests/src/test_rays.cpp
         tests/include/test_spheres.h
-        tests/src/test_spheres.cpp core/include/shapes.h core/include/intersection.h tests/include/test_intersections.h tests/src/test_intersections.cpp core/src/shapes.cpp core/src/intersection.cpp core/include/light.h tests/include/test_lights.h tests/src/test_lights.cpp core/include/material.h tests/include/test_materials.h tests/src/test_materials.cpp core/src/material.cpp core/src/light.cpp)
+        tests/src/test_spheres.cpp core/include/shapes.h core/include/intersection.h tests/include/test_intersections.h tests/src/test_intersections.cpp core/src/shapes.cpp core/src/intersection.cpp core/include/light.h tests/include/test_lights.h tests/src/test_lights.cpp core/include/material.h tests/include/test_materials.h tests/src/test_materials.cpp core/src/material.cpp core/src/light.cpp dsl/include/tokens.h dsl/include/lexer.h dsl/src/lexer.cpp dsl/include/errors.h dsl/src/errors.cpp)

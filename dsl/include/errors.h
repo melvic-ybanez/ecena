@@ -8,7 +8,8 @@
 #include <string>
 
 namespace rt::dsl::errors {
-    struct Error : std::runtime_error {
+    class Error : public std::runtime_error {
+    public:
         int line;
 
         Error(const std::string &message, int line);

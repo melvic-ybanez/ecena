@@ -9,7 +9,8 @@
 #include "../../math/include/tuples.h"
 
 namespace rt::materials {
-    struct Material {
+    class Material {
+    public:
         Color color;
         real ambient;
         real diffuse;

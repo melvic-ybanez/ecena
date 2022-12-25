@@ -5,7 +5,7 @@
 #include "../include/lexer.h"
 #include "../include/errors.h"
 
-namespace rt::dsl {
+namespace rt::dsl::lexer {
     Lexer::Lexer() {
         start = -1;
         current = -1;

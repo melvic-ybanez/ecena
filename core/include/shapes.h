@@ -19,7 +19,8 @@ namespace rt::shapes {
 
     std::ostream &operator<<(std::ostream &out, const Type &type);
 
-    struct Shape {
+    class Shape {
+    public:
         math::Matrix<4, 4> transformation;
 
         Material material;
@@ -28,13 +29,13 @@ namespace rt::shapes {
 
         virtual ~Shape();
 
-        Shape(const Shape &shape);
+        Shape(const Shape &shape) = delete;
 
-        Shape(Shape &&shape) noexcept;
+        Shape(Shape &&shape) noexcept = delete;
 
-        Shape &operator=(const Shape &shape);
+        Shape &operator=(const Shape &shape) = delete;
 
-        Shape &operator=(Shape &&shape) noexcept;
+        Shape &operator=(Shape &&shape) noexcept = delete;
 
         virtual intersections::Aggregate intersect(const Ray &ray) const = 0;
 
@@ -55,7 +56,8 @@ namespace rt::shapes {
         Shape &shear(real xy, real xz, real yx, real yz, real zx, real zy);
     };
 
-    struct Sphere : public Shape {
+    class Sphere : public Shape {
+    public:
         intersections::Aggregate intersect(const Ray &ray) const override;
 
         Type type() const override;

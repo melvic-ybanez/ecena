@@ -9,15 +9,7 @@
 namespace rt::shapes {
     Shape::Shape() : transformation{math::matrix::identity<4, 4>()} {}
 
-    Shape::Shape(const Shape &) = default;
-
     Shape::~Shape() = default;
-
-    Shape::Shape(Shape &&) noexcept = default;
-
-    Shape &Shape::operator=(const Shape &) = default;
-
-    Shape &Shape::operator=(Shape &&) noexcept = default;
 
     std::ostream &operator<<(std::ostream &out, const Type &type) {
         switch (type) {

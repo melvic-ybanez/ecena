@@ -52,25 +52,25 @@ namespace tests::intersections {
         set("Hit", [] {
             rt::shapes::Sphere sphere;
 
-            scenario("When all intersections have positive ts", [=] {
+            scenario("When all intersections have positive ts", [&] {
                 auto i1 = new rt::Intersection{1, &sphere};
                 auto i2 = new rt::Intersection{2, &sphere};
                 rt::intersections::Aggregate agg{{i2, i1}};
                 ASSERT_EQ(i1, agg.hit());
             });
-            scenario("When some intersections have negative ts", [=] {
+            scenario("When some intersections have negative ts", [&] {
                 auto i1 = new rt::Intersection{-1, &sphere};
                 auto i2 = new rt::Intersection {2, &sphere};
                 rt::intersections::Aggregate agg{{i2, i1}};
                 ASSERT_EQ(i2, agg.hit());
             });
-            scenario("When all intersections have negative ts", [=] {
+            scenario("When all intersections have negative ts", [&] {
                 auto i1 = new rt::Intersection{-2, &sphere};
                 auto i2 = new rt::Intersection {-1, &sphere};
                 rt::intersections::Aggregate agg{{i2, i1}};
                 ASSERT_EQ(nullptr, agg.hit());
             });
-            scenario("Always the lowest non-negative intersection", [=] {
+            scenario("Always the lowest non-negative intersection", [&] {
                 auto i1 = new rt::Intersection{5, &sphere};
                 auto i2 = new rt::Intersection {7, &sphere};
                 auto i3 = new rt::Intersection{-3, &sphere};

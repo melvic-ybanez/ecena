@@ -8,8 +8,9 @@
 #include <vector>
 #include "tokens.h"
 
-namespace rt::dsl {
-    struct Lexer {
+namespace rt::dsl::lexer {
+    class Lexer {
+    public:
         std::string source;
         int start;
         int current;

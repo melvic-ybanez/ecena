@@ -21,16 +21,14 @@ namespace rt::lights {
 
         auto light_dot_normal = light_vec.dot(normal_vec);
 
+        // if the light is not the other side of the surface...
         if (light_dot_normal >= 0) {
-            // light is not the other side of the surface
-
             diffuse = effective_color * material.diffuse * light_dot_normal;
             auto reflect_vec = Vec(-light_vec).reflect(normal_vec);
             auto reflect_dot_eye = reflect_vec.dot(eye_vec);
 
+            // if the light does not reflect away from the eye...
             if (reflect_dot_eye > 0) {
-                // light does not reflect away from the eye
-
                 auto factor = std::pow(reflect_dot_eye, material.shininess);
                 specular = light.intensity * material.specular * factor;
             }

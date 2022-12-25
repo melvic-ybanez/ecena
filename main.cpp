@@ -16,6 +16,7 @@ int main() {
 
     // TODO: Add the rendering logic here. The ray tracer is still in-progress.
     //  For now we only have the tests for the functioning parts of the renderer.
+    //  The DSL is also currently being worked on.
 
     auto duration = static_cast<double>(clock() - start_time) / CLOCKS_PER_SEC;
 

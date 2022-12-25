@@ -2,6 +2,8 @@
 // Created by Melvic Ybanez on 12/25/22.
 //
 
+#include <utility>
+
 #include "../include/lexer.h"
 #include "../include/errors.h"
 
@@ -9,6 +11,7 @@ namespace rt::dsl::lexer {
     Lexer::Lexer() {
         start = -1;
         current = -1;
+        line = 1;
     }
 
     std::vector<Token> Lexer::scan() {
@@ -68,12 +71,13 @@ namespace rt::dsl::lexer {
         current++;
     }
 
+
     void Lexer::add_token(TokenType type) {
-        add_token(type, lexeme());
+        add_token(type, {});
     }
 
-    void Lexer::add_token(TokenType type, const std::string &lexeme) {
-        tokens.push_back({ type, lexeme, line });
+    void Lexer::add_token(TokenType type, TokenValue value) {
+        tokens.push_back({ type, lexeme(), line, std::move(value) });
     }
 
     void Lexer::next_line() {
@@ -100,7 +104,8 @@ namespace rt::dsl::lexer {
             advance();
             while (std::isdigit(peek())) advance();
         }
-        add_token(TokenType::number);
+        auto value_str = source.substr(start, current);
+        add_token(TokenType::number, std::stod(value_str));
     }
 
     bool Lexer::is_at_end() const {

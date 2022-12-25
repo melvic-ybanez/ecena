@@ -5,6 +5,7 @@
 #ifndef ECENA_TOKENS_H
 #define ECENA_TOKENS_H
 
+#include <optional>
 #include <string>
 
 namespace rt::dsl {
@@ -18,13 +19,17 @@ namespace rt::dsl {
         comma,
         colon,
         dot,
-        minus
+        minus,
+        eof
     };
+
+    using TokenValue = std::optional<std::variant<std::string, double>>;
 
     struct Token {
         TokenType type;
         std::string lexeme;
         int line;
+        TokenValue value;
     };
 }
 

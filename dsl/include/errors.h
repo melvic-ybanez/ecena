@@ -6,6 +6,7 @@
 #define ECENA_ERRORS_H
 
 #include <string>
+#include "tokens.h"
 
 namespace rt::dsl::errors {
     class Error : public std::runtime_error {
@@ -20,6 +21,10 @@ namespace rt::dsl::errors {
     Error invalid_character(char c, int line);
 
     Error unterminated_string(int line);
+
+    Error expected(const Token &token, const std::string &expected, const std::string &after);
+
+    Error invalid_expression(const Token &token);
 }
 
 #endif //ECENA_ERRORS_H

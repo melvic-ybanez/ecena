@@ -34,7 +34,7 @@ namespace rt::dsl::lexer {
     private:
         void add_token(TokenType type);
 
-        void add_token(TokenType type, const std::string &lexeme);
+        void add_token(TokenType type, TokenValue value);
 
         void next_line();
 

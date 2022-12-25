@@ -18,4 +18,6 @@ namespace rt::dsl {
     Field::Field(std::unique_ptr<String> key, std::unique_ptr<Expr> value) :
             key{std::move(key)},
             value{std::move(value)} {}
+
+    Array::Array(std::vector<std::unique_ptr<Expr>> elems) : elems{std::move(elems)} {}
 }

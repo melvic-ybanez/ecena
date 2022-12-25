@@ -19,6 +19,8 @@ namespace rt::dsl::parsers {
 
         std::unique_ptr<String> parse_string();
 
+        std::unique_ptr<Array> parse_array();
+
         std::optional<Token> match(TokenType type);
 
         bool check(TokenType type) const;
@@ -31,7 +33,7 @@ namespace rt::dsl::parsers {
 
         const Token &previous() const;
 
-        void consume(TokenType type, const std::string &expected, const std::string &after);
+        void consume(TokenType type, const std::string &expected, const std::string &where);
 
         std::vector<Field> parse_fields();
 

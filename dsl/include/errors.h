@@ -22,9 +22,7 @@ namespace rt::dsl::errors {
 
     Error unterminated_string(int line);
 
-    Error expected(const Token &token, const std::string &expected, const std::string &after);
-
-    Error invalid_expression(const Token &token);
+    Error expected(const Token &token, const std::string &expected, const std::string &where);
 }
 
 #endif //ECENA_ERRORS_H

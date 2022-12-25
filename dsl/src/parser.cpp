@@ -36,11 +36,11 @@ namespace rt::dsl::parsers {
         return previous();
     }
 
-    void Parser::consume(TokenType type, const std::string &expected, const std::string &after) {
+    void Parser::consume(TokenType type, const std::string &expected, const std::string &where) {
         if (check(type)) {
             advance();
         } else {
-            throw errors::expected(peek(), expected, after);
+            throw errors::expected(peek(), expected, where);
         }
     }
 
@@ -50,8 +50,7 @@ namespace rt::dsl::parsers {
         if (auto result = match(TokenType::number); result.has_value()) {
             return std::make_unique<Number>(std::get<double>(result.value().value.value()));
         }
-        // TODO: Parse array here
-        throw errors::invalid_expression(peek());
+        return parse_array();
     }
 
     std::unique_ptr<String> Parser::parse_string() {
@@ -62,15 +61,15 @@ namespace rt::dsl::parsers {
     }
 
     std::unique_ptr<Object> Parser::parse_object() {
-        consume(TokenType::left_brace, "{", " start of source");
+        consume(TokenType::left_brace, "{", "at start of source");
         std::vector<Field> fields = parse_fields();
-        consume(TokenType::right_brace, "}", "object fields");
+        consume(TokenType::right_brace, "}", "after object fields");
         return std::make_unique<Object>(std::move(fields));
     }
 
     Field Parser::parse_field() {
         auto key = parse_string();
-        consume(TokenType::colon, ":", "field key");
+        consume(TokenType::colon, ":", "after field key");
         auto value = parse_expr();
         return {std::move(key), std::move(value)};
     }
@@ -81,5 +80,31 @@ namespace rt::dsl::parsers {
             fields.push_back(parse_field());
         }
         return fields;
+    }
+
+    std::unique_ptr<Array> Parser::parse_array() {
+        consume(TokenType::left_bracket, "[", "at the start of array expression");
+        std::vector<std::unique_ptr<Expr>> elems;
+
+        // first check if the array is empty, so we don't make the mistake of doing the loop
+        if (peek().type == TokenType::right_bracket) {
+            advance();
+            return std::make_unique<Array>(std::move(elems));
+        }
+
+        // now we can assume the array has some elements. Parse the first one since it's
+        // a special case (not preceded by a comma)
+        auto first = parse_expr();
+        elems.push_back(std::move(first));
+
+        while (peek().type == TokenType::right_bracket) {
+            consume(TokenType::comma, ",", "after array element");
+            auto elem = parse_expr();
+            elems.push_back(std::move(elem));
+        }
+
+        consume(TokenType::right_bracket, "]", "at the end of array expression");
+
+        return std::make_unique<Array>(std::move(elems));
     }
 }

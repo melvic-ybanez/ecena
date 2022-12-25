@@ -20,11 +20,7 @@ namespace rt::dsl::errors {
         return {"Unterminated string", line};
     }
 
-    Error expected(const Token &token, const std::string &expected, const std::string &after) {
-        return {"Expected: " + expected + " after " + after + ". Got: " + token.lexeme, token.line};
-    }
-
-    Error invalid_expression(const Token &token) {
-        return {"Invalid Expression: " + token.lexeme, token.line};
+    Error expected(const Token &token, const std::string &expected, const std::string &where) {
+        return {"Expected: " + expected + " " + where + ". Got: " + token.lexeme, token.line};
     }
 }

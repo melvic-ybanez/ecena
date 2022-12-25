@@ -51,7 +51,11 @@ namespace rt::dsl {
     };
 
     class Array : public Expr {
+    public:
+        Array(std::vector<std::unique_ptr<Expr>> elems);
 
+    private:
+        std::vector<std::unique_ptr<Expr>> elems;
     };
 
     class Field {

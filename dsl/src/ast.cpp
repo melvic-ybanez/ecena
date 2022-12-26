@@ -5,10 +5,6 @@
 #include "../include/ast.h"
 
 namespace rt::dsl {
-    Expr::Expr() = default;
-
-    Expr::~Expr() = default;
-
     Object::Object(std::vector<Field> fields) : fields{std::move(fields)} {}
 
     String::String(const std::string &value) : value{value} {}

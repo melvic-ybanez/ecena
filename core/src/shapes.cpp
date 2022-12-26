@@ -9,8 +9,6 @@
 namespace rt::shapes {
     Shape::Shape() : transformation{math::matrix::identity<4, 4>()} {}
 
-    Shape::~Shape() = default;
-
     std::ostream &operator<<(std::ostream &out, const Type &type) {
         switch (type) {
             case Type::sphere:

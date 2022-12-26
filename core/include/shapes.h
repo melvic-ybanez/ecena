@@ -27,7 +27,7 @@ namespace rt::shapes {
 
         Shape();
 
-        virtual ~Shape();
+        virtual ~Shape() = default;
 
         Shape(const Shape &shape) = delete;
 

@@ -23,16 +23,6 @@ namespace rt::intersections {
         is_sorted = false;
     }
 
-    Aggregate::Aggregate() = default;
-
-    Aggregate::Aggregate(const Aggregate &set) = default;
-
-    Aggregate::Aggregate(Aggregate &&set) noexcept = default;
-
-    Aggregate &Aggregate::operator=(const Aggregate &other) = default;
-
-    Aggregate &Aggregate::operator=(Aggregate &&other) noexcept = default;
-
     Aggregate::~Aggregate() {
         for (auto e: elems_) {
             delete e;

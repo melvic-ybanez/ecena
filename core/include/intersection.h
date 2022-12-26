@@ -40,15 +40,15 @@ namespace rt::intersections {
     public:
         Aggregate(AggregateData elems_);
 
-        Aggregate();
+        Aggregate() = default;
 
-        Aggregate(const Aggregate &set);
+        Aggregate(const Aggregate &set) = default;
 
-        Aggregate(Aggregate &&set) noexcept;
+        Aggregate(Aggregate &&set) = default;
 
-        Aggregate &operator=(const Aggregate &other);
+        Aggregate &operator=(const Aggregate &other) = default;
 
-        Aggregate &operator=(Aggregate &&other) noexcept;
+        Aggregate &operator=(Aggregate &&other) = default;
 
         ~Aggregate();
 

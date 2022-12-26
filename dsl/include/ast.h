@@ -11,11 +11,11 @@
 namespace rt::dsl {
     class Field;
 
-    class Expr {
+    class Expr  {
     public:
-        Expr();
+        Expr() = default;
 
-        virtual ~Expr();
+        virtual ~Expr() = default;
 
         Expr(const Expr &from) = delete;
 

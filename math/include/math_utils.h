@@ -15,6 +15,11 @@ namespace rt::math {
     bool compare_reals(real a, real b);
 
     int scale(real value, int max_value);
+
+    struct Dimensions {
+        int width;
+        int height;
+    };
 }
 
 namespace rt {

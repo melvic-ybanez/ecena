@@ -14,17 +14,15 @@ namespace rt {
     using PixelTable = std::vector<PixelRow>;
 
     class Canvas {
-        PixelTable pixels_;
-        int width_;
-        int height_;
     public:
+        PixelTable pixels;
+        math::Dimensions dimensions;
+
         Canvas(int width, int height);
 
         int width() const;
 
         int height() const;
-
-        const PixelTable & pixels() const;
 
         PixelRow &operator[](int row);
     };

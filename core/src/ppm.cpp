@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 12/10/22.
 //
 #include <sstream>
+#include <fstream>
 
 #include "../include/ppm.h"
 
@@ -22,7 +23,7 @@ namespace rt {
 
     std::string Ppm::pixel_data() const {
         std::string out;
-        for (const auto &row: canvas.pixels()) {
+        for (const auto &row: canvas.pixels) {
             std::vector<std::string> color_strs;
 
             int count = 0;
@@ -76,5 +77,10 @@ namespace rt {
 
     int Ppm::max_color() const {
         return max_color_;
+    }
+
+    std::ofstream &operator<<(std::ofstream &out, const Ppm &ppm) {
+        out << ppm.pixel_data();
+        return out;
     }
 }

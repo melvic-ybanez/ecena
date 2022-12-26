@@ -23,11 +23,11 @@ namespace tests::canvas {
 
             ASSERT_EQ_MSG("Width", canvas.width(), 10);
             ASSERT_EQ_MSG("Height", canvas.height(), 20);
-            ASSERT_EQ_MSG("Canvas height is the number of rows", canvas.height(), canvas.pixels().size());
-            ASSERT_EQ_MSG("Canvas width is the number of columns", canvas.width(), canvas.pixels()[0].size());
+            ASSERT_EQ_MSG("Canvas height is the number of rows", canvas.height(), canvas.pixels.size());
+            ASSERT_EQ_MSG("Canvas width is the number of columns", canvas.width(), canvas.pixels[0].size());
 
             bool all_black = true;
-            for (const auto &row: canvas.pixels()) {
+            for (const auto &row: canvas.pixels) {
                 for (const auto &pixel: row) {
                     if (pixel != rt::Color::black_) {
                         all_black = false;

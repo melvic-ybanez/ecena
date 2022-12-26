@@ -20,7 +20,7 @@ add_executable(
         core/include/shapes.h
         core/include/intersection.h
         core/src/shapes.cpp
-        core/src/intersection.cpp core/include/light.h core/include/material.h core/src/material.cpp core/src/light.cpp dsl/include/tokens.h dsl/include/lexer.h dsl/src/lexer.cpp dsl/include/errors.h dsl/src/errors.cpp dsl/include/parser.h dsl/include/ast.h dsl/src/parser.cpp dsl/src/ast.cpp)
+        core/src/intersection.cpp core/include/light.h core/include/material.h core/src/material.cpp core/src/light.cpp dsl/include/tokens.h dsl/include/lexer.h dsl/src/lexer.cpp dsl/include/errors.h dsl/src/errors.cpp dsl/include/parser.h dsl/include/ast.h dsl/src/parser.cpp dsl/src/ast.cpp core/include/renderer.h core/src/renderer.cpp core/include/data.h core/src/data.cpp)
 add_executable(
         ecena_tests
         tests/src/tests.cpp

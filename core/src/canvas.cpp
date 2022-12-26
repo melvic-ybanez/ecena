@@ -5,23 +5,19 @@
 #include "../include/canvas.h"
 
 namespace rt {
-    Canvas::Canvas(int width, int height) : width_(width), height_(height) {
-        pixels_.insert(pixels_.end(), height, PixelRow(width, math::Color::black_));
+    Canvas::Canvas(int width, int height) : dimensions{width, height} {
+        pixels.insert(pixels.end(), height, PixelRow(width, math::Color::black_));
     }
 
     int Canvas::width() const {
-        return width_;
+        return dimensions.width;
     }
 
     int Canvas::height() const {
-        return height_;
-    }
-
-    const PixelTable &Canvas::pixels() const {
-        return pixels_;
+        return dimensions.height;
     }
 
     PixelRow &Canvas::operator[](int row){
-        return pixels_[row];
+        return pixels[row];
     }
 }

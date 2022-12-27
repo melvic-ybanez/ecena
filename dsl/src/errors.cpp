@@ -25,7 +25,11 @@ namespace rt::dsl::errors {
     }
 
     Error type_mismatch(ExprType expected, ExprType got, int line) {
-        return {"Type mismatch. Expected: " + type_to_str(expected) + ". Got: " + type_to_str(got), line};
+        return type_mismatch(type_to_str(expected), type_to_str(got), line);
+    }
+
+    Error type_mismatch(const std::string &expected, const std::string &got, int line) {
+        return {"Type mismatch. Expected: " + expected + ". Got: " + got, line};
     }
 
     Error wrong_args_count(size_t expected, size_t got, int line) {

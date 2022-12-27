@@ -9,9 +9,13 @@
 #include "ast.h"
 
 namespace rt::dsl::eval {
-    Data object(const Object &object);
+    Data to_data(const Object &object);
 
-    void to_ray_origin(const Field &field, Data &data);
+    Wall to_wall(const std::unique_ptr<Expr> &expr, int line);
+
+    std::unique_ptr<Shape> to_shape(const std::unique_ptr<Expr> &expr, int line);
+
+    std::vector<std::unique_ptr<Shape>> to_shapes(const std::unique_ptr<Expr> &expr, int line);
 }
 
 #endif //ECENA_EVAL_H

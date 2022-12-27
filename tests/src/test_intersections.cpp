@@ -18,11 +18,11 @@ namespace tests::intersections {
     }
 
     void init() {
-        scenario("An intersection encapsulates t and object", [] {
+        scenario("An intersection encapsulates t and to_data", [] {
             auto sphere = new rt::shapes::Sphere;
             rt::Intersection i{3.5, sphere};
             ASSERT_EQ_MSG("Inspect t", 3.5, i.t());
-            ASSERT_EQ_MSG("Inspect object", rt::shapes::Type::sphere, sphere->type());
+            ASSERT_EQ_MSG("Inspect to_data", rt::shapes::Type::sphere, sphere->type());
         });
     }
 
@@ -37,14 +37,14 @@ namespace tests::intersections {
             ASSERT_EQ_MSG("Inspect first element", i1, agg[0]);
             ASSERT_EQ_MSG("Inspect second element", i2, agg[1]);
         });
-        set("Intersect sets the object on the intersection", [] {
+        set("Intersect sets the to_data on the intersection", [] {
             rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
             rt::shapes::Sphere sphere;
             auto agg = sphere.intersect(ray);
 
             ASSERT_EQ_MSG("Inspect count", 2, agg.count());
-            ASSERT_EQ_MSG("Inspect first object", &sphere, agg[0]->shape());
-            ASSERT_EQ_MSG("Inspect second object", &sphere, agg[1]->shape());
+            ASSERT_EQ_MSG("Inspect first to_data", &sphere, agg[0]->shape());
+            ASSERT_EQ_MSG("Inspect second to_data", &sphere, agg[1]->shape());
         });
     }
 

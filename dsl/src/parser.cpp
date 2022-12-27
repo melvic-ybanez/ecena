@@ -64,7 +64,7 @@ namespace rt::dsl::parsers {
     std::unique_ptr<Object> Parser::parse_object() {
         consume(TokenType::left_brace, "{", "at start of source");
         std::vector<Field> fields = parse_fields();
-        consume(TokenType::right_brace, "}", "after object fields");
+        consume(TokenType::right_brace, "}", "after to_data fields");
         return std::make_unique<Object>(std::move(fields));
     }
 

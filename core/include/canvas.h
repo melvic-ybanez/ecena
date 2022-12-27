@@ -18,6 +18,8 @@ namespace rt {
         PixelTable pixels;
         math::Dimensions dimensions;
 
+        Canvas();
+
         Canvas(int width, int height);
 
         int width() const;

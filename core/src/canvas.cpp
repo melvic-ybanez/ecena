@@ -5,6 +5,8 @@
 #include "../include/canvas.h"
 
 namespace rt {
+    Canvas::Canvas() : Canvas(0, 0) {}
+
     Canvas::Canvas(int width, int height) : dimensions{width, height} {
         pixels.insert(pixels.end(), height, PixelRow(width, math::Color::black_));
     }

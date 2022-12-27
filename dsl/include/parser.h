@@ -33,7 +33,7 @@ namespace rt::dsl::parsers {
 
         const Token &previous() const;
 
-        void consume(TokenType type, const std::string &expected, const std::string &where);
+        Token consume(TokenType type, const std::string &expected, const std::string &where);
 
         std::vector<Field> parse_fields();
 

@@ -7,9 +7,19 @@
 
 #include <string>
 #include <vector>
+#include "../../core/include/data.h"
 
 namespace rt::dsl {
     class Field;
+
+    enum class ExprType {
+        object,
+        number,
+        string,
+        array
+    };
+
+    std::string type_to_str(ExprType type);
 
     class Expr  {
     public:
@@ -24,19 +34,26 @@ namespace rt::dsl {
         Expr &operator=(const Expr &from) = delete;
 
         Expr &operator=(Expr &&from) noexcept = delete;
+
+        virtual ExprType type() const = 0;
     };
 
     class Object : public Expr {
     public:
+        std::vector<Field> fields;
+
         explicit Object(std::vector<Field> fields);
 
-    private:
-        std::vector<Field> fields;
+        ExprType type() const override;
     };
 
     class String : public Expr {
     public:
         String(const std::string &value);
+
+        bool operator==(const std::string &str) const;
+
+        ExprType type() const override;
 
     private:
         std::string value;
@@ -44,27 +61,33 @@ namespace rt::dsl {
 
     class Number : public Expr {
     public:
+        double value;
+
         Number(double value);
 
-    private:
-        double value;
+        ExprType type() const override;
     };
 
     class Array : public Expr {
     public:
+        std::vector<std::unique_ptr<Expr>> elems;
+
         Array(std::vector<std::unique_ptr<Expr>> elems);
 
-    private:
-        std::vector<std::unique_ptr<Expr>> elems;
+        ExprType type() const override;
     };
 
     class Field {
     public:
-        Field(std::unique_ptr<String> key, std::unique_ptr<Expr> value);
+        int line;
+        std::unique_ptr<String> key_;
+        std::unique_ptr<Expr> value_;
 
-    private:
-        std::unique_ptr<String> key;
-        std::unique_ptr<Expr> value;
+        Field(std::unique_ptr<String> key, std::unique_ptr<Expr> value, int line);
+
+        const String &key() const;
+
+        const Expr &value() const;
     };
 }
 

@@ -36,9 +36,10 @@ namespace rt::dsl::parsers {
         return previous();
     }
 
-    void Parser::consume(TokenType type, const std::string &expected, const std::string &where) {
+    Token Parser::consume(TokenType type, const std::string &expected, const std::string &where) {
         if (check(type)) {
             advance();
+            return previous();
         } else {
             throw errors::expected(peek(), expected, where);
         }
@@ -69,9 +70,9 @@ namespace rt::dsl::parsers {
 
     Field Parser::parse_field() {
         auto key = parse_string();
-        consume(TokenType::colon, ":", "after field key");
+        auto colon = consume(TokenType::colon, ":", "after field key");
         auto value = parse_expr();
-        return {std::move(key), std::move(value)};
+        return {std::move(key), std::move(value), colon.line};
     }
 
     std::vector<Field> Parser::parse_fields() {

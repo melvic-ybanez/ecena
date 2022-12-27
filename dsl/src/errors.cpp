@@ -23,4 +23,12 @@ namespace rt::dsl::errors {
     Error expected(const Token &token, const std::string &expected, const std::string &where) {
         return {"Expected: " + expected + " " + where + ". Got: " + token.lexeme, token.line};
     }
+
+    Error type_mismatch(ExprType expected, ExprType got, int line) {
+        return {"Type mismatch. Expected: " + type_to_str(expected) + ". Got: " + type_to_str(got), line};
+    }
+
+    Error wrong_args_count(size_t expected, size_t got, int line) {
+        return {"Wrong number of arguments. Expected: " + std::to_string(expected) + ". Got: " + std::to_string(got), line};
+    }
 }

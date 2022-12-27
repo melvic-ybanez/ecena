@@ -9,7 +9,7 @@ namespace rt::dsl::errors {
     Error::Error(const std::string &message, int line) : std::runtime_error(message), line{line} {}
 
     std::ostream &operator<<(std::ostream &out, const Error &error) {
-        return out << "An error occurred. " << error.what() << ". Line: " << error.line;
+        return out << "Unable to parse scene. " << error.what() << ". Line: " << error.line;
     }
 
     Error invalid_character(char c, int line) {

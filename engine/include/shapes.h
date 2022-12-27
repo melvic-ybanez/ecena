@@ -6,7 +6,7 @@
 #define ECENA_SHAPES_H
 
 #include <vector>
-#include "../../math/include/math_utils.h"
+#include "../math/include/math_utils.h"
 #include "ray.h"
 #include "intersection.h"
 #include "material.h"

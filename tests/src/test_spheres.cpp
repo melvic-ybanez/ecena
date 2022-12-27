@@ -5,8 +5,8 @@
 #include <cmath>
 #include "../include/test_spheres.h"
 #include "../include/asserts.h"
-#include "../../core/include/ray.h"
-#include "../../core/include/shapes.h"
+#include "../../engine/include/ray.h"
+#include "../../engine/include/shapes.h"
 
 namespace tests::spheres {
     void all() {

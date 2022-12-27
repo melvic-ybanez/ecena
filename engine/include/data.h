@@ -6,7 +6,7 @@
 #define ECENA_DATA_H
 
 #include <vector>
-#include "../../math/include/tuples.h"
+#include "../math/include/tuples.h"
 #include "canvas.h"
 #include "shapes.h"
 

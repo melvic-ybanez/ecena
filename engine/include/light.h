@@ -5,7 +5,7 @@
 #ifndef ECENA_LIGHT_H
 #define ECENA_LIGHT_H
 
-#include "../../math/include/tuples.h"
+#include "../math/include/tuples.h"
 #include "material.h"
 
 namespace rt::lights {

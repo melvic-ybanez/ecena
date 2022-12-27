@@ -4,8 +4,7 @@
 
 #include "../include/test_rays.h"
 #include "../include/asserts.h"
-#include "../../math/include/tuples.h"
-#include "../../core/include/ray.h"
+#include "../../engine/include/ray.h"
 
 namespace tests::rays {
     void all() {

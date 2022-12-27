@@ -5,8 +5,8 @@
 #include <array>
 #include "../include/test_intersections.h"
 #include "../include/asserts.h"
-#include "../../core/include/intersection.h"
-#include "../../core/include/shapes.h"
+#include "../../engine/include/intersection.h"
+#include "../../engine/include/shapes.h"
 
 namespace tests::intersections {
     void all() {

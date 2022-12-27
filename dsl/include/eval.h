@@ -5,7 +5,7 @@
 #ifndef ECENA_EVAL_H
 #define ECENA_EVAL_H
 
-#include "../../core/include/data.h"
+#include "../../engine/include/data.h"
 #include "ast.h"
 
 namespace rt::dsl::eval {

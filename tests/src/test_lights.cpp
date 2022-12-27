@@ -4,8 +4,7 @@
 
 #include "../include/test_lights.h"
 #include "../include/asserts.h"
-#include "../../math/include/tuples.h"
-#include "../../core/include/light.h"
+#include "../../engine/include/light.h"
 
 namespace tests::lights {
     void all() {

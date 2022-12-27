@@ -2,6 +2,10 @@
 #include <fstream>
 #include <ctime>
 
+#include "dsl/include/lexer.h"
+#include "dsl/include/parser.h"
+#include "dsl/include/errors.h"
+
 int main() {
     std::ofstream out_img{"output.ppm"};
 
@@ -10,13 +14,30 @@ int main() {
         return 1;
     }
 
+    std::string source;
+    std::string line;
+
+    while (getline(std::cin, line)) {
+        source += line + "\n";
+    }
+
+    std::unique_ptr<rt::dsl::Object> object;
+
+    rt::dsl::Lexer lexer{source};
+    try {
+        auto tokens = lexer.scan_all();
+        rt::dsl::Parser parser{tokens};
+        object = parser.parse_object();
+    } catch (rt::dsl::errors::Error &error) {
+        std::cout << error;
+        return 1;
+    }
+
+    // TODO: Apply Eval to the DSL object and invoke the rendering engine here
+
     std::cout << "Rendering...\n";
 
     auto start_time = clock();
-
-    // TODO: Add the rendering logic here. The ray tracer is still in-progress.
-    //  For now we only have the tests for the functioning parts of the renderer.
-    //  The DSL is also currently being worked on.
 
     auto duration = static_cast<double>(clock() - start_time) / CLOCKS_PER_SEC;
 

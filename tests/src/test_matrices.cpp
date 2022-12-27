@@ -5,7 +5,8 @@
 #include <array>
 #include "../include/test_matrices.h"
 #include "../include/asserts.h"
-#include "../../math/include/matrix.h"
+#include "../../engine/math/include/math_utils.h"
+#include "../../engine/math/include/matrix.h"
 
 namespace tests::matrices {
     namespace math = rt::math;

@@ -5,8 +5,8 @@
 #include <cmath>
 #include "../include/test_materials.h"
 #include "../include/asserts.h"
-#include "../../core/include/material.h"
-#include "../../core/include/light.h"
+#include "../../engine/include/material.h"
+#include "../../engine/include/light.h"
 
 namespace tests::materials {
     void all() {

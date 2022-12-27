@@ -7,14 +7,26 @@
 #include "../include/lexer.h"
 #include "../include/errors.h"
 
-namespace rt::dsl::lexer {
+namespace rt::dsl {
     Lexer::Lexer() {
-        start = -1;
-        current = -1;
+        start = 0;
+        current = 0;
         line = 1;
     }
 
-    std::vector<Token> Lexer::scan() {
+    Lexer::Lexer(const std::string &source) : Lexer() {
+        this->source = source;
+    }
+
+    std::vector<Token> Lexer::scan_all() {
+        while (!is_at_end()) {
+            scan_next();
+        }
+        tokens.push_back({TokenType::eof, "", line});
+        return tokens;
+    }
+
+    void Lexer::scan() {
         auto c = read_and_advance();
         switch (c) {
             case '{':
@@ -58,7 +70,11 @@ namespace rt::dsl::lexer {
                     throw errors::invalid_character(c, line);
                 }
         }
-        return tokens;
+    }
+
+    void Lexer::scan_next() {
+        start = current;
+        scan();
     }
 
     char Lexer::read_and_advance() {
@@ -93,7 +109,7 @@ namespace rt::dsl::lexer {
             throw errors::unterminated_string(line);
         } else {
             advance(); // remove the closing quotation
-            auto content = source.substr(start + 1, current - 1);
+            auto content = source.substr(start + 1, current - start - 2);
             add_token(TokenType::string, content);
         }
     }

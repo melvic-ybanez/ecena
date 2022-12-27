@@ -9,10 +9,13 @@
 #include <map>
 #include "ast.h"
 #include "tokens.h"
+#include "errors.h"
 
-namespace rt::dsl::parsers {
+namespace rt::dsl {
     class Parser {
     public:
+        Parser(const std::vector<Token> tokens);
+
         std::unique_ptr<Expr> parse_expr();
 
         std::unique_ptr<Object> parse_object();
@@ -38,6 +41,17 @@ namespace rt::dsl::parsers {
         std::vector<Field> parse_fields();
 
         Field parse_field();
+
+        template<typename T>
+        std::unique_ptr<T> do_or_sync(std::function<std::unique_ptr<T> ()> f) {
+            int current_ = current;
+            try {
+                return f();
+            } catch (errors::Error &error) {
+                current = current_;
+                return nullptr;
+            }
+        }
 
     private:
         std::vector<Token> tokens;

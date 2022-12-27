@@ -5,7 +5,9 @@
 #include "../include/parser.h"
 #include "../include/errors.h"
 
-namespace rt::dsl::parsers {
+namespace rt::dsl {
+    Parser::Parser(const std::vector<Token> tokens) : tokens{tokens}, current{0} {}
+
     bool Parser::is_at_end() const {
         return peek().type == TokenType::eof;
     }
@@ -46,11 +48,16 @@ namespace rt::dsl::parsers {
     }
 
     std::unique_ptr<Expr> Parser::parse_expr() {
-        if (auto result = parse_object(); result != nullptr) return result;
-        if (auto result = parse_string(); result != nullptr) return result;
-        if (auto result = match(TokenType::number); result.has_value()) {
-            return std::make_unique<Number>(std::get<double>(result.value().value.value()));
-        }
+        if (auto result = do_or_sync<Object>([&] { return parse_object(); }); result != nullptr) return result;
+        if (auto result = do_or_sync<String>([&] { return parse_string(); }); result != nullptr) return result;
+        auto result = do_or_sync<Number>([&] {
+            std::unique_ptr<Number> result;
+            if (auto result_ = match(TokenType::number); result_.has_value()) {
+                result = std::make_unique<Number>(std::get<double>(result_.value().value.value()));
+            }
+            return result;
+        });
+        if (result != nullptr) return result;
         return parse_array();
     }
 
@@ -62,7 +69,7 @@ namespace rt::dsl::parsers {
     }
 
     std::unique_ptr<Object> Parser::parse_object() {
-        consume(TokenType::left_brace, "{", "at start of source");
+        consume(TokenType::left_brace, "{", "at the start of source");
         std::vector<Field> fields = parse_fields();
         consume(TokenType::right_brace, "}", "after to_data fields");
         return std::make_unique<Object>(std::move(fields));

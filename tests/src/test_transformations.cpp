@@ -6,7 +6,7 @@
 #include<cmath>
 #include "../include/asserts.h"
 #include "../include/test_transformations.h"
-#include "../../math/include/matrix.h"
+#include "../../engine/math/include/matrix.h"
 
 namespace tests::transformations {
     namespace matrix = rt::math::matrix;

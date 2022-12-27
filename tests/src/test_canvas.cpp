@@ -4,9 +4,8 @@
 
 #include "../include/test_canvas.h"
 #include "../include/asserts.h"
-#include "../../core/include/canvas.h"
-#include "../../math/include/tuples.h"
-#include "../../core/include/ppm.h"
+#include "../../engine/include/canvas.h"
+#include "../../engine/include/ppm.h"
 
 namespace tests::canvas {
     void all() {

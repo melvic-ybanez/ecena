@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-#include "../../core/include/data.h"
+#include "../../engine/include/data.h"
 
 namespace rt::dsl {
     class Field;
@@ -36,6 +36,8 @@ namespace rt::dsl {
         Expr &operator=(Expr &&from) noexcept = delete;
 
         virtual ExprType type() const = 0;
+
+        virtual std::ostream &display(std::ostream &out) const = 0;
     };
 
     class Object : public Expr {
@@ -45,18 +47,21 @@ namespace rt::dsl {
         explicit Object(std::vector<Field> fields);
 
         ExprType type() const override;
+
+        std::ostream &display(std::ostream &out) const override;
     };
 
     class String : public Expr {
     public:
+        std::string value;
+
         String(const std::string &value);
 
         bool operator==(const std::string &str) const;
 
         ExprType type() const override;
 
-    private:
-        std::string value;
+        std::ostream &display(std::ostream &out) const override;
     };
 
     class Number : public Expr {
@@ -66,6 +71,8 @@ namespace rt::dsl {
         Number(double value);
 
         ExprType type() const override;
+
+        std::ostream &display(std::ostream &out) const override;
     };
 
     class Array : public Expr {
@@ -75,6 +82,8 @@ namespace rt::dsl {
         Array(std::vector<std::unique_ptr<Expr>> elems);
 
         ExprType type() const override;
+
+        std::ostream &display(std::ostream &out) const override;
     };
 
     class Field {
@@ -89,6 +98,10 @@ namespace rt::dsl {
 
         const Expr &value() const;
     };
+
+    std::ostream &operator<<(std::ostream &out, const Expr &expr);
+
+    std::ostream &operator<<(std::ostream &out, const Field &field);
 }
 
 #endif //ECENA_AST_H

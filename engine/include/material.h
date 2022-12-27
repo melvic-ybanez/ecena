@@ -5,8 +5,8 @@
 #ifndef ECENA_MATERIAL_H
 #define ECENA_MATERIAL_H
 
-#include "../../math/include/math_utils.h"
-#include "../../math/include/tuples.h"
+#include "../math/include/math_utils.h"
+#include "../math/include/tuples.h"
 
 namespace rt::materials {
     class Material {

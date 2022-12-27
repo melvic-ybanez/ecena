@@ -5,8 +5,8 @@
 #ifndef ECENA_RAY_H
 #define ECENA_RAY_H
 
-#include "../../math/include/tuples.h"
-#include "../../math/include/matrix.h"
+#include "../math/include/tuples.h"
+#include "../math/include/matrix.h"
 
 namespace rt {
     class Ray {

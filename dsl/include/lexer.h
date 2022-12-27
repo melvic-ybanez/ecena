@@ -8,7 +8,7 @@
 #include <vector>
 #include "tokens.h"
 
-namespace rt::dsl::lexer {
+namespace rt::dsl {
     class Lexer {
     public:
         std::string source;
@@ -19,7 +19,13 @@ namespace rt::dsl::lexer {
 
         Lexer();
 
-        std::vector<Token> scan();
+        Lexer(const std::string &source);
+
+        std::vector<Token> scan_all();
+
+        void scan();
+
+        void scan_next();
 
         void advance();
 

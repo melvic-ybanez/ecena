@@ -30,7 +30,7 @@ namespace rt::shapes {
         auto a = transformed_ray.direction().dot(transformed_ray.direction());
         auto b = 2 * transformed_ray.direction().dot(sphere_to_ray);
         auto c = Vec{sphere_to_ray}.dot(sphere_to_ray) - 1;
-        auto discriminant{b * b - 4 * a * c};
+        auto discriminant = b * b - 4 * a * c;
 
         if (discriminant < 0) return {};
 

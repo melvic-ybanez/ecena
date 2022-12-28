@@ -4,6 +4,7 @@
 
 #include "../include/ast.h"
 #include "../include/errors.h"
+#include "../../shared/include/utils.h"
 
 namespace rt::dsl {
     std::ostream &operator<<(std::ostream &out, const Expr &expr) {
@@ -26,14 +27,7 @@ namespace rt::dsl {
     }
 
     std::ostream &Object::display(std::ostream &out) const {
-        out << "{ ";
-        size_t r = 0;
-        for (auto &field: fields) {
-            out << field;
-            r++;
-            if (r != fields.size()) out << ", ";
-        }
-        return out << " }";
+        return out << join_object(fields);
     }
 
     String::String(const std::string &value) : value{value} {}
@@ -84,13 +78,6 @@ namespace rt::dsl {
     }
 
     std::ostream &Array::display(std::ostream &out) const {
-        out << "[ ";
-        size_t r = 0;
-        for (auto &elem : elems) {
-            out << elem;
-            r++;
-            if (r != elems.size()) out << ", ";
-        }
-        return out << " ]";
+        return out << join_array(elems);
     }
 }

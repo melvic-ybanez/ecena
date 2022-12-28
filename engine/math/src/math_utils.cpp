@@ -18,4 +18,8 @@ namespace rt::math {
         if (result < 0) return 0;
         return result;
     }
+
+    std::ostream &operator<<(std::ostream &out, const Dimensions &dimensions) {
+        return out << "{ width: " << dimensions.width << ", height: " << dimensions.height << " }";
+    }
 }

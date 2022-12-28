@@ -114,6 +114,6 @@ namespace rt::math {
     using Matrix = rt::math::matrix::Matrix<R, C>;
 }
 
-#include "matrix.tpp"
+#include "../src/matrix.tpp"
 
 #endif //ECENA_MATRIX_H

@@ -48,9 +48,9 @@ namespace rt::math {
         Tuple rotate_z(real r) const;
 
         Tuple shear(real xy, real xz, real yx, real yz, real zx, real zy) const;
-    };
 
-    std::ostream &operator<<(std::ostream &out, const Tuple &t);
+        friend std::ostream &operator<<(std::ostream &out, const Tuple &t);
+    };
 
     Tuple operator+(const Tuple &u, const Tuple &v);
 

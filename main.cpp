@@ -5,6 +5,7 @@
 #include "dsl/include/lexer.h"
 #include "dsl/include/parser.h"
 #include "dsl/include/errors.h"
+#include "dsl/include/eval.h"
 
 int main() {
     std::ofstream out_img{"output.ppm"};
@@ -33,7 +34,11 @@ int main() {
         return 1;
     }
 
-    // TODO: Apply Eval to the DSL object and invoke the rendering engine here
+    auto data = rt::dsl::eval::to_data(*object);
+
+    // TODO: Apply rendering to the data here...
+    // For now, let's just print the data.
+    std::cout << data;
 
     std::cout << "Rendering...\n";
 

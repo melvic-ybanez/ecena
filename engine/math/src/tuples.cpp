@@ -8,6 +8,7 @@
 #include <cmath>
 #include "../include/tuples.h"
 #include "../include/matrix.h"
+#include "../../../shared/include/utils.h"
 
 namespace rt::math {
     Tuple::Tuple() : elems{0, 0, 0, 0} {}
@@ -54,7 +55,7 @@ namespace rt::math {
     }
 
     std::ostream &operator<<(std::ostream &out, const Tuple &t) {
-        return out << t.x() << ' ' << t.y() << ' ' << t.z() << ' ' << t.w();
+        return out << join_object(t.elems);
     }
 
     Tuple operator+(const Tuple &u, const Tuple &v) {

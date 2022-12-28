@@ -5,6 +5,8 @@
 #ifndef ECENA_MATH_UTILS_H
 #define ECENA_MATH_UTILS_H
 
+#include <ostream>
+
 namespace rt::math {
     using real = double;
 
@@ -20,6 +22,8 @@ namespace rt::math {
         int width;
         int height;
     };
+
+    std::ostream &operator<<(std::ostream &out, const Dimensions &dimensions);
 }
 
 namespace rt {

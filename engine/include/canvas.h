@@ -28,6 +28,8 @@ namespace rt {
 
         PixelRow &operator[](int row);
     };
+
+    std::ostream &operator<<(std::ostream &out, const Canvas &canvas);
 }
 
 #endif //ECENA_CANVAS_H

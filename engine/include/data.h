@@ -23,8 +23,14 @@ namespace rt {
         Canvas canvas;
         std::vector<std::unique_ptr<Shape>> shapes;
 
+        Data();
+
         math::Dimensions pixel_size() const;
     };
+
+    std::ostream &operator<<(std::ostream &out, const Data &data);
+
+    std::ostream &operator<<(std::ostream &out, const Wall &wall);
 }
 
 #endif //ECENA_DATA_H

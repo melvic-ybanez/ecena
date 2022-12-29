@@ -39,7 +39,6 @@ int main() {
 
     std::cout << "Rendering...\n";
 
-    std::cout << rt::render(data);
     out_img << rt::render(data);
 
     auto start_time = clock();

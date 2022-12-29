@@ -20,7 +20,7 @@ namespace rt {
                 for (auto &shape : data.shapes) {
                     auto xs = shape->intersect(ray);
                     if (xs.hit() != nullptr) {
-                        data.canvas[y][x] = Color::red_; // for now let's hardcode a color
+                        data.canvas[y][x] = shape->material.color;
                     }
                 }
             }

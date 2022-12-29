@@ -47,17 +47,35 @@ namespace rt::dsl::eval {
 
     std::unique_ptr<Shape> to_shape(const std::unique_ptr<Expr> &expr, int line) {
         auto obj = to_object(expr, line);
+        std::unique_ptr<Shape> shape;
 
         for (auto &field: obj->fields) {
             if (field.key() == "type") {
                 if (field.value().type() != ExprType::string)
                     throw errors::type_mismatch(ExprType::string, field.value().type(), line);
                 auto type = dynamic_cast<String *>(field.value_.get());
-                if (*type == "sphere") return std::make_unique<shapes::Sphere>();
+                if (*type == "sphere") shape = std::make_unique<shapes::Sphere>();
+            }
+            if (field.key() == "material") {
+                shape->material = to_material(field.value_, line);
             }
         }
 
-        return nullptr;
+        return shape;
+    }
+
+    Material to_material(const std::unique_ptr<Expr> &expr, int line) {
+        auto obj = to_object(expr, line);
+        Material material;
+
+        for (auto &field: obj->fields) {
+            if (field.key() == "color") {
+                auto point = to_point(field.value_, line);
+                material.color = Color{point.x(), point.y(), point.z()};
+            }
+        }
+
+        return material;
     }
 
     Wall to_wall(const std::unique_ptr<Expr> &expr, int line) {

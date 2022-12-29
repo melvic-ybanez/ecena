@@ -16,6 +16,8 @@ namespace rt::dsl::eval {
     std::unique_ptr<Shape> to_shape(const std::unique_ptr<Expr> &expr, int line);
 
     std::vector<std::unique_ptr<Shape>> to_shapes(const std::unique_ptr<Expr> &expr, int line);
+
+    Material to_material(const std::unique_ptr<Expr> &expr, int line);
 }
 
 #endif //ECENA_EVAL_H

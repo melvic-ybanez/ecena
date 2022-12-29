@@ -39,9 +39,9 @@ int main() {
 
     std::cout << "Rendering...\n";
 
-    out_img << rt::render(data);
-
     auto start_time = clock();
+
+    out_img << rt::render(data);
 
     auto duration = static_cast<double>(clock() - start_time) / CLOCKS_PER_SEC;
 

@@ -3,7 +3,6 @@
 //
 
 #include "../include/renderer.h"
-#include "../include/data.h"
 
 namespace rt {
     Ppm render(Data &data) {
@@ -19,8 +18,13 @@ namespace rt {
 
                 for (auto &shape : data.shapes) {
                     auto xs = shape->intersect(ray);
-                    if (xs.hit() != nullptr) {
-                        data.canvas[y][x] = shape->material.color;
+                    auto hit = xs.hit();
+                    if (hit != nullptr) {
+                        auto point = ray.at(hit->t());
+                        auto normal = hit->shape()->normal_at(point);
+                        auto eye_vec = Vec(-ray.direction());
+                        auto color = lights::lighting(hit->shape()->material, data.light, point, eye_vec, normal);
+                        data.canvas[y][x] = color;
                     }
                 }
             }

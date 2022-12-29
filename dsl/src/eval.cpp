@@ -8,6 +8,8 @@
 namespace rt::dsl::eval {
     static Point to_point(const std::unique_ptr<Expr> &expr, int line);
 
+    static Color to_color(const std::unique_ptr<Expr> &expr, int line);
+
     static math::Dimensions to_dimensions(const std::unique_ptr<Expr> &expr, int line);
 
     static Array *to_array(const std::unique_ptr<Expr> &expr, std::optional<size_t> size_limit, int line);
@@ -27,6 +29,7 @@ namespace rt::dsl::eval {
                 data.canvas = {static_cast<int>(dims.width), static_cast<int>(dims.height)};
             }
             if (field.key() == "shapes") data.shapes = to_shapes(field.value_, field.line);
+            if (field.key() == "point_light") data.light = to_point_light(field.value_, field.line);
         }
 
         return data;
@@ -52,7 +55,7 @@ namespace rt::dsl::eval {
         for (auto &field: obj->fields) {
             if (field.key() == "type") {
                 if (field.value().type() != ExprType::string)
-                    throw errors::type_mismatch(ExprType::string, field.value().type(), line);
+                    throw errors::type_mismatch(ExprType::string, field.value().type(), field.line);
                 auto type = dynamic_cast<String *>(field.value_.get());
                 if (*type == "sphere") shape = std::make_unique<shapes::Sphere>();
             }
@@ -70,8 +73,7 @@ namespace rt::dsl::eval {
 
         for (auto &field: obj->fields) {
             if (field.key() == "color") {
-                auto point = to_point(field.value_, line);
-                material.color = Color{point.x(), point.y(), point.z()};
+                material.color = to_color(field.value_, field.line);
             }
         }
 
@@ -102,6 +104,11 @@ namespace rt::dsl::eval {
     Point to_point(const std::unique_ptr<Expr> &expr, int line) {
         auto elem_values = to_num_array(expr, 3, line);
         return Point{elem_values[0], elem_values[1], elem_values[2]};
+    }
+
+    Color to_color(const std::unique_ptr<Expr> &expr, int line) {
+        auto point = to_point(expr, line);
+        return Color{point.x(), point.y(), point.z()};
     }
 
     math::Dimensions to_dimensions(const std::unique_ptr<Expr> &expr, int line) {
@@ -141,5 +148,17 @@ namespace rt::dsl::eval {
         }
 
         return elem_values;
+    }
+
+    PointLight to_point_light(const std::unique_ptr<Expr> &expr, int line) {
+        auto object = to_object(expr, line);
+        PointLight light;
+
+        for (auto &field: object->fields) {
+            if (field.key() == "position") light.position = to_point(field.value_, field.line);
+            if (field.key() == "intensity") light.intensity = to_color(field.value_, field.line);
+        }
+
+        return light;
     }
 }

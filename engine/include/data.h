@@ -9,6 +9,7 @@
 #include "../math/include/tuples.h"
 #include "canvas.h"
 #include "shapes.h"
+#include "light.h"
 
 namespace rt {
     struct Wall {
@@ -22,6 +23,7 @@ namespace rt {
         Wall wall;
         Canvas canvas;
         std::vector<std::unique_ptr<Shape>> shapes;
+        PointLight light;
 
         Data();
 

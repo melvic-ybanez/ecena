@@ -50,9 +50,6 @@ namespace rt::dsl {
             case '.':
                 add_token(TokenType::dot);
                 break;
-            case '-':
-                add_token(TokenType::minus);
-                break;
             case ' ':
             case '\r':
             case '\t':
@@ -62,6 +59,12 @@ namespace rt::dsl {
                 break;
             case '"':
                 scan_string();
+                break;
+            case '-':
+                scan_digit();
+                break;
+            case '+':
+                scan_digit();
                 break;
             default:
                 if (std::isdigit(c)) {
@@ -93,7 +96,7 @@ namespace rt::dsl {
     }
 
     void Lexer::add_token(TokenType type, TokenValue value) {
-        tokens.push_back({ type, lexeme(), line, std::move(value) });
+        tokens.push_back({type, lexeme(), line, std::move(value)});
     }
 
     void Lexer::next_line() {
@@ -121,7 +124,8 @@ namespace rt::dsl {
             while (std::isdigit(peek())) advance();
         }
         auto value_str = source.substr(start, current);
-        add_token(TokenType::number, std::stod(value_str));
+        auto value = std::stod(value_str);
+        add_token(TokenType::number, value);
     }
 
     bool Lexer::is_at_end() const {

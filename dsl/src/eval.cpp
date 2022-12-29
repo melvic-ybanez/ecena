@@ -21,10 +21,10 @@ namespace rt::dsl::eval {
 
         for (auto &field: object.fields) {
             if (field.key() == "ray_origin") data.ray_origin = to_point(field.value_, field.line);
-            if (field.key() == "pixel_size") data.wall = to_wall(field.value_, field.line);
+            if (field.key() == "wall") data.wall = to_wall(field.value_, field.line);
             if (field.key() == "canvas") {
                 auto dims = to_dimensions(field.value_, field.line);
-                data.canvas = {dims.width, dims.height};
+                data.canvas = {static_cast<int>(dims.width), static_cast<int>(dims.height)};
             }
             if (field.key() == "shapes") data.shapes = to_shapes(field.value_, field.line);
         }
@@ -36,8 +36,8 @@ namespace rt::dsl::eval {
         auto arr = to_array(expr, {}, line);
         std::vector<std::unique_ptr<Shape>> shapes;
 
-        for (auto &expr: arr->elems) {
-            if (auto shape = to_shape(expr, line); shape != nullptr) {
+        for (auto &elem: arr->elems) {
+            if (auto shape = to_shape(elem, line); shape != nullptr) {
                 shapes.push_back(std::move(shape));
             }
         }
@@ -52,7 +52,7 @@ namespace rt::dsl::eval {
             if (field.key() == "type") {
                 if (field.value().type() != ExprType::string)
                     throw errors::type_mismatch(ExprType::string, field.value().type(), line);
-                auto type = dynamic_cast<String *>(expr.get());
+                auto type = dynamic_cast<String *>(field.value_.get());
                 if (*type == "sphere") return std::make_unique<shapes::Sphere>();
             }
         }
@@ -67,7 +67,7 @@ namespace rt::dsl::eval {
 
         for (auto &field: obj->fields) {
             if (field.key() == "location") wall.location = to_point(field.value_, field.line);
-            if (field.key() == "dimensions") wall.dimensions = to_dimensions(field.value_, field.line);
+            if (field.key() == "size") wall.size = to_dimensions(field.value_, field.line);
         }
 
         return wall;

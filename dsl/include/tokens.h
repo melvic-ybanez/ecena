@@ -19,7 +19,6 @@ namespace rt::dsl {
         comma,
         colon,
         dot,
-        minus,
         eof
     };
 

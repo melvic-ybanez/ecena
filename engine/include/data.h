@@ -13,7 +13,7 @@
 namespace rt {
     struct Wall {
         Point location;
-        math::Dimensions dimensions;
+        math::Dimensions size;
     };
 
     class Data {

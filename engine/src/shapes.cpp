@@ -81,4 +81,8 @@ namespace rt::shapes {
         auto world_normal = inverse.transpose() * object_normal;
         return Vec{world_normal}.normalize();
     }
+
+    std::ostream &operator<<(std::ostream &out, const Shape &shape) {
+        return out << "{ type: " << shape.type() << " }";
+    }
 }

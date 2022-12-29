@@ -27,7 +27,7 @@ namespace rt::dsl {
     }
 
     std::ostream &Object::display(std::ostream &out) const {
-        return out << join_object(fields);
+        return out << join_to_object(fields);
     }
 
     String::String(const std::string &value) : value{value} {}
@@ -78,6 +78,6 @@ namespace rt::dsl {
     }
 
     std::ostream &Array::display(std::ostream &out) const {
-        return out << join_array(elems);
+        return out << join_to_array(elems);
     }
 }

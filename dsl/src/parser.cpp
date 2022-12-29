@@ -71,7 +71,7 @@ namespace rt::dsl {
     std::unique_ptr<Object> Parser::parse_object() {
         consume(TokenType::left_brace, "{", "at the start of source");
         std::vector<Field> fields = parse_fields();
-        consume(TokenType::right_brace, "}", "after to_data fields");
+        consume(TokenType::right_brace, "}", "after all the fields");
         return std::make_unique<Object>(std::move(fields));
     }
 
@@ -86,6 +86,8 @@ namespace rt::dsl {
         std::vector<Field> fields;
         while (peek().type == TokenType::string) {
             fields.push_back(parse_field());
+            if (peek().type != TokenType::right_brace)
+                consume(TokenType::comma, ",", "after a field");
         }
         return fields;
     }
@@ -94,7 +96,7 @@ namespace rt::dsl {
         consume(TokenType::left_bracket, "[", "at the start of array expression");
         std::vector<std::unique_ptr<Expr>> elems;
 
-        // first check if the array is empty, so we don't make the mistake of doing the loop
+        // first, check if the array is empty, so we don't make the mistake of doing the loop
         if (peek().type == TokenType::right_bracket) {
             advance();
             return std::make_unique<Array>(std::move(elems));
@@ -105,7 +107,7 @@ namespace rt::dsl {
         auto first = parse_expr();
         elems.push_back(std::move(first));
 
-        while (peek().type == TokenType::right_bracket) {
+        while (peek().type == TokenType::comma) {
             consume(TokenType::comma, ",", "after array element");
             auto elem = parse_expr();
             elems.push_back(std::move(elem));

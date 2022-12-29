@@ -16,7 +16,7 @@ namespace rt {
     class Canvas {
     public:
         PixelTable pixels;
-        math::Dimensions dimensions;
+        math::Dimensions size;
 
         Canvas();
 

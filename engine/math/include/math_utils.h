@@ -18,9 +18,16 @@ namespace rt::math {
 
     int scale(real value, int max_value);
 
-    struct Dimensions {
-        int width;
-        int height;
+    class Dimensions {
+    public:
+        real width;
+        real height;
+
+        Dimensions();
+
+        Dimensions(real width, real height);
+
+        Dimensions(int width, int height);
     };
 
     std::ostream &operator<<(std::ostream &out, const Dimensions &dimensions);

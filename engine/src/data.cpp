@@ -7,22 +7,21 @@
 
 namespace rt {
     Data::Data() {
-        wall.dimensions = {100, 100};
+        wall.size = {10, 10};
     }
 
-
     math::Dimensions Data::pixel_size() const {
-        return {wall.dimensions.width / canvas.width(), wall.dimensions.height / canvas.height()};
+        return {wall.size.width / canvas.width(), wall.size.height / canvas.height()};
     }
 
     std::ostream &operator<<(std::ostream &out, const Data &data) {
         return out << "{ ray_origin: " << data.ray_origin
                    << ", wall: " << data.wall << ", canvas: " << data.canvas
                    << ", pixel_size: " << data.pixel_size() << ", shapes: "
-                   << join_array(data.shapes) << " }";
+                   << join_to_array(data.shapes) << " }";
     }
 
     std::ostream &operator<<(std::ostream &out, const Wall &wall) {
-        return out << "{ point: " << wall.location << ", dimensions: " << wall.dimensions << " }";
+        return out << "{ point: " << wall.location << ", size: " << wall.size << " }";
     }
 }

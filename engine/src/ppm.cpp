@@ -79,8 +79,8 @@ namespace rt {
         return max_color_;
     }
 
-    std::ofstream &operator<<(std::ofstream &out, const Ppm &ppm) {
-        out << ppm.pixel_data();
+    std::ostream &operator<<(std::ostream &out, const Ppm &ppm) {
+        out << ppm.header() << "\n" << ppm.pixel_data();
         return out;
     }
 }

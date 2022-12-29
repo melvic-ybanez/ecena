@@ -55,7 +55,7 @@ namespace rt::math {
     }
 
     std::ostream &operator<<(std::ostream &out, const Tuple &t) {
-        return out << join_object(t.elems);
+        return out << join_to_object(t.elems);
     }
 
     Tuple operator+(const Tuple &u, const Tuple &v) {

@@ -31,7 +31,7 @@ namespace rt {
         int max_color() const;
     };
 
-    std::ofstream &operator<<(std::ofstream &out, const Ppm &ppm);
+    std::ostream &operator<<(std::ostream &out, const Ppm &ppm);
 }
 
 #endif //ECENA_PPM_H

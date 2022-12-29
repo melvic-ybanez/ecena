@@ -7,6 +7,14 @@
 #include <cmath>
 
 namespace rt::math {
+    Dimensions::Dimensions() : Dimensions(0, 0) {}
+
+    Dimensions::Dimensions(real width, real height) : width{width}, height{height} {}
+
+    Dimensions::Dimensions(int width, int height) :
+            Dimensions(static_cast<double>(width),
+                       static_cast<double>(height)) {}
+
     bool compare_reals(real a, real b) {
         auto result = std::abs(a - b);
         return std::isnan(result) || result < epsilon;

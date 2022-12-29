@@ -21,7 +21,7 @@ namespace rt::dsl::errors {
     }
 
     Error expected(const Token &token, const std::string &expected, const std::string &where) {
-        return {"Expected: " + expected + " " + where + ". Got: " + token.lexeme, token.line};
+        return {"Expected: '" + expected + "' " + where + ". Got: '" + token.lexeme + "'", token.line};
     }
 
     Error type_mismatch(ExprType expected, ExprType got, int line) {

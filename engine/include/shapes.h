@@ -64,6 +64,8 @@ namespace rt::shapes {
 
         Vec normal_at(const Point &point) const override;
     };
+
+    std::ostream &operator<<(std::ostream &out, const Shape &shape);
 }
 
 namespace rt {

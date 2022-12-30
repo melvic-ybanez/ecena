@@ -21,6 +21,8 @@ namespace rt::lights {
             const Vec &eye_vec,
             const Vec &normal_vec
     );
+
+    std::ostream &operator<<(std::ostream &out, const PointLight &light);
 }
 
 namespace rt {

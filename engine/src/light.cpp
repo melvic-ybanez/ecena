@@ -36,4 +36,8 @@ namespace rt::lights {
 
         return {ambient + diffuse + specular};
     }
+
+    std::ostream &operator<<(std::ostream &out, const PointLight &light) {
+        return out << "{ position: " << light.position << ", intensity: " << light.intensity << " }";
+    }
 }

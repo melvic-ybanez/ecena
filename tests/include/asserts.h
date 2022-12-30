@@ -25,7 +25,7 @@ namespace tests {
     void assert_true(const std::string &message, bool cond, const char *function_name, int line_no);
 
     template<typename T1, typename T2>
-    void assert_equals(const std::string &message, T1 t1, T2 t2, const char *function_name, int line_no) {
+    void assert_equals(const std::string &message, const T1 &t1, const T2 &t2, const char *function_name, int line_no) {
         std::ostringstream msg_stream;
         bool cond = t1 == t2;
         if (cond) {

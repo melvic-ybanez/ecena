@@ -13,7 +13,7 @@
 namespace rt {
     class World {
     public:
-        std::vector<std::unique_ptr<Shape>> objects;
+        std::vector<Shape *> objects;
         std::optional<PointLight> light;
     };
 }

@@ -20,7 +20,7 @@ add_executable(
         engine/include/shapes.h
         engine/include/intersection.h
         engine/src/shapes.cpp
-        engine/src/intersection.cpp engine/include/light.h engine/include/material.h engine/src/material.cpp engine/src/light.cpp dsl/include/tokens.h dsl/include/lexer.h dsl/src/lexer.cpp dsl/include/errors.h dsl/src/errors.cpp dsl/include/parser.h dsl/include/ast.h dsl/src/parser.cpp dsl/src/ast.cpp engine/include/renderer.h engine/src/renderer.cpp engine/include/data.h engine/src/data.cpp dsl/include/eval.h dsl/src/eval.cpp shared/include/utils.h engine/include/world.h tests/include/test_world.h tests/src/test_world.cpp)
+        engine/src/intersection.cpp engine/include/light.h engine/include/material.h engine/src/material.cpp engine/src/light.cpp dsl/include/tokens.h dsl/include/lexer.h dsl/src/lexer.cpp dsl/include/errors.h dsl/src/errors.cpp dsl/include/parser.h dsl/include/ast.h dsl/src/parser.cpp dsl/src/ast.cpp engine/include/renderer.h engine/src/renderer.cpp engine/include/data.h engine/src/data.cpp dsl/include/eval.h dsl/src/eval.cpp shared/include/utils.h engine/include/world.h)
 add_executable(
         ecena_tests
         tests/src/tests.cpp

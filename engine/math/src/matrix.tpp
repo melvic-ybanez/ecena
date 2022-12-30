@@ -1,3 +1,5 @@
+#include <optional>
+
 namespace rt::math::matrix {
     template<size_t R, size_t C>
     Row<C> &Matrix<R, C>::operator[](size_t row) {
@@ -153,10 +155,12 @@ namespace rt::math::matrix {
 
     template<size_t R, size_t C>
     Matrix<R, C> identity() {
-        static Matrix<R, C> identity_;
+        static std::optional<Matrix<R, C>> opt_identity;
 
-        // If it has a 1, then it's already initialized. Just return it immediately.
-        if (identity_[0][0] == 1) return identity_;
+        if (opt_identity.has_value()) return opt_identity.value();
+
+        opt_identity = {{}};
+        auto &identity_ = opt_identity.value();
 
         // set all the elements along the diagonal to 1
         for (auto r = 0; r < R; r++) {

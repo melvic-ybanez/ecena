@@ -20,10 +20,10 @@ namespace rt {
                     auto xs = shape->intersect(ray);
                     auto hit = xs.hit();
                     if (hit != nullptr) {
-                        auto point = ray.at(hit->t());
-                        auto normal = hit->shape()->normal_at(point);
-                        auto eye_vec = Vec(-ray.direction());
-                        auto color = lights::lighting(hit->shape()->material, data.light, point, eye_vec, normal);
+                        auto point = ray.at(hit->t);
+                        auto normal = hit->object->normal_at(point);
+                        auto eye_vec = Vec(-ray.direction);
+                        auto color = lights::lighting(hit->object->material, data.light, point, eye_vec, normal);
                         data.canvas[y][x] = color;
                     }
                 }

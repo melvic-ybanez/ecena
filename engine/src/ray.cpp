@@ -7,30 +7,22 @@
 #include "../include/ray.h"
 
 namespace rt {
-    Ray::Ray(const Point &origin, const Vec &direction): origin_{origin}, direction_{direction} {}
+    Ray::Ray(const Point &origin, const Vec &direction): origin{origin}, direction{direction} {}
 
-    Ray::Ray(Point &&origin, Vec &&direction): origin_{std::move(origin)}, direction_{std::move(direction)} {}
+    Ray::Ray(Point &&origin, Vec &&direction): origin{std::move(origin)}, direction{std::move(direction)} {}
 
     Ray::Ray(Tuple &&origin, Tuple &&direction) : Ray(Point{origin}, Vec{direction}) {}
 
-    const Point &Ray::origin() const {
-        return origin_;
-    }
-
-    const Vec &Ray::direction() const {
-        return direction_;
-    }
-
     Point Ray::at(real t) const {
-        return rt::Point{origin() + direction() * t};
+        return rt::Point{origin + direction * t};
     }
 
     std::ostream &operator<<(std::ostream &out, const Ray &ray) {
-        return out << "origin: " << ray.origin() << "; direction " << ray.direction();
+        return out << "origin: " << ray.origin << "; direction " << ray.direction;
     }
 
     Ray Ray::transform(const math::Matrix<4, 4> &matrix) const {
-        return Ray{matrix * origin_, matrix * direction_};
+        return Ray{matrix * origin, matrix * direction};
     }
 
     Ray Ray::translate(real x, real y, real z) const {
@@ -58,6 +50,6 @@ namespace rt {
     }
 
     bool Ray::operator==(const Ray &that) const {
-        return this->origin_ == that.origin_ && this->direction_ == that.direction_;
+        return this->origin == that.origin && this->direction == that.direction;
     }
 }

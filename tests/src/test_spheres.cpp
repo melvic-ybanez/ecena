@@ -30,8 +30,8 @@ namespace tests::spheres {
                 // need to store it twice. According to the "Ray Tracer Challenge" book,
                 // it will help in determining object overlaps when constructing solid Geometries.
                 ASSERT_EQ_MSG("Number of intersections", 2, xs.count());
-                ASSERT_EQ_MSG("First intersection", 5.0, xs[0]->t());
-                ASSERT_EQ_MSG("Second intersection", 5.0, xs[1]->t());
+                ASSERT_EQ_MSG("First intersection", 5.0, xs[0]->t);
+                ASSERT_EQ_MSG("Second intersection", 5.0, xs[1]->t);
             });
             scenario("A ray misses the sphere", [&] {
                 rt::Ray ray{rt::Point{0, 2, -5}, rt::Vec{0, 0, 1}};
@@ -44,16 +44,16 @@ namespace tests::spheres {
                 auto xs{sphere.intersect(ray)};
 
                 ASSERT_EQ_MSG("Number of intersections", 2, xs.count());
-                ASSERT_EQ_MSG("First intersection", -1.0, xs[0]->t());
-                ASSERT_EQ_MSG("Second intersection", 1.0, xs[1]->t());
+                ASSERT_EQ_MSG("First intersection", -1.0, xs[0]->t);
+                ASSERT_EQ_MSG("Second intersection", 1.0, xs[1]->t);
             });
             set("A sphere is behind a ray", [&] {
                 rt::Ray ray{rt::Point{0, 0, 5}, rt::Vec{0, 0, 1}};
                 auto xs{sphere.intersect(ray)};
 
                 ASSERT_EQ_MSG("Number of intersections", 2, xs.count());
-                ASSERT_EQ_MSG("First intersection", -6.0, xs[0]->t());
-                ASSERT_EQ_MSG("Second intersection", -4.0, xs[1]->t());
+                ASSERT_EQ_MSG("First intersection", -6.0, xs[0]->t);
+                ASSERT_EQ_MSG("Second intersection", -4.0, xs[1]->t);
             });
             set("A scaled sphere with a ray", [&]() mutable {
                 rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
@@ -61,8 +61,8 @@ namespace tests::spheres {
                 auto xs = sphere.intersect(ray);
 
                 ASSERT_EQ_MSG("Inspect count", 2, xs.count());
-                ASSERT_EQ_MSG("Inspect first t", 3, xs[0]->t());
-                ASSERT_EQ_MSG("Inspect second t", 7, xs[1]->t());
+                ASSERT_EQ_MSG("Inspect first t", 3, xs[0]->t);
+                ASSERT_EQ_MSG("Inspect second t", 7, xs[1]->t);
             });
             set("A translated sphere with a ray", [&]() mutable {
                 rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};

@@ -5,18 +5,10 @@
 #include "../include/intersection.h"
 
 namespace rt::intersections {
-    Intersection::Intersection(real t, const Shape *shape) : t_{t}, shape_{shape} {}
-
-    real Intersection::t() const {
-        return t_;
-    }
-
-    const Shape *Intersection::shape() const {
-        return shape_;
-    }
+    Intersection::Intersection(real t, const Shape *object) : t{t}, object{object} {}
 
     bool Intersection::operator<(const Intersection &that) const {
-        return this->t() < that.t();
+        return this->t < that.t;
     }
 
     Aggregate::Aggregate(AggregateData elems_) : elems{std::move(elems_)} {
@@ -39,7 +31,7 @@ namespace rt::intersections {
     Intersection *Aggregate::hit() {
         sort();
         for (auto e: elems) {
-            if (e->t() >= 0) return e;
+            if (e->t >= 0) return e;
         }
         return nullptr;
     }

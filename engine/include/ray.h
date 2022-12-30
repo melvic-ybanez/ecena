@@ -10,19 +10,15 @@
 
 namespace rt {
     class Ray {
-        Point origin_;
-        Vec direction_;
-
     public:
+        Point origin;
+        Vec direction;
+
         Ray(const Point &origin, const Vec &direction);
 
         Ray(Point &&origin, Vec &&direction);
 
         Ray(Tuple &&origin, Tuple &&direction);
-
-        const Point &origin() const;
-
-        const Vec &direction() const;
 
         Point at(real t) const;
 

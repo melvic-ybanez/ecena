@@ -13,6 +13,8 @@ namespace tests::intersections {
     void aggregations();
 
     void hits();
+
+    void computations();
 }
 
 #endif //ECENA_TEST_INTERSECTIONS_H

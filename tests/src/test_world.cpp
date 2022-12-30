@@ -33,10 +33,10 @@ namespace tests::world {
             auto xs = world.intersect(ray);
 
             ASSERT_EQ_MSG("Count", 4, xs.count());
-            ASSERT_EQ_MSG("1st intersection", 4, xs[0]->t());
-            ASSERT_EQ_MSG("2nd intersection", 4.5, xs[1]->t());
-            ASSERT_EQ_MSG("3rd intersection", 5.5, xs[2]->t());
-            ASSERT_EQ_MSG("4th intersection", 6, xs[3]->t());
+            ASSERT_EQ_MSG("1st intersection", 4, xs[0]->t);
+            ASSERT_EQ_MSG("2nd intersection", 4.5, xs[1]->t);
+            ASSERT_EQ_MSG("3rd intersection", 5.5, xs[2]->t);
+            ASSERT_EQ_MSG("4th intersection", 6, xs[3]->t);
         });
     }
 

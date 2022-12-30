@@ -18,15 +18,11 @@ namespace rt {
 
 namespace rt::intersections {
     class Intersection {
-        real t_;
-        const Shape *shape_;
-
     public:
-        Intersection(real t, const Shape *shape);
+        real t;
+        const Shape *object;
 
-        real t() const;
-
-        const Shape *shape() const;
+        Intersection(real t, const Shape *object);
 
         bool operator<(const Intersection &that) const;
     };
@@ -60,6 +56,7 @@ namespace rt::intersections {
 
 namespace rt {
     using Intersection = intersections::Intersection;
+    using Aggregate = intersections::Aggregate;
 }
 
 #endif //ECENA_INTERSECTION_H

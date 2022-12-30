@@ -14,18 +14,29 @@ namespace tests::world {
         set("World", [] {
             init();
 
-            auto world = default_world();
-            for (auto object: world.objects) {
-                delete object;
-            }
+            intersections();
         });
     }
 
     void init() {
         set("Creating a world", [] {
-           rt::World world;
+            rt::World world;
             ASSERT_EQ_MSG("Inspect objects", 0, world.objects.size());
             ASSERT_TRUE_MSG("Inspect light source", !world.light.has_value());
+        });
+    }
+
+    void intersections() {
+        set("Intersections", [] {
+            auto world = default_world();
+            rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+            auto xs = world.intersect(ray);
+
+            ASSERT_EQ_MSG("Count", 4, xs.count());
+            ASSERT_EQ_MSG("1st intersection", 4, xs[0]->t());
+            ASSERT_EQ_MSG("2nd intersection", 4.5, xs[1]->t());
+            ASSERT_EQ_MSG("3rd intersection", 5.5, xs[2]->t());
+            ASSERT_EQ_MSG("4th intersection", 6, xs[3]->t());
         });
     }
 
@@ -49,6 +60,6 @@ namespace tests::world {
         world.objects.push_back(s1);
         world.objects.push_back(s2);
 
-        return opt_world.value();
+        return std::move(opt_world.value());
     }
 }

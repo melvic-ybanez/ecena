@@ -9,6 +9,8 @@ namespace tests::world {
     void all();
 
     void init();
+
+    void intersections();
 }
 
 #endif //ECENA_TEST_WORLD_H

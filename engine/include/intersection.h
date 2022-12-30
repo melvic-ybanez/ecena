@@ -34,23 +34,12 @@ namespace rt::intersections {
     using AggregateData = std::vector<Intersection *>;
 
     class Aggregate {
-        AggregateData elems_;
-        bool is_sorted;
-
     public:
+        AggregateData elems;
+
         Aggregate(AggregateData elems_);
 
         Aggregate() = default;
-
-        Aggregate(const Aggregate &set) = default;
-
-        Aggregate(Aggregate &&set) = default;
-
-        Aggregate &operator=(const Aggregate &other) = default;
-
-        Aggregate &operator=(Aggregate &&other) = default;
-
-        ~Aggregate();
 
         size_t count() const;
 
@@ -59,6 +48,13 @@ namespace rt::intersections {
         bool empty() const;
 
         Intersection *hit();
+
+        void combine_with(const Aggregate &agg);
+
+        void sort();
+
+    private:
+        bool is_sorted;
     };
 }
 

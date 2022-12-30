@@ -19,38 +19,42 @@ namespace rt::intersections {
         return this->t() < that.t();
     }
 
-    Aggregate::Aggregate(AggregateData elems_) : elems_{std::move(elems_)} {
+    Aggregate::Aggregate(AggregateData elems_) : elems{std::move(elems_)} {
         is_sorted = false;
-    }
-
-    Aggregate::~Aggregate() {
-        for (auto e: elems_) {
-            delete e;
-        }
-        elems_.clear();
+        sort();
     }
 
     size_t Aggregate::count() const {
-        return elems_.size();
+        return elems.size();
     }
 
     bool Aggregate::empty() const {
-        return elems_.empty();
+        return elems.empty();
     }
 
     Intersection *Aggregate::operator[](size_t i) {
-        return elems_[i];
+        return elems[i];
     }
 
     Intersection *Aggregate::hit() {
-        if (!is_sorted) {
-            std::sort(elems_.begin(), elems_.end(), [](Intersection *t1, Intersection *t2) { return *t1 < *t2; });
-            is_sorted = true;
-        }
-
-        for (auto e : elems_) {
+        sort();
+        for (auto e: elems) {
             if (e->t() >= 0) return e;
         }
         return nullptr;
+    }
+
+    void Aggregate::combine_with(const Aggregate &agg) {
+        std::copy(agg.elems.begin(), agg.elems.end(), std::back_inserter(this->elems));
+        is_sorted = is_sorted && agg.count() == 0;
+        sort();
+    }
+
+    void Aggregate::sort() {
+        if (is_sorted) return;
+
+        std::sort(this->elems.begin(), this->elems.end(),
+                  [](Intersection *t1, Intersection *t2) { return *t1 < *t2; });
+        is_sorted = true;
     }
 }

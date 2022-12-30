@@ -9,6 +9,8 @@
 #include "../../engine/include/shapes.h"
 
 namespace tests::intersections {
+    static void clear_agg(rt::intersections::Aggregate &agg);
+
     void all() {
         set("Intersections", [] {
             init();
@@ -36,6 +38,7 @@ namespace tests::intersections {
             ASSERT_EQ_MSG("Inspect count", 2, agg.count());
             ASSERT_EQ_MSG("Inspect first element", i1, agg[0]);
             ASSERT_EQ_MSG("Inspect second element", i2, agg[1]);
+            clear_agg(agg);
         });
         set("Intersect sets the to_data on the intersection", [] {
             rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
@@ -45,6 +48,7 @@ namespace tests::intersections {
             ASSERT_EQ_MSG("Inspect count", 2, agg.count());
             ASSERT_EQ_MSG("Inspect first to_data", &sphere, agg[0]->shape());
             ASSERT_EQ_MSG("Inspect second to_data", &sphere, agg[1]->shape());
+            clear_agg(agg);
         });
     }
 
@@ -57,18 +61,21 @@ namespace tests::intersections {
                 auto i2 = new rt::Intersection{2, &sphere};
                 rt::intersections::Aggregate agg{{i2, i1}};
                 ASSERT_EQ(i1, agg.hit());
+                clear_agg(agg);
             });
             scenario("When some intersections have negative ts", [&] {
                 auto i1 = new rt::Intersection{-1, &sphere};
                 auto i2 = new rt::Intersection {2, &sphere};
                 rt::intersections::Aggregate agg{{i2, i1}};
                 ASSERT_EQ(i2, agg.hit());
+                clear_agg(agg);
             });
             scenario("When all intersections have negative ts", [&] {
                 auto i1 = new rt::Intersection{-2, &sphere};
                 auto i2 = new rt::Intersection {-1, &sphere};
                 rt::intersections::Aggregate agg{{i2, i1}};
                 ASSERT_EQ(nullptr, agg.hit());
+                clear_agg(agg);
             });
             scenario("Always the lowest non-negative intersection", [&] {
                 auto i1 = new rt::Intersection{5, &sphere};
@@ -77,7 +84,15 @@ namespace tests::intersections {
                 auto i4 = new rt::Intersection {2, &sphere};
                 rt::intersections::Aggregate agg{{i1, i2, i3, i4}};
                 ASSERT_EQ(i4, agg.hit());
+                clear_agg(agg);
             });
         });
+    }
+
+    void clear_agg(rt::intersections::Aggregate &agg) {
+        for (auto e: agg.elems) {
+            delete e;
+        }
+        agg.elems.clear();
     }
 }

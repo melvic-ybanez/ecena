@@ -108,7 +108,7 @@ namespace rt::math::matrix {
      */
     Matrix<4, 4> shearing(real xy, real xz, real yx, real yz, real zx, real zy);
 
-    Matrix<4, 4> view_transform(Point from, Point to, Vec up);
+    Matrix<4, 4> view_transform(const Point& from, const Point& to, const Vec& up);
 }
 
 namespace rt::math {

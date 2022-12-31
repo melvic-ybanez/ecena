@@ -3,6 +3,7 @@
 //
 
 #include "../include/asserts.h"
+#include "../../engine/math/include/math_utils.h"
 
 namespace tests {
     int test_count;

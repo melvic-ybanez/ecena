@@ -14,6 +14,7 @@
 #include "../include/test_lights.h"
 #include "../include/test_materials.h"
 #include "../include/test_world.h"
+#include "../include/test_camera.h"
 
 int main() {
     tests::reset();
@@ -27,6 +28,7 @@ int main() {
     tests::lights::all();
     tests::materials::all();
     tests::world::all();
+    tests::camera::all();
     std::cout << "Ran " << tests::test_count << " tests. Successful: " << tests::success_count << ". Failed: "
               << tests::test_count - tests::success_count << ".";
 }

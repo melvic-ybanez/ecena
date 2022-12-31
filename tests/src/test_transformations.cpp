@@ -19,6 +19,7 @@ namespace tests::transformations {
             rotations();
             shearing();
             multiple_transformations();
+            view_transformations();
         });
     }
 
@@ -130,6 +131,45 @@ namespace tests::transformations {
         scenario("Chained transformations must be applied in reverse order", [=] {
             auto transformation{translation * scaling * rotation_x};
             ASSERT_EQ(transformation * point, rt::Point(15, 0, 7));
+        });
+    }
+
+    void view_transformations() {
+        set("View transformations", [] {
+            scenario("For the default orientation", [] {
+                rt::Point from{0, 0, 0};
+                rt::Point to{0, 0, -1};
+                rt::Vec up{0, 1, 0};
+                auto idm = rt::math::matrix::identity<4, 4>();
+                auto vt = rt::math::matrix::view_transform(from, to, up);
+                ASSERT_EQ(idm, vt);
+            });
+            scenario("Looking in positive z direction", [] {
+                rt::Point from{0, 0, 0};
+                rt::Point to{0, 0, 1};
+                rt::Vec up{0, 1, 0};
+                auto vt = rt::math::matrix::view_transform(from, to, up);
+                ASSERT_EQ(rt::math::matrix::scaling(-1, 1, -1), vt);
+            });
+            scenario("The view transformation moves the world", [] {
+                rt::Point from{0, 0, 8};
+                rt::Point to{0, 0, 0};
+                rt::Vec up{0, 1, 0};
+                auto vt = rt::math::matrix::view_transform(from, to, up);
+                ASSERT_EQ(rt::math::matrix::translation(0, 0, -8), vt);
+            });
+            scenario("An arbitrary view transformation", [] {
+                rt::Point from{1, 3, 2};
+                rt::Point to{4, -2, 8};
+                rt::Vec up{1, 1, 0};
+                auto vt = rt::math::matrix::view_transform(from, to, up);
+                rt::math::Matrix<4, 4> result{
+                        {{{-0.50709, 0.50709, 0.67612, -2.36643},
+                          {0.76772, 0.60609, 0.12122, -2.82843},
+                          {-0.35857, 0.59761, -0.71714, 0.00000},
+                          {0.00000, 0.00000, 0.00000, 1.00000}}}
+                };
+            });
         });
     }
 }

@@ -107,6 +107,8 @@ namespace rt::math::matrix {
      * Moves z in proportion to x and y.
      */
     Matrix<4, 4> shearing(real xy, real xz, real yx, real yz, real zx, real zy);
+
+    Matrix<4, 4> view_transform(Point from, Point to, Vec up);
 }
 
 namespace rt::math {

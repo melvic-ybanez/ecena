@@ -75,4 +75,17 @@ namespace rt::math::matrix {
                   {0, 0, 0, 1}}}
         };
     }
+
+    Matrix<4, 4> view_transform(Point from, Point to, Vec up) {
+        auto forward = Vec(to - from).normalize();
+        auto left = forward.cross(up.normalize());
+        auto true_up = left.cross(forward);
+        Matrix<4, 4> orientiation{
+                {{{left.x(), left.y(), left.z(), 0},
+                  {true_up.x(), true_up.y(), true_up.z(), 0},
+                  {-forward.x(), -forward.y(), -forward.z(), 0},
+                  {0, 0, 0, 1}}}
+        };
+        return orientiation * translation(-from.x(), -from.y(), -from.z());
+    }
 }

@@ -13,6 +13,8 @@ namespace rt::tests::camera {
     void pixel_size();
 
     void rays();
+
+    void rendering();
 }
 
 #endif //ECENA_TEST_CAMERA_H

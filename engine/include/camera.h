@@ -8,16 +8,18 @@
 #include "../math/include/math_utils.h"
 #include "../math/include/matrix.h"
 #include "ray.h"
+#include "canvas.h"
+#include "world.h"
 
 namespace rt {
     class Camera {
     public:
-        real hsize;
-        real vsize;
+        double h_size;
+        double v_size;
         real field_of_view;     // how much the camera can see
         Matrix<4, 4> transform;
 
-        Camera(real hsize, real vsize, real field_of_view);
+        Camera(double h_size, double v_size, real field_of_view);
 
         real pixel_size() const;
 
@@ -30,6 +32,8 @@ namespace rt {
         real half_view() const;
 
         Ray ray_for_pixel(int x, int y) const;
+
+        Canvas render(const World &world) const;
     };
 }
 

@@ -6,8 +6,8 @@
 #include "../include/camera.h"
 
 namespace rt {
-    Camera::Camera(real hsize, real vsize, real field_of_view)
-            : hsize{hsize}, vsize{vsize},
+    Camera::Camera(double h_size, double v_size, real field_of_view)
+            : h_size{h_size}, v_size{v_size},
               field_of_view{field_of_view},
               transform{math::matrix::identity<4, 4>()} {}
 
@@ -17,11 +17,11 @@ namespace rt {
     }
 
     real Camera::pixel_size() const {
-        return half_width() * 2 / hsize;
+        return half_width() * 2 / h_size;
     }
 
     real Camera::aspect_ratio() const {
-        return hsize / vsize;
+        return h_size / v_size;
     }
 
     real Camera::half_width() const {
@@ -56,5 +56,19 @@ namespace rt {
         auto direction = Vec(pixel - origin).normalize();
 
         return {origin, direction};
+    }
+
+    Canvas Camera::render(const World &world) const {
+        auto image = Canvas{static_cast<int>(h_size), static_cast<int>(v_size)};
+
+        for (auto y = 0; y < v_size; y++) {
+            for (auto x = 0; x < h_size; x++) {
+                auto ray = ray_for_pixel(x, y);
+                auto color = world.color_at(ray);
+                image[y][x] = color;
+            }
+        }
+
+        return image;
     }
 }

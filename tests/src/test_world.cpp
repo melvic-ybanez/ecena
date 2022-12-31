@@ -13,8 +13,8 @@ namespace tests::world {
     void all() {
         set("World", [] {
             init();
-
             intersections();
+            shading();
         });
     }
 
@@ -40,13 +40,34 @@ namespace tests::world {
         });
     }
 
+    void shading() {
+        set("Shading", [] {
+            scenario("Shading an intersection", [] {
+                auto world = default_world();
+                rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+                auto shape = world[0];
+                rt::Intersection i{4, shape};
+                rt::Comps comps{i, ray};
+                auto color = world.shade_hit(comps);
+
+                ASSERT_EQ(rt::Color(0.38066, 0.47583, 0.2855), color);
+            });
+            scenario("Shading an intersection from the inside", [] {
+                auto world = default_world();
+                world.light = {rt::Point{0, 0.25, 0}, rt::Color::white_};
+                rt::Ray ray{rt::Point{0, 0, 0}, rt::Vec{0, 0, 1}};
+                auto shape = world[1];
+                rt::Intersection i{0.5, shape};
+                rt::Comps comps{i, ray};
+                auto color = world.shade_hit(comps);
+
+                ASSERT_EQ(rt::Color(0.90498, 0.90498, 0.90498), color);
+            });
+        });
+    }
+
     rt::World default_world() {
-        static std::optional<rt::World> opt_world;
-
-        if (opt_world.has_value()) return opt_world.value();
-        opt_world = {{}};
-
-        auto &world = opt_world.value();
+        rt::World world;
         world.light = rt::PointLight{{-10, 10, -10}, rt::Color::white_};
 
         auto s1 = new rt::shapes::Sphere;
@@ -60,6 +81,6 @@ namespace tests::world {
         world.objects.push_back(s1);
         world.objects.push_back(s2);
 
-        return std::move(opt_world.value());
+        return world;
     }
 }

@@ -103,7 +103,7 @@ namespace tests::intersections {
                 rt::Intersection i{4, &shape};
                 rt::Comps comps{i, ray};
 
-                ASSERT_TRUE_MSG("inside", !comps.inside);
+                ASSERT_TRUE(!comps.inside);
             });
             set("The hit, when an intersection occurs on the inside", [&] {
                 rt::Ray ray{rt::Point{0, 0, 0}, rt::Vec{0, 0, 1}};

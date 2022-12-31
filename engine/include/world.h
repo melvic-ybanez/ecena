@@ -9,6 +9,7 @@
 #include <optional>
 #include "shapes.h"
 #include "light.h"
+#include "comps.h"
 
 namespace rt {
     class World {
@@ -29,6 +30,10 @@ namespace rt {
         World &operator=(World &&from) noexcept = default;
 
         ~World();
+
+        Color shade_hit(const Comps &comps) const;
+
+        Shape *operator[](size_t i);
     };
 }
 

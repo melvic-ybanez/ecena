@@ -17,18 +17,20 @@
 #include "../include/test_camera.h"
 
 int main() {
-    tests::reset();
-    tests::tuples::all();
-    tests::canvas::all();
-    tests::matrices::all();
-    tests::transformations::all();
-    tests::rays::all();
-    tests::spheres::all();
-    tests::intersections::all();
-    tests::lights::all();
-    tests::materials::all();
-    tests::world::all();
-    tests::camera::all();
-    std::cout << "Ran " << tests::test_count << " tests. Successful: " << tests::success_count << ". Failed: "
-              << tests::test_count - tests::success_count << ".";
+    using namespace rt::tests;
+
+    reset();
+    tuples::all();
+    canvas::all();
+    matrices::all();
+    transformations::all();
+    rays::all();
+    spheres::all();
+    intersections::all();
+    lights::all();
+    materials::all();
+    world::all();
+    camera::all();
+    std::cout << "Ran " << test_count << " tests. Successful: " << success_count << ". Failed: "
+              << test_count - success_count << ".";
 }

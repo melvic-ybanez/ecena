@@ -6,7 +6,7 @@
 #include "../include/asserts.h"
 #include "../../engine/include/light.h"
 
-namespace tests::lights {
+namespace rt::tests::lights {
     void all() {
         set("Lights", [] {
             init();
@@ -16,8 +16,8 @@ namespace tests::lights {
     void init() {
         set("A point light has a position and intensity", [] {
             rt::Color intensity{1, 1, 1};
-            rt::Point position{0, 0, 0};
-            rt::PointLight light{position, intensity};
+            Point position{0, 0, 0};
+            PointLight light{position, intensity};
 
             ASSERT_EQ_MSG("Inspect position", position, light.position);
             ASSERT_EQ_MSG("Inspect intensity", intensity, light.intensity);

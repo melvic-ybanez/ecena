@@ -5,7 +5,7 @@
 #ifndef ECENA_TEST_RAYS_H
 #define ECENA_TEST_RAYS_H
 
-namespace tests::rays {
+namespace rt::tests::rays {
     void all();
 
     void init();

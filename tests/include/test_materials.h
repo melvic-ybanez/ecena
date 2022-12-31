@@ -5,7 +5,7 @@
 #ifndef ECENA_TEST_MATERIALS_H
 #define ECENA_TEST_MATERIALS_H
 
-namespace tests::materials {
+namespace rt::tests::materials {
     void all();
 
     void init();

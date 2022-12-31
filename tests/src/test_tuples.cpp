@@ -7,7 +7,7 @@
 #include "../include/asserts.h"
 #include "../../engine/math/include/tuples.h"
 
-namespace tests::tuples {
+namespace rt::tests::tuples {
     void all() {
         set("Tuples", [] {
             identities();
@@ -21,14 +21,14 @@ namespace tests::tuples {
     }
 
     void identities() {
-        ASSERT_EQ_MSG("Default point", rt::Point(), rt::Tuple(0, 0, 0, 1));
-        ASSERT_EQ_MSG("Default vector", rt::Vec(), rt::Tuple(0, 0, 0, 0));
+        ASSERT_EQ_MSG("Default point", Point(), rt::Tuple(0, 0, 0, 1));
+        ASSERT_EQ_MSG("Default vector", Vec(), rt::Tuple(0, 0, 0, 0));
         scenario("A tuple with W = 1.0 is a point", [] {
-            rt::Point point{4.3, -4.2, 3.1};
+            Point point{4.3, -4.2, 3.1};
             ASSERT_EQ(point.w(), 1);
         });
         scenario("A tuple with W = 0.0 is a vector", [] {
-            rt::Vec vector{4.3, -4.2, 3.1};
+            Vec vector{4.3, -4.2, 3.1};
             ASSERT_EQ(vector.w(), 0);
         });
     }
@@ -36,31 +36,31 @@ namespace tests::tuples {
     void operations() {
         set("Addition", [] {
             scenario("Two tuples", [] {
-                rt::Point t1{3, -2, 5};
-                rt::Vec t2{-2, 3, 1};
-                ASSERT_EQ(t1 + t2, rt::Point(1, 1, 6));
+                Point t1{3, -2, 5};
+                Vec t2{-2, 3, 1};
+                ASSERT_EQ(t1 + t2, Point(1, 1, 6));
             });
             scenario("Two vectors", [] {
-                rt::Vec v1{3, -2, 5};
-                rt::Vec v2{-2, 3, 1};
-                ASSERT_EQ(v1 + v2, rt::Vec(1, 1, 6));
+                Vec v1{3, -2, 5};
+                Vec v2{-2, 3, 1};
+                ASSERT_EQ(v1 + v2, Vec(1, 1, 6));
             });
         });
         set("Subtraction", [] {
             scenario("Subtracting two points", [] {
-                rt::Point p1{3, 2, 1};
-                rt::Point p2{5, 6, 7};
-                ASSERT_EQ(p1 - p2, rt::Vec(-2, -4, -6));
+                Point p1{3, 2, 1};
+                Point p2{5, 6, 7};
+                ASSERT_EQ(p1 - p2, Vec(-2, -4, -6));
             });
             scenario("Subtracting a vector from a point", [] {
-                rt::Point p{3, 2, 1};
-                rt::Vec v{5, 6, 7};
-                ASSERT_EQ(p - v, rt::Point(-2, -4, -6));
+                Point p{3, 2, 1};
+                Vec v{5, 6, 7};
+                ASSERT_EQ(p - v, Point(-2, -4, -6));
             });
             scenario("Subtracting two vectors", [] {
-                rt::Vec v1{3, 2, 1};
-                rt::Vec v2{5, 6, 7};
-                ASSERT_EQ(v1 - v2, rt::Vec(-2, -4, -6));
+                Vec v1{3, 2, 1};
+                Vec v2{5, 6, 7};
+                ASSERT_EQ(v1 - v2, Vec(-2, -4, -6));
             });
         });
         scenario("Negating a tuple", [] {
@@ -78,36 +78,36 @@ namespace tests::tuples {
 
     void magnitude() {
         set("Magnitude", [] {
-            ASSERT_EQ_MSG("(1, 0, 0)", rt::Vec(1, 0, 0).magnitude(), 1);
-            ASSERT_EQ_MSG("(0, 1, 0)", rt::Vec(0, 1, 0).magnitude(), 1);
-            ASSERT_EQ_MSG("(0, 0, 1)", rt::Vec(0, 0, 1).magnitude(), 1);
-            ASSERT_EQ_MSG("(1, 2, 3)", rt::Vec(1, 2, 3).magnitude(), std::sqrt(14));
-            ASSERT_EQ_MSG("(-1, -2, -3)", rt::Vec(-1, -2, -3).magnitude(), std::sqrt(14));
+            ASSERT_EQ_MSG("(1, 0, 0)", Vec(1, 0, 0).magnitude(), 1);
+            ASSERT_EQ_MSG("(0, 1, 0)", Vec(0, 1, 0).magnitude(), 1);
+            ASSERT_EQ_MSG("(0, 0, 1)", Vec(0, 0, 1).magnitude(), 1);
+            ASSERT_EQ_MSG("(1, 2, 3)", Vec(1, 2, 3).magnitude(), std::sqrt(14));
+            ASSERT_EQ_MSG("(-1, -2, -3)", Vec(-1, -2, -3).magnitude(), std::sqrt(14));
         });
     }
 
     void normalize() {
         set("Normalize", [] {
-            ASSERT_EQ_MSG("(4, 0, 0)", rt::Vec(4, 0, 0).normalize(), rt::Vec(1, 0, 0));
-            ASSERT_EQ_MSG("(1, 2, 3)", rt::Vec(1, 2, 3).normalize(),
-                          rt::Vec(1 / std::sqrt(14), 2 / std::sqrt(14), 3 / std::sqrt(14)));
-            ASSERT_EQ_MSG("The magnitude of normalized vector", rt::Vec(1, 2, 3).normalize().magnitude(), 1);
+            ASSERT_EQ_MSG("(4, 0, 0)", Vec(4, 0, 0).normalize(), Vec(1, 0, 0));
+            ASSERT_EQ_MSG("(1, 2, 3)", Vec(1, 2, 3).normalize(),
+                          Vec(1 / std::sqrt(14), 2 / std::sqrt(14), 3 / std::sqrt(14)));
+            ASSERT_EQ_MSG("The magnitude of normalized vector", Vec(1, 2, 3).normalize().magnitude(), 1);
         });
     }
 
     void products() {
         set("Products", [] {
             scenario("Dot", [] {
-                rt::Vec v1{1, 2, 3};
-                rt::Vec v2{2, 3, 4};
+                Vec v1{1, 2, 3};
+                Vec v2{2, 3, 4};
                 ASSERT_EQ(v1.dot(v2), 20);
             });
 
             set("Cross", [] {
-                rt::Vec v1{1, 2, 3};
-                rt::Vec v2{2, 3, 4};
-                ASSERT_EQ_MSG("First with Second", v1.cross(v2), rt::Vec(-1, 2, -1));
-                ASSERT_EQ_MSG("Second with First", v2.cross(v1), rt::Vec(1, -2, 1));
+                Vec v1{1, 2, 3};
+                Vec v2{2, 3, 4};
+                ASSERT_EQ_MSG("First with Second", v1.cross(v2), Vec(-1, 2, -1));
+                ASSERT_EQ_MSG("Second with First", v2.cross(v1), Vec(1, -2, 1));
             });
         });
     }
@@ -138,14 +138,14 @@ namespace tests::tuples {
     void reflections() {
         set("Reflections", [] {
             scenario("Reflecting a vector approaching at 45 degrees", [] {
-                rt::Vec v{1, -1, 0};
-                rt::Vec n{0, 1, 0};
-                ASSERT_EQ(rt::Vec(1, 1, 0), v.reflect(n));
+                Vec v{1, -1, 0};
+                Vec n{0, 1, 0};
+                ASSERT_EQ(Vec(1, 1, 0), v.reflect(n));
             });
             scenario("Reflecting a vector off a slanted surface ", [] {
-                rt::Vec v{0, -1, 0};
-                rt::Vec n{std::sqrt(2) / 2, std::sqrt(2) / 2, 0};
-                ASSERT_EQ(rt::Vec(1, 0, 0), v.reflect(n));
+                Vec v{0, -1, 0};
+                Vec n{std::sqrt(2) / 2, std::sqrt(2) / 2, 0};
+                ASSERT_EQ(Vec(1, 0, 0), v.reflect(n));
             });
         });
     }

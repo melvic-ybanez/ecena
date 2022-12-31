@@ -14,14 +14,14 @@ namespace rt {
     Ray::Ray(Tuple &&origin, Tuple &&direction) : Ray(Point{origin}, Vec{direction}) {}
 
     Point Ray::at(real t) const {
-        return rt::Point{origin + direction * t};
+        return Point{origin + direction * t};
     }
 
     std::ostream &operator<<(std::ostream &out, const Ray &ray) {
         return out << "origin: " << ray.origin << "; direction " << ray.direction;
     }
 
-    Ray Ray::transform(const math::Matrix<4, 4> &matrix) const {
+    Ray Ray::transform(const Matrix<4, 4> &matrix) const {
         return Ray{matrix * origin, matrix * direction};
     }
 

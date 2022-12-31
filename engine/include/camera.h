@@ -7,14 +7,15 @@
 
 #include "../math/include/math_utils.h"
 #include "../math/include/matrix.h"
+#include "ray.h"
 
 namespace rt {
     class Camera {
     public:
-        const real hsize;
-        const real vsize;
-        const real field_of_view;     // how much the camera can see
-        const math::Matrix<4, 4> transform;
+        real hsize;
+        real vsize;
+        real field_of_view;     // how much the camera can see
+        Matrix<4, 4> transform;
 
         Camera(real hsize, real vsize, real field_of_view);
 
@@ -27,6 +28,8 @@ namespace rt {
         real aspect_ratio() const;
 
         real half_view() const;
+
+        Ray ray_for_pixel(int x, int y) const;
     };
 }
 

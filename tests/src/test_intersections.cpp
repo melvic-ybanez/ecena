@@ -9,7 +9,7 @@
 #include "../../engine/include/shapes.h"
 #include "../../engine/include/comps.h"
 
-namespace tests::intersections {
+namespace rt::tests::intersections {
     void all() {
         set("Intersections", [] {
             init();
@@ -40,7 +40,7 @@ namespace tests::intersections {
             ASSERT_EQ_MSG("Inspect second element", &i2, agg[1]);
         });
         set("Intersect sets the to_data on the intersection", [] {
-            rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+            Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
             rt::shapes::Sphere sphere;
             auto agg = sphere.intersect(ray);
 
@@ -88,32 +88,32 @@ namespace tests::intersections {
             rt::shapes::Sphere shape;
 
             set("Precomputing the state of an intersection", [&] {
-                rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+                Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 rt::Intersection i{4, &shape};
                 rt::Comps comps{i, ray};
 
                 ASSERT_EQ_MSG("t", i.t, comps.t);
                 ASSERT_EQ_MSG("object", i.object, comps.object);
-                ASSERT_EQ_MSG("point", rt::Point(0, 0, -1), comps.point);
-                ASSERT_EQ_MSG("eye vector", rt::Vec(0, 0, -1), comps.eye_vec);
-                ASSERT_EQ_MSG("normal vector", rt::Vec(0, 0, -1), comps.normal_vec);
+                ASSERT_EQ_MSG("point", Point(0, 0, -1), comps.point);
+                ASSERT_EQ_MSG("eye vector", Vec(0, 0, -1), comps.eye_vec);
+                ASSERT_EQ_MSG("normal vector", Vec(0, 0, -1), comps.normal_vec);
             });
             scenario("The hit, when an intersection occurs on the outside", [&] {
-                rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+                Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 rt::Intersection i{4, &shape};
                 rt::Comps comps{i, ray};
 
                 ASSERT_TRUE(!comps.inside);
             });
             set("The hit, when an intersection occurs on the inside", [&] {
-                rt::Ray ray{rt::Point{0, 0, 0}, rt::Vec{0, 0, 1}};
+                Ray ray{Point{0, 0, 0}, Vec{0, 0, 1}};
                 rt::Intersection i{1, &shape};
                 rt::Comps comps{i, ray};
 
-                ASSERT_EQ_MSG("point", rt::Point(0, 0, 1), comps.point);
-                ASSERT_EQ_MSG("eye vector", rt::Vec(0, 0, -1), comps.eye_vec);
+                ASSERT_EQ_MSG("point", Point(0, 0, 1), comps.point);
+                ASSERT_EQ_MSG("eye vector", Vec(0, 0, -1), comps.eye_vec);
                 ASSERT_TRUE_MSG("inside", comps.inside);
-                ASSERT_EQ_MSG("normal", rt::Vec(0, 0, -1), comps.normal_vec);   // normal is inverted
+                ASSERT_EQ_MSG("normal", Vec(0, 0, -1), comps.normal_vec);   // normal is inverted
             });
         });
     }

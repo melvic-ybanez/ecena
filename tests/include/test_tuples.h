@@ -5,7 +5,7 @@
 #ifndef ECENA_TEST_TUPLES_H
 #define ECENA_TEST_TUPLES_H
 
-namespace tests::tuples {
+namespace rt::tests::tuples {
     void all();
 
     void identities();

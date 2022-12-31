@@ -5,12 +5,14 @@
 #ifndef ECENA_TEST_CAMERA_H
 #define ECENA_TEST_CAMERA_H
 
-namespace tests::camera {
+namespace rt::tests::camera {
     void all();
 
     void init();
 
     void pixel_size();
+
+    void rays();
 }
 
 #endif //ECENA_TEST_CAMERA_H

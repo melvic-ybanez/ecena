@@ -22,7 +22,7 @@ namespace rt {
 
         Point at(real t) const;
 
-        Ray transform(const math::Matrix<4, 4> &matrix) const;
+        Ray transform(const Matrix<4, 4> &matrix) const;
 
         Ray translate(real x, real y, real z) const;
 

@@ -8,9 +8,7 @@
 #include "../../engine/math/include/math_utils.h"
 #include "../../engine/math/include/matrix.h"
 
-namespace tests::matrices {
-    namespace math = rt::math;
-
+namespace rt::tests::matrices {
     void all() {
         set("Matrices", [] {
             init();
@@ -27,7 +25,7 @@ namespace tests::matrices {
 
     void init() {
         set("4 x 4 Matrix", [] {
-            math::Matrix<4, 4> matrix{
+            Matrix<4, 4> matrix{
                     {{{1, 2, 3, 4},
                       {5.5, 6.5, 7.5, 8.5},
                       {9, 10, 11, 12},
@@ -43,7 +41,7 @@ namespace tests::matrices {
             ASSERT_EQ_MSG("[3, 2]", 15.5, matrix[3][2]);
         });
         set("2 x 2 Matrix", [] {
-            math::Matrix<2, 2> matrix{
+            Matrix<2, 2> matrix{
                     {{{-3, 5},
                       {1, -2}}}
             };
@@ -54,7 +52,7 @@ namespace tests::matrices {
             ASSERT_EQ_MSG("[1, 1]", -2, matrix[1][1]);
         });
         set("3 x 3 Matrix", [] {
-            math::Matrix<3, 3> matrix{
+            Matrix<3, 3> matrix{
                     {{{-3, 5, 0},
                       {1, -2, -7},
                       {0, 1, 1}}}
@@ -69,13 +67,13 @@ namespace tests::matrices {
     void compare() {
         set("Comparing matrices", [] {
             scenario("Identical matrices", [] {
-                math::Matrix<4, 4> m1{
+                Matrix<4, 4> m1{
                         {{{1, 2, 3, 4},
                           {5, 6, 7, 8},
                           {9, 8, 7, 6},
                           {5, 4, 3, 2}}}
                 };
-                math::Matrix<4, 4> m2{
+                Matrix<4, 4> m2{
                         {{{1, 2, 3, 4},
                           {5, 6, 7, 8},
                           {9, 8, 7, 6},
@@ -85,13 +83,13 @@ namespace tests::matrices {
                 ASSERT_EQ(m1, m2);
             });
             scenario("Non-identical matrices", [] {
-                math::Matrix<4, 4> m1{
+                Matrix<4, 4> m1{
                         {{{1, 2, 3, 4},
                           {5, 6, 7, 8},
                           {9, 8, 7, 6},
                           {5, 4, 3, 2}}}
                 };
-                math::Matrix<4, 4> m2{
+                Matrix<4, 4> m2{
                         {{{2, 3, 4, 5},
                           {6, 7, 8, 9},
                           {8, 7, 6, 5},
@@ -106,19 +104,19 @@ namespace tests::matrices {
     void multiplications() {
         set("Multiplication", [] {
             scenario("Matrix-matrix", [] {
-                math::Matrix<4, 4> m1{
+                Matrix<4, 4> m1{
                         {{{1, 2, 3, 4},
                           {5, 6, 7, 8},
                           {9, 8, 7, 6},
                           {5, 4, 3, 2}}}
                 };
-                math::Matrix<4, 4> m2{
+                Matrix<4, 4> m2{
                         {{{-2, 1, 2, 3},
                           {3, 2, 1, -1},
                           {4, 3, 6, 5},
                           {1, 2, 7, 8}}}
                 };
-                math::Matrix<4, 4> expected{
+                Matrix<4, 4> expected{
                         {{{20, 22, 50, 48},
                           {44, 54, 114, 108},
                           {40, 58, 110, 102},
@@ -128,7 +126,7 @@ namespace tests::matrices {
                 ASSERT_EQ(expected, m1 * m2);
             });
             scenario("Matrix-tuple", [] {
-                math::Matrix<4, 4> matrix{
+                Matrix<4, 4> matrix{
                         {{{1, 2, 3, 4},
                           {2, 4, 4, 2},
                           {8, 6, 4, 1},
@@ -141,7 +139,7 @@ namespace tests::matrices {
                 ASSERT_EQ(expected, matrix * tuple);
             });
             scenario("Matrix-Id", [] {
-                math::Matrix<4, 4> matrix{
+                Matrix<4, 4> matrix{
                         {{{0, 1, 2, 4},
                           {1, 2, 4, 8},
                           {2, 4, 8, 6},
@@ -151,13 +149,13 @@ namespace tests::matrices {
                 ASSERT_EQ(matrix, result);
             });
             scenario("A product and its inverse", [] {
-                math::Matrix<4, 4> matrix{
+                Matrix<4, 4> matrix{
                         {{{3, -9, 7, 3},
                           {3, -8, 2, -9},
                           {-4, 4, 4, 1},
                           {-6, 5, -1, 1}}}
                 };
-                math::Matrix<4, 4> matrix2{
+                Matrix<4, 4> matrix2{
                         {{{8, 2, 2, 2},
                           {3, -1, 7, 0},
                           {7, 0, 5, 4},
@@ -173,13 +171,13 @@ namespace tests::matrices {
     void transpose() {
         set("Transpose", [] {
             scenario("A non-id matrix", [] {
-                math::Matrix<4, 4> matrix{
+                Matrix<4, 4> matrix{
                         {{{0, 9, 3, 0},
                           {9, 8, 0, 8},
                           {1, 8, 5, 3},
                           {0, 0, 5, 8}}}
                 };
-                math::Matrix<4, 4> expected{
+                Matrix<4, 4> expected{
                         {{{0, 9, 1, 0},
                           {9, 8, 8, 0},
                           {3, 0, 5, 5},
@@ -188,7 +186,7 @@ namespace tests::matrices {
                 ASSERT_EQ(expected, matrix.transpose());
             });
             scenario("An identity matrix", [] {
-                auto idm = math::matrix::identity<4, 4>();
+                auto idm = matrix::identity<4, 4>();
                 ASSERT_EQ(idm, idm.transpose());
             });
         });
@@ -197,14 +195,14 @@ namespace tests::matrices {
     void determinants() {
         set("Determinants", [] {
             scenario("2x2", [] {
-                math::Matrix<2, 2> matrix{
+                Matrix<2, 2> matrix{
                         {{{1, 5},
                           {-3, 2}}}
                 };
                 ASSERT_EQ(17, matrix.determinant());
             });
             set("3x3", [] {
-                math::Matrix<3, 3> matrix{
+                Matrix<3, 3> matrix{
                         {{{1, 2, 6},
                           {-5, 8, -4},
                           {2, 6, 4}}}
@@ -215,7 +213,7 @@ namespace tests::matrices {
                 ASSERT_EQ_MSG("Determinant", -196, matrix.determinant());
             });
             set("4z4", [] {
-                math::Matrix<4, 4> matrix{
+                Matrix<4, 4> matrix{
                         {{{-2, -8, 3, 5},
                           {-3, 1, 7, 3},
                           {1, 2, -9, 6},
@@ -233,25 +231,25 @@ namespace tests::matrices {
     void submatrices() {
         set("Submatrices", [] {
             scenario("3x3", [] {
-                math::Matrix<3, 3> matrix{
+                Matrix<3, 3> matrix{
                         {{{1, 5, 0},
                           {-3, 2, 7},
                           {0, 6, -3}}}
                 };
-                math::Matrix<2, 2> expected{
+                Matrix<2, 2> expected{
                         {{{-3, 2},
                           {0, 6}}}
                 };
                 ASSERT_EQ(expected, matrix.submatrix(0, 2));
             });
             scenario("4x4", [] {
-                math::Matrix<4, 4> matrix{
+                Matrix<4, 4> matrix{
                         {{{-6, 1, 1, 6},
                           {-8, 5, 8, 6},
                           {-1, 0, 8, 2},
                           {-7, 1, -1, 1}}}
                 };
-                math::Matrix<3, 3> expected{
+                Matrix<3, 3> expected{
                         {{{-6, 1, 6},
                           {-8, 8, 6},
                           {-7, -1, 1}}}
@@ -263,7 +261,7 @@ namespace tests::matrices {
 
     void minors() {
         set("Computing a minor of a 3x3 matrix", [] {
-            math::Matrix<3, 3> matrix{
+            Matrix<3, 3> matrix{
                     {{{3, 5, 0},
                       {2, -1, -7},
                       {6, -1, 5}}}
@@ -275,7 +273,7 @@ namespace tests::matrices {
 
     void cofactors() {
         set("Calculating the cofactor of a 3x3 matrix", [] {
-            math::Matrix<3, 3> matrix{
+            Matrix<3, 3> matrix{
                     {{{3, 5, 0},
                       {2, -1, -7},
                       {6, -1, 5}}}
@@ -290,7 +288,7 @@ namespace tests::matrices {
     void inversion() {
         set("Inversion", [] {
             set("Testing an invertible matrix for invertibility", [] {
-                math::Matrix<4, 4> matrix{
+                Matrix<4, 4> matrix{
                         {{{6, 4, 4, 4},
                           {5, 5, 7, 6},
                           {4, -9, 3, -7},
@@ -300,7 +298,7 @@ namespace tests::matrices {
                 ASSERT_TRUE_MSG("Is invertible", matrix.is_invertible());
             });
             set("Testing a non-invertible matrix for invertibility", [] {
-                math::Matrix<4, 4> matrix{
+                Matrix<4, 4> matrix{
                         {{{-4, 2, -2, -3},
                           {9, 6, 2, 6},
                           {0, -5, 1, -5},
@@ -310,13 +308,13 @@ namespace tests::matrices {
                 ASSERT_TRUE_MSG("Is not invertible", !matrix.is_invertible());
             });
             set("Calculating the inverse of a matrix", [] {
-                math::Matrix<4, 4> matrix{
+                Matrix<4, 4> matrix{
                         {{{-5, 2, 6, -8},
                           {1, -5, 1, 8},
                           {7, 7, -6, -7},
                           {1, -3, 7, 4}}}
                 };
-                math::Matrix<4, 4> m_inverse{matrix.inverse()};
+                Matrix<4, 4> m_inverse{matrix.inverse()};
 
                 ASSERT_EQ_MSG("Check determinant", 532, matrix.determinant());
                 ASSERT_EQ_MSG("Cofactor(2, 3)", -160, matrix.cofactor(2, 3));
@@ -324,33 +322,33 @@ namespace tests::matrices {
                 ASSERT_EQ_MSG("Cofactor(3, 2)", 105, matrix.cofactor(3, 2));
                 ASSERT_EQ_MSG("Inverse(2, 3)", 105.0 / 532, m_inverse[2][3]);
 
-                math::Matrix<4, 4> m_expected_inverse{
+                Matrix<4, 4> m_expected_inverse{
                         {{{0.21805, 0.45113, 0.24060, -0.04511},
                           {-0.80827, -1.45677, -0.44361, 0.52068},
                           {-0.07895, -0.22368, -0.05263, 0.19737},
                           {-0.52256, -0.81391, -0.30075, 0.30639}}}
                 };
 
-                math::Matrix<4, 4> matrix1{
+                Matrix<4, 4> matrix1{
                         {{{8, -5, 9, 2},
                           {7, 5, 6, 1},
                           {-6, 0, 9, 6},
                           {-3, 0, -9, -4}}}
                 };
-                math::Matrix<4, 4> m1_expected_inverse{
+                Matrix<4, 4> m1_expected_inverse{
                         {{{-0.15385, -0.15385, -0.28205, -0.53846},
                           {-0.07692, 0.12308, 0.02564, 0.03077},
                           {0.35897, 0.35897, 0.43590, 0.92308},
                           {-0.69231, -0.69231, -0.76923, -1.92308}}}
                 };
 
-                math::Matrix<4, 4> matrix2{
+                Matrix<4, 4> matrix2{
                         {{{9, 3, 0, 9},
                           {-5, -2, -6, -3},
                           {-4, 9, 6, 4},
                           {-7, 6, 6, 2}}}
                 };
-                math::Matrix<4, 4> m2_expected_inverse{
+                Matrix<4, 4> m2_expected_inverse{
                         {{{-0.04074, -0.07778, 0.14444, -0.22222},
                           {-0.07778, 0.03333, 0.36667, -0.33333},
                           {-0.02901, -0.14630, -0.10926, 0.12963},

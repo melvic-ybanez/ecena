@@ -14,7 +14,7 @@
 #define ASSERT_EQ_MSG(message, a, b) assert_equals(message, a, b, __PRETTY_FUNCTION__, __LINE__)
 #define ASSERT_EQ(a, b) ASSERT_EQ_MSG(scenario_msg, a, b)
 
-namespace tests {
+namespace rt::tests {
     extern int test_count;
     extern int success_count;
     extern int set_level;

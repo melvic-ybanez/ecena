@@ -5,7 +5,7 @@
 #ifndef ECENA_TEST_LIGHTS_H
 #define ECENA_TEST_LIGHTS_H
 
-namespace tests::lights {
+namespace rt::tests::lights {
     void all();
 
     void init();

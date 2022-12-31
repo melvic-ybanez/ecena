@@ -5,7 +5,7 @@
 #ifndef ECENA_TEST_INTERSECTIONS_H
 #define ECENA_TEST_INTERSECTIONS_H
 
-namespace tests::intersections {
+namespace rt::tests::intersections {
     void all();
 
     void init();

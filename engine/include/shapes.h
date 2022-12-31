@@ -21,7 +21,7 @@ namespace rt::shapes {
 
     class Shape {
     public:
-        math::Matrix<4, 4> transformation;
+        Matrix<4, 4> transformation;
 
         Material material;
 

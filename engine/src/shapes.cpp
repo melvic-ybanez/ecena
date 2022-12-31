@@ -77,7 +77,7 @@ namespace rt::shapes {
     Vec Sphere::normal_at(const Point &world_point) const {
         auto inverse = transformation.inverse();
         auto object_point = inverse * world_point;
-        auto object_normal = Vec{object_point - rt::Point{0, 0, 0}};
+        auto object_normal = Vec{object_point - Point{0, 0, 0}};
         auto world_normal = inverse.transpose() * object_normal;
         return Vec{world_normal}.normalize();
     }

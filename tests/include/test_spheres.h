@@ -5,7 +5,7 @@
 #ifndef ECENA_TEST_SPHERES_H
 #define ECENA_TEST_SPHERES_H
 
-namespace tests::spheres {
+namespace rt::tests::spheres {
     void all();
 
     void intersections();

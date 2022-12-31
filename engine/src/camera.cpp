@@ -37,4 +37,24 @@ namespace rt {
         }
         return half_view();
     }
+
+    Ray Camera::ray_for_pixel(int x, int y) const {
+        auto pixel_size = this->pixel_size();
+
+        // offsets from the edges of the canvas to the center of the pixel
+        auto x_offset = (x + 0.5) * pixel_size;
+        auto y_offset = (y + 0.5) * pixel_size;
+
+        // world space coordinates
+        auto world_x = half_width() - x_offset;     // +x is left because camera looks toward -z
+        auto world_y = half_height() - y_offset;
+
+        auto transform_inverse = transform.inverse();
+        auto canvas_point = Point{world_x, world_y, -1};
+        auto pixel = transform_inverse * canvas_point;
+        auto origin = Point{transform_inverse * Point{0, 0, 0}};
+        auto direction = Vec(pixel - origin).normalize();
+
+        return {origin, direction};
+    }
 }

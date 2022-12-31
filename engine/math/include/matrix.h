@@ -111,9 +111,11 @@ namespace rt::math::matrix {
     Matrix<4, 4> view_transform(const Point& from, const Point& to, const Vec& up);
 }
 
-namespace rt::math {
+namespace rt {
+    namespace matrix = math::matrix;
+
     template<size_t R, size_t C>
-    using Matrix = rt::math::matrix::Matrix<R, C>;
+    using Matrix = matrix::Matrix<R, C>;
 }
 
 #include "../src/matrix.tpp"

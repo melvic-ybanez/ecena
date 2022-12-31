@@ -7,7 +7,7 @@
 #include "../include/asserts.h"
 #include "../../engine/include/world.h"
 
-namespace tests::world {
+namespace rt::tests::world {
     static rt::World default_world();
 
     void all() {
@@ -30,7 +30,7 @@ namespace tests::world {
     void intersections() {
         set("Intersections", [] {
             auto world = default_world();
-            rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+            Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
             auto xs = world.intersect(ray);
 
             ASSERT_EQ_MSG("Count", 4, xs.count());
@@ -45,7 +45,7 @@ namespace tests::world {
         set("Shading", [] {
             scenario("Shading an intersection", [] {
                 auto world = default_world();
-                rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+                Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 auto shape = world.objects[0];
                 rt::Intersection i{4, shape};
                 rt::Comps comps{i, ray};
@@ -55,8 +55,8 @@ namespace tests::world {
             });
             scenario("Shading an intersection from the inside", [] {
                 auto world = default_world();
-                world.light = {rt::Point{0, 0.25, 0}, rt::Color::white_};
-                rt::Ray ray{rt::Point{0, 0, 0}, rt::Vec{0, 0, 1}};
+                world.light = {Point{0, 0.25, 0}, rt::Color::white_};
+                Ray ray{Point{0, 0, 0}, Vec{0, 0, 1}};
                 auto shape = world.objects[1];
                 rt::Intersection i{0.5, shape};
                 rt::Comps comps{i, ray};
@@ -71,13 +71,13 @@ namespace tests::world {
         set("Colors", [] {
             scenario("When a ray misses", [] {
                 auto world = default_world();
-                rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 1, 0}};
+                Ray ray{Point{0, 0, -5}, Vec{0, 1, 0}};
                 auto color = world.color_at(ray);
                 ASSERT_EQ(rt::Color::black_, color);
             });
             scenario("When a ray hits", [] {
                 auto world = default_world();
-                rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+                Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 auto color = world.color_at(ray);
                 ASSERT_EQ(rt::Color(0.38066, 0.47583, 0.2855), color);
             });
@@ -87,7 +87,7 @@ namespace tests::world {
                 outer->material.ambient = 1;
                 auto inner = world.objects[1];
                 inner->material.ambient = 1;
-                rt::Ray ray{rt::Point{0, 0, 0.75}, rt::Vec{0, 0, -1}};
+                Ray ray{Point{0, 0, 0.75}, Vec{0, 0, -1}};
                 auto color = world.color_at(ray);
                 ASSERT_EQ(inner->material.color, color);
             });
@@ -96,7 +96,7 @@ namespace tests::world {
 
     rt::World default_world() {
         rt::World world;
-        world.light = rt::PointLight{{-10, 10, -10}, rt::Color::white_};
+        world.light = PointLight{{-10, 10, -10}, rt::Color::white_};
 
         auto s1 = new rt::shapes::Sphere;
         s1->material.color = {0.8, 1.0, 0.6};
@@ -104,7 +104,7 @@ namespace tests::world {
         s1->material.specular = 0.2;
 
         auto s2 = new rt::shapes::Sphere;
-        s2->transformation = rt::math::matrix::scaling(0.5, 0.5, 0.5);
+        s2->transformation = math::matrix::scaling(0.5, 0.5, 0.5);
 
         world.objects.push_back(s1);
         world.objects.push_back(s2);

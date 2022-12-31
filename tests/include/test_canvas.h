@@ -5,7 +5,7 @@
 #ifndef ECENA_TEST_CANVAS_H
 #define ECENA_TEST_CANVAS_H
 
-namespace tests::canvas {
+namespace rt::tests::canvas {
     void all();
 
     void init();

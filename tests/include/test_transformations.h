@@ -5,7 +5,7 @@
 #ifndef ECENA_TEST_TRANSFORMATIONS_H
 #define ECENA_TEST_TRANSFORMATIONS_H
 
-namespace tests::transformations {
+namespace rt::tests::transformations {
     void all();
 
     void translations();

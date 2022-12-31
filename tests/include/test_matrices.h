@@ -5,7 +5,7 @@
 #ifndef ECENA_TEST_MATRICES_H
 #define ECENA_TEST_MATRICES_H
 
-namespace tests::matrices {
+namespace rt::tests::matrices {
     void all();
 
     void init();

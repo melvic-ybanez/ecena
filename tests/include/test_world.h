@@ -5,7 +5,7 @@
 #ifndef ECENA_TEST_WORLD_H
 #define ECENA_TEST_WORLD_H
 
-namespace tests::world {
+namespace rt::tests::world {
     void all();
 
     void init();

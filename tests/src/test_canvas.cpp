@@ -7,7 +7,7 @@
 #include "../../engine/include/canvas.h"
 #include "../../engine/include/ppm.h"
 
-namespace tests::canvas {
+namespace rt::tests::canvas {
     void all() {
         set("Canvas", [] {
             init();

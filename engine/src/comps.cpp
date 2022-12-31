@@ -10,5 +10,12 @@ namespace rt {
               object{intersection.object},
               point{ray.at(t)},
               eye_vec{-ray.direction},
-              normal_vec{object->normal_at(point)} {}
+              normal_vec{object->normal_at(point)} {
+        if (normal_vec.dot(eye_vec) < 0) {
+            inside = true;
+            normal_vec = Vec(-normal_vec);
+        } else {
+            inside = false;
+        }
+    }
 }

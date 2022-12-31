@@ -14,6 +14,7 @@ namespace rt {
         Point point;
         Vec eye_vec;
         Vec normal_vec;
+        bool inside;
 
         Comps(const Intersection &intersection, const Ray &ray);
     };

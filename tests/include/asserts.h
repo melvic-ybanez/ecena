@@ -36,6 +36,11 @@ namespace tests {
         assert_true(msg_stream.str(), t1 == t2, function_name, line_no);
     }
 
+    /**
+     * Like `assert_equals()`, but allows a group of statements inside a function `f`. The message parameter passed
+     * will be available within the scope of `f`, and is automatically used in any `ASSERT_*` functions that
+     * do not end with the `_MSG` suffix.
+     */
     void scenario(const std::string &message, const std::function<void()> &f);
 
     void set(const std::string &message, const std::function<void()> &f);

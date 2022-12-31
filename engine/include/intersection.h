@@ -33,7 +33,7 @@ namespace rt::intersections {
     public:
         AggregateData elems;
 
-        Aggregate(AggregateData elems_);
+        Aggregate(AggregateData elems);
 
         Aggregate() = default;
 

@@ -11,7 +11,7 @@ namespace rt::intersections {
         return this->t < that.t;
     }
 
-    Aggregate::Aggregate(AggregateData elems_) : elems{std::move(elems_)} {
+    Aggregate::Aggregate(AggregateData elems) : elems{std::move(elems)} {
         is_sorted = false;
         sort();
     }

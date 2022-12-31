@@ -13,6 +13,8 @@ namespace tests::world {
     void intersections();
 
     void shading();
+
+    void colors();
 }
 
 #endif //ECENA_TEST_WORLD_H

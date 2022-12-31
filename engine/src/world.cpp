@@ -13,8 +13,8 @@ namespace rt {
         objects.clear();
     }
 
-    intersections::Aggregate World::intersect(const Ray &ray) const {
-        intersections::Aggregate aggregate;
+    Aggregate World::intersect(const Ray &ray) const {
+        Aggregate aggregate;
         for (auto obj: objects) {
             auto agg = obj->intersect(ray);
             aggregate.combine_with(agg);
@@ -27,7 +27,11 @@ namespace rt {
         return lights::lighting(comps.object->material, light.value(), comps.point, comps.eye_vec, comps.normal_vec);
     }
 
-    Shape *World::operator[](size_t i) {
-        return objects[i];
+    Color World::color_at(const Ray &ray) const {
+        auto xs = intersect(ray);
+        auto hit = xs.hit();
+        if (hit == nullptr) return Color::black_;
+        Comps comps{*hit, ray};
+        return shade_hit(comps);
     }
 }

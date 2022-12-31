@@ -33,7 +33,7 @@ namespace rt {
 
         Color shade_hit(const Comps &comps) const;
 
-        Shape *operator[](size_t i);
+        Color color_at(const Ray &ray) const;
     };
 }
 

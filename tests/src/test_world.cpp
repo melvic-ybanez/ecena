@@ -15,6 +15,7 @@ namespace tests::world {
             init();
             intersections();
             shading();
+            colors();
         });
     }
 
@@ -45,7 +46,7 @@ namespace tests::world {
             scenario("Shading an intersection", [] {
                 auto world = default_world();
                 rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
-                auto shape = world[0];
+                auto shape = world.objects[0];
                 rt::Intersection i{4, shape};
                 rt::Comps comps{i, ray};
                 auto color = world.shade_hit(comps);
@@ -56,12 +57,39 @@ namespace tests::world {
                 auto world = default_world();
                 world.light = {rt::Point{0, 0.25, 0}, rt::Color::white_};
                 rt::Ray ray{rt::Point{0, 0, 0}, rt::Vec{0, 0, 1}};
-                auto shape = world[1];
+                auto shape = world.objects[1];
                 rt::Intersection i{0.5, shape};
                 rt::Comps comps{i, ray};
                 auto color = world.shade_hit(comps);
 
                 ASSERT_EQ(rt::Color(0.90498, 0.90498, 0.90498), color);
+            });
+        });
+    }
+
+    void colors() {
+        set("Colors", [] {
+            scenario("When a ray misses", [] {
+                auto world = default_world();
+                rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 1, 0}};
+                auto color = world.color_at(ray);
+                ASSERT_EQ(rt::Color::black_, color);
+            });
+            scenario("When a ray hits", [] {
+                auto world = default_world();
+                rt::Ray ray{rt::Point{0, 0, -5}, rt::Vec{0, 0, 1}};
+                auto color = world.color_at(ray);
+                ASSERT_EQ(rt::Color(0.38066, 0.47583, 0.2855), color);
+            });
+            scenario("An intersection behind the ray", [] {
+                auto world = default_world();
+                auto outer = world.objects[0];
+                outer->material.ambient = 1;
+                auto inner = world.objects[1];
+                inner->material.ambient = 1;
+                rt::Ray ray{rt::Point{0, 0, 0.75}, rt::Vec{0, 0, -1}};
+                auto color = world.color_at(ray);
+                ASSERT_EQ(inner->material.color, color);
             });
         });
     }

@@ -8,6 +8,11 @@
 #include <vector>
 #include "math_utils.h"
 
+namespace rt::math::matrix {
+    template<size_t R, size_t C>
+    class Matrix;
+}
+
 namespace rt::math {
     class Tuple {
     protected:
@@ -48,6 +53,8 @@ namespace rt::math {
         Tuple shear(real xy, real xz, real yx, real yz, real zx, real zy) const;
 
         friend std::ostream &operator<<(std::ostream &out, const Tuple &t);
+
+        Tuple transform(const matrix::Matrix<4, 4> &transformation) const;
     };
 
     Tuple operator+(const Tuple &u, const Tuple &v);

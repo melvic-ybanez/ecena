@@ -2,7 +2,7 @@
 // Created by Melvic Ybanez on 12/29/22.
 //
 
-#ifndef ECENA_UTILS_H
+#ifndef ECENA_TEST_UTILS_H
 #define ECENA_UTILS_H
 
 #include <sstream>
@@ -47,4 +47,4 @@ namespace rt {
     }
 }
 
-#endif //ECENA_UTILS_H
+#endif //ECENA_TEST_UTILS_H

@@ -67,27 +67,27 @@ namespace rt::math {
     }
 
     Tuple Tuple::translate(real x, real y, real z) const {
-        return TRANSFORM(math::matrix::translation(x, y, z));
+        return math::matrix::translation(x, y, z) * *this;
     }
 
     Tuple Tuple::scale(real x, real y, real z) const {
-        return TRANSFORM(math::matrix::scaling(x, y, z));
+        return math::matrix::scaling(x, y, z) * *this;
     }
 
     Tuple Tuple::rotate_x(real r) const {
-        return TRANSFORM(math::matrix::rotation_x(r));
+        return math::matrix::rotation_x(r) * *this;
     }
 
     Tuple Tuple::rotate_y(real r) const {
-        return TRANSFORM(math::matrix::rotation_y(r));
+        return math::matrix::rotation_y(r) * *this;
     }
 
     Tuple Tuple::rotate_z(real r) const {
-        return TRANSFORM(math::matrix::rotation_z(r));
+        return math::matrix::rotation_z(r) * *this;
     }
 
     Tuple Tuple::shear(real xy, real xz, real yx, real yz, real zx, real zy) const {
-        return TRANSFORM(math::matrix::shearing(xy, xz, yx, yz, zx, zy));
+        return math::matrix::shearing(xy, xz, yx, yz, zx, zy) * *this;
     }
 
     Point::Point() : Tuple(0, 0, 0, 1) {}

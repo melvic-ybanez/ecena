@@ -8,8 +8,6 @@
 #include <vector>
 #include "math_utils.h"
 
-#define TRANSFORM(matrix) matrix * (*this)
-
 namespace rt::math {
     class Tuple {
     protected:

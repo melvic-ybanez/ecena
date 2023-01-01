@@ -77,6 +77,7 @@ crashlytics-build.properties
 fabric.properties
 
 cmake-build-debug/*
+cmake-build-release/*
 
 .DS_Store
 output.ppm

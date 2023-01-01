@@ -76,7 +76,7 @@ namespace rt::math::matrix {
         };
     }
 
-    Matrix<4, 4> view_transform(const Point& from, const Point& to, const Vec& up) {
+    Matrix<4, 4> view_transform(const Point &from, const Point &to, const Vec &up) {
         auto forward = Vec(to - from).normalize();
         auto left = forward.cross(up.normalize());
         auto true_up = left.cross(forward);

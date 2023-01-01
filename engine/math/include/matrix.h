@@ -6,7 +6,6 @@
 #define ECENA_MATRIX_H
 
 #include <array>
-#include <ostream>
 #include "math_utils.h"
 #include "tuples.h"
 

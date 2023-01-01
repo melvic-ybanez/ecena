@@ -2,20 +2,14 @@
 // Created by Melvic Ybanez on 12/31/22.
 //
 
+#include <ostream>
 #include "../include/world.h"
+#include "../../shared/include/utils.h"
 
 namespace rt {
-    World::~World() {
-        for (auto &e: objects) {
-            delete e;
-            e = nullptr;
-        }
-        objects.clear();
-    }
-
     Aggregate World::intersect(const Ray &ray) const {
         Aggregate aggregate;
-        for (auto obj: objects) {
+        for (auto &obj: objects) {
             auto agg = obj->intersect(ray);
             aggregate.combine_with(agg);
         }
@@ -33,5 +27,11 @@ namespace rt {
         if (hit == nullptr) return Color::black_;
         Comps comps{*hit, ray};
         return shade_hit(comps);
+    }
+
+    std::ostream &operator<<(std::ostream &out, const World &world) {
+        return out << "{ objects: " << join_to_array(world.objects)
+                   << ", light: " << optional_to_str(world.light)
+                   << " }";
     }
 }

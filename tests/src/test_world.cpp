@@ -44,8 +44,8 @@ namespace rt::tests::world {
             scenario("Shading an intersection", [] {
                 auto world = default_world();
                 Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
-                auto shape = world.objects[0];
-                Intersection i{4, shape};
+                auto &shape = world.objects[0];
+                Intersection i{4, shape.get()};
                 Comps comps{i, ray};
                 auto color = world.shade_hit(comps);
 
@@ -55,8 +55,8 @@ namespace rt::tests::world {
                 auto world = default_world();
                 world.light = {Point{0, 0.25, 0}, Color::white_};
                 Ray ray{Point{0, 0, 0}, Vec{0, 0, 1}};
-                auto shape = world.objects[1];
-                Intersection i{0.5, shape};
+                auto &shape = world.objects[1];
+                Intersection i{0.5, shape.get()};
                 Comps comps{i, ray};
                 auto color = world.shade_hit(comps);
 
@@ -81,9 +81,9 @@ namespace rt::tests::world {
             });
             scenario("An intersection behind the ray", [] {
                 auto world = default_world();
-                auto outer = world.objects[0];
+                auto &outer = world.objects[0];
                 outer->material.ambient = 1;
-                auto inner = world.objects[1];
+                auto &inner = world.objects[1];
                 inner->material.ambient = 1;
                 Ray ray{Point{0, 0, 0.75}, Vec{0, 0, -1}};
                 auto color = world.color_at(ray);

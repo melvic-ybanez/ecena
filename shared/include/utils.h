@@ -2,10 +2,11 @@
 // Created by Melvic Ybanez on 12/29/22.
 //
 
-#ifndef ECENA_TEST_UTILS_H
+#ifndef ECENA_UTILS_H
 #define ECENA_UTILS_H
 
 #include <sstream>
+#include <optional>
 
 namespace rt {
     template<typename T, typename Fn>
@@ -38,13 +39,23 @@ namespace rt {
 
     template<typename T>
     std::string join_to_array(const std::vector<T> &elems) {
-        return "[ " + join_with(elems, ", ") + " ]";
+        return "[ " + join(elems) + " ]";
     }
 
     template<typename T>
     std::string join_to_object(const std::vector<T> &elems) {
-        return "{ " + join_with(elems, ", ") + " }";
+        return "{ " + join(elems) + " }";
+    }
+
+    template<typename T>
+    std::string optional_to_str(const std::optional<T> &optional) {
+        std::stringstream ss;
+
+        if (optional.has_value()) ss << optional.value();
+        else ss << "null";
+
+        return ss.str();
     }
 }
 
-#endif //ECENA_TEST_UTILS_H
+#endif //ECENA_UTILS_H

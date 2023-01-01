@@ -11,6 +11,8 @@ namespace rt {
               field_of_view{field_of_view},
               transform{math::matrix::identity<4, 4>()} {}
 
+    Camera::Camera() : Camera(0, 0, 0) {}
+
     real Camera::half_view() const {
         // splitting the field of view in half gives us a right triangle
         return std::tan(field_of_view / 2);
@@ -70,5 +72,11 @@ namespace rt {
         }
 
         return image;
+    }
+
+    std::ostream &operator<<(std::ostream &out, const Camera &camera) {
+        return out << "{ h_size: " << camera.h_size << ", v_size: " << camera.v_size
+                   << ", field_of_view: " << camera.field_of_view << ", transform: "
+                   << camera.transform << " }";
     }
 }

@@ -19,6 +19,8 @@ namespace rt {
         real field_of_view;     // how much the camera can see
         Matrix<4, 4> transform;
 
+        Camera();
+
         Camera(double h_size, double v_size, real field_of_view);
 
         real pixel_size() const;
@@ -35,6 +37,8 @@ namespace rt {
 
         Canvas render(const World &world) const;
     };
+
+    std::ostream &operator<<(std::ostream &out, const Camera &camera);
 }
 
 #endif //ECENA_CAMERA_H

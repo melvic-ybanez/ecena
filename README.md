@@ -5,7 +5,7 @@ The project has two main parts:
 1. __Domain-specific language__ - this is a Json-like language that you need to use to describe the scene you want Ecena to render. Note that Ecena doesn't offer a UI, so the only way to communicate with the renderer is by using the DSL.
 2. __Rendering engine__ - the Ray Tracer modules responsible for the drawing of the 3D world.
 
-For instance, to render the example scene from the _Making a Scene_ chapter of [The Ray Tracer Challenge](http://raytracerchallenge.com/), 
+For instance, to render the example scene from the _Making a Scene_ chapter of [The Ray Tracer Challenge](http://raytracerchallenge.com/) (with the addition of shadows), 
 you can input the following code:
 
 ```json
@@ -72,7 +72,7 @@ $ ecena < spheres.json
 
 You should get the following result: 
 
-![spheres](https://user-images.githubusercontent.com/4519785/210182223-1ea39d14-ea98-4ca5-8e85-523968501419.png)
+![shadowed_spheres](https://user-images.githubusercontent.com/4519785/210240177-7d0a4f94-cf7b-45dd-b1a9-f0b411f110ad.png)
 
 ---
 

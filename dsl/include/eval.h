@@ -12,17 +12,17 @@
 namespace rt::dsl::eval {
     Data to_data(const Object &object);
 
-    std::unique_ptr<Shape> to_shape(const std::unique_ptr<Expr> &expr, int line);
+    std::unique_ptr<Shape> to_shape(const Expr &expr, int line);
 
-    std::vector<std::unique_ptr<Shape>> to_shapes(const std::unique_ptr<Expr> &expr, int line);
+    std::vector<std::unique_ptr<Shape>> to_shapes(const Expr &expr, int line);
 
-    Material to_material(const std::unique_ptr<Expr> &expr, int line);
+    Material to_material(const Expr &expr, int line);
 
-    PointLight to_point_light(const std::unique_ptr<Expr> &expr, int line);
+    PointLight to_point_light(const Expr &expr, int line);
 
-    Camera to_camera(const std::unique_ptr<Expr> &expr, int line);
+    Camera to_camera(const Expr &expr, int line);
 
-    World to_world(const std::unique_ptr<Expr> &expr, int line);
+    World to_world(const Expr &expr, int line);
 }
 
 #endif //ECENA_EVAL_H

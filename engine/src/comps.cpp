@@ -17,5 +17,6 @@ namespace rt {
         } else {
             inside = false;
         }
+        over_point = point + normal_vec * math::epsilon;
     }
 }

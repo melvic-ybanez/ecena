@@ -14,6 +14,7 @@ namespace rt::tests::world {
             intersections();
             shading();
             colors();
+            shadows();
         });
     }
 
@@ -21,7 +22,7 @@ namespace rt::tests::world {
         set("Creating a world", [] {
             World world;
             ASSERT_EQ_MSG("Inspect objects", 0, world.objects.size());
-            ASSERT_TRUE_MSG("Inspect light source", !world.light.has_value());
+            ASSERT_FALSE_MSG("Inspect light source", world.light.has_value());
         });
     }
 
@@ -62,6 +63,24 @@ namespace rt::tests::world {
 
                 ASSERT_EQ(Color(0.90498, 0.90498, 0.90498), color);
             });
+
+            scenario("An intersection in shadow", [] {
+                auto world = default_world();
+                world.light = PointLight{{0, 0, -10}, Color::white_};
+
+                std::unique_ptr<shapes::Shape> s1 = std::make_unique<shapes::Sphere>();
+                std::unique_ptr<shapes::Shape> s2 = std::make_unique<shapes::Sphere>();
+                s2->translate(0, 0, 10);
+                Intersection i{4, s2.get()};
+                world.add_object(s1);
+                world.add_object(s2);
+
+                Ray ray{{0, 0, 5}, {0, 0, 1}};
+                Comps comps{i, ray};
+                auto c = world.shade_hit(comps);
+
+                ASSERT_EQ(Color(0.1, 0.1, 0.1), c);
+            });
         });
     }
 
@@ -88,6 +107,31 @@ namespace rt::tests::world {
                 Ray ray{Point{0, 0, 0.75}, Vec{0, 0, -1}};
                 auto color = world.color_at(ray);
                 ASSERT_EQ(inner->material.color, color);
+            });
+        });
+    }
+
+    void shadows() {
+        set("Shadows", [] {
+            scenario("There is no shadow when nothing is collinear with point and light", [] {
+                auto world = default_world();
+                Point point{0, 10, 0};
+                ASSERT_FALSE(world.is_shadowed_at(point));
+            });
+            scenario("The shadow when an object is between the point and the light", [] {
+                auto world = default_world();
+                Point point{10, -10, 10};
+                ASSERT_TRUE(world.is_shadowed_at(point));
+            });
+            scenario("There is no shadow when an object is behind the light", [] {
+                auto world = default_world();
+                Point point{-20, 20, -10};
+                ASSERT_FALSE(world.is_shadowed_at(point));
+            });
+            scenario("There is no shadow when an object is behind the point", [] {
+                auto world = default_world();
+                Point point{-2, 2, -2};
+                ASSERT_FALSE(world.is_shadowed_at(point));
             });
         });
     }

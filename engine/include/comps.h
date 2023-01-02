@@ -12,6 +12,7 @@ namespace rt {
         real t;
         const Shape *object;
         Point point;
+        Point over_point;
         Vec eye_vec;
         Vec normal_vec;
         bool inside;

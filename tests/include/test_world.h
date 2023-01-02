@@ -15,6 +15,8 @@ namespace rt::tests::world {
     void shading();
 
     void colors();
+
+    void shadows();
 }
 
 #endif //ECENA_TEST_WORLD_H

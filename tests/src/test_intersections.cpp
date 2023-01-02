@@ -80,6 +80,18 @@ namespace rt::tests::intersections {
                 Aggregate agg{{&i1, &i2, &i3, &i4}};
                 ASSERT_EQ(&i4, agg.hit());
             });
+
+            set("The hit should offset the point", [] {
+                Ray ray{{0, 0, -5},
+                        {0, 0, 1}};
+                shapes::Sphere sphere;
+                sphere.translate(0, 0, 1);
+                Intersection i{5, &sphere};
+                Comps comps{i, ray};
+
+                ASSERT_TRUE_MSG("Over point z", comps.over_point.z() < -math::epsilon / 2);
+                ASSERT_TRUE_MSG("Point z", comps.point.z() > comps.over_point.z());
+            });
         });
     }
 
@@ -88,7 +100,7 @@ namespace rt::tests::intersections {
             shapes::Sphere shape;
 
             set("Precomputing the state of an intersection", [&] {
-                Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
+                Ray ray{{0, 0, -5}, {0, 0, 1}};
                 Intersection i{4, &shape};
                 Comps comps{i, ray};
 
@@ -103,7 +115,7 @@ namespace rt::tests::intersections {
                 Intersection i{4, &shape};
                 Comps comps{i, ray};
 
-                ASSERT_TRUE(!comps.inside);
+                ASSERT_FALSE(comps.inside);
             });
             set("The hit, when an intersection occurs on the inside", [&] {
                 Ray ray{Point{0, 0, 0}, Vec{0, 0, 1}};

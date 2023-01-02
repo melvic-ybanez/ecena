@@ -142,7 +142,7 @@ namespace rt::tests::spheres {
                 rt::Material mat;
                 mat.ambient = 1;
 
-                ASSERT_TRUE_MSG("Material is not equal to default", sphere.material != mat);
+                ASSERT_FALSE_MSG("Material is not equal to default", sphere.material == mat);
 
                 sphere.material = mat;
                 ASSERT_EQ_MSG("Material is equal to the sphere's material ", mat, sphere.material);

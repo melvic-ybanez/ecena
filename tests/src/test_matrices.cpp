@@ -96,7 +96,7 @@ namespace rt::tests::matrices {
                           {4, 3, 2, 1}}}
                 };
 
-                ASSERT_TRUE(m1 != m2);
+                ASSERT_FALSE(m1 == m2);
             });
         });
     }
@@ -305,7 +305,7 @@ namespace rt::tests::matrices {
                           {0, 0, 0, 0}}}
                 };
                 ASSERT_EQ_MSG("Check determinant", 0, matrix.determinant());
-                ASSERT_TRUE_MSG("Is not invertible", !matrix.is_invertible());
+                ASSERT_FALSE_MSG("Is not invertible", matrix.is_invertible());
             });
             set("Calculating the inverse of a matrix", [] {
                 Matrix<4, 4> matrix{

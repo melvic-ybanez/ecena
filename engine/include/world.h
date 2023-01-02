@@ -22,6 +22,10 @@ namespace rt {
         Color shade_hit(const Comps &comps) const;
 
         Color color_at(const Ray &ray) const;
+
+        bool is_shadowed_at(const Point &point) const;
+
+        World &add_object(std::unique_ptr<Shape> &shape);
     };
 
     std::ostream &operator<<(std::ostream &out, const World &world);

@@ -18,7 +18,9 @@ namespace rt {
 
     Color World::shade_hit(const Comps &comps) const {
         if (!light.has_value()) return Color::black_;
-        return lights::lighting(comps.object->material, light.value(), comps.point, comps.eye_vec, comps.normal_vec);
+        auto shadowed = is_shadowed_at(comps.over_point);
+        return lights::lighting(comps.object->material, light.value(), comps.point, comps.eye_vec, comps.normal_vec,
+                                shadowed);
     }
 
     Color World::color_at(const Ray &ray) const {
@@ -33,5 +35,20 @@ namespace rt {
         return out << "{ objects: " << join_to_array(world.objects)
                    << ", light: " << optional_to_str(world.light)
                    << " }";
+    }
+
+    bool World::is_shadowed_at(const Point &point) const {
+        auto direction = Vec(light->position - point);
+        auto distance = direction.magnitude();
+        Ray ray{point, direction.normalize()};
+        auto xs = intersect(ray);
+        auto hit = xs.hit();
+
+        return hit != nullptr && hit->t < distance;
+    }
+
+    World &World::add_object(std::unique_ptr<Shape> &shape) {
+        objects.push_back(std::move(shape));
+        return *this;
     }
 }

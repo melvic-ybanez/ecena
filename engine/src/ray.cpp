@@ -14,7 +14,7 @@ namespace rt {
     Ray::Ray(Tuple &&origin, Tuple &&direction) : Ray(Point{origin}, Vec{direction}) {}
 
     Point Ray::at(real t) const {
-        return Point{origin + direction * t};
+        return origin + direction * t;
     }
 
     std::ostream &operator<<(std::ostream &out, const Ray &ray) {

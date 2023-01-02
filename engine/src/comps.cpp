@@ -13,7 +13,7 @@ namespace rt {
               normal_vec{object->normal_at(point)} {
         if (normal_vec.dot(eye_vec) < 0) {
             inside = true;
-            normal_vec = Vec(-normal_vec);
+            normal_vec = -normal_vec;
         } else {
             inside = false;
         }

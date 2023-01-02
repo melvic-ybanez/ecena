@@ -59,20 +59,24 @@ namespace rt::math {
 
     Tuple operator+(const Tuple &u, const Tuple &v);
 
-    Tuple operator-(const Tuple &u, const Tuple & v);
+    Tuple operator-(const Tuple &u, const Tuple &v);
 
     class Point : public Tuple {
     public:
         Point(real x, real y, real z);
+
         Point();
-        explicit Point(const Tuple &tuple);
+
+        Point(const Tuple &tuple);  // NOLINT
     };
 
     class Vec : public Tuple {
     public:
         Vec(real x, real y, real z);
+
         Vec();
-        explicit Vec(const Tuple &tuple);
+
+        Vec(const Tuple &tuple);    // NOLINT
 
         real magnitude() const;
 
@@ -93,7 +97,8 @@ namespace rt::math {
     class Color : public Tuple {
     public:
         Color(real r, real g, real b);
-        Color(const Tuple &tuple);
+
+        Color(const Tuple &tuple);  // NOLINT
         Color();
 
         static const Color black_;
@@ -103,7 +108,9 @@ namespace rt::math {
         static const Color white_;
 
         real red() const;
+
         real green() const;
+
         real blue() const;
 
         void write_to(std::ofstream &out) const;

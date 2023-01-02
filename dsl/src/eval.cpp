@@ -158,7 +158,7 @@ namespace rt::dsl::eval {
 
     Point to_point(const std::unique_ptr<Expr> &expr, int line) {
         auto elem_values = to_num_array(expr, 3, line);
-        return Point{elem_values[0], elem_values[1], elem_values[2]};
+        return {elem_values[0], elem_values[1], elem_values[2]};
     }
 
     Color to_color(const std::unique_ptr<Expr> &expr, int line) {
@@ -168,7 +168,7 @@ namespace rt::dsl::eval {
 
     Vec to_vec(const std::unique_ptr<Expr> &expr, int line) {
         auto point = to_point(expr, line);
-        return Vec{point.x(), point.y(), point.z()};
+        return {point.x(), point.y(), point.z()};
     }
 
     Array *to_array(const std::unique_ptr<Expr> &expr, std::optional<size_t> size, int line) {

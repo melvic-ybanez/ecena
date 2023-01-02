@@ -19,7 +19,8 @@ namespace rt::lights {
             const PointLight &light,
             const Point &point,
             const Vec &eye_vec,
-            const Vec &normal_vec
+            const Vec &normal_vec,
+            bool in_shadow = false
     );
 
     std::ostream &operator<<(std::ostream &out, const PointLight &light);

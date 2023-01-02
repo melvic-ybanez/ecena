@@ -54,7 +54,7 @@ namespace rt {
         auto transform_inverse = transform.inverse();
         auto canvas_point = Point{world_x, world_y, -1};
         auto pixel = transform_inverse * canvas_point;
-        auto origin = Point{transform_inverse * Point{0, 0, 0}};
+        auto origin = transform_inverse * Point{0, 0, 0};
         auto direction = Vec(pixel - origin).normalize();
 
         return {origin, direction};

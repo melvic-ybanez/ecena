@@ -11,11 +11,15 @@ namespace rt::lights {
             const PointLight &light,
             const Point &point,
             const Vec &eye_vec,
-            const Vec &normal_vec
+            const Vec &normal_vec,
+            bool in_shadow
     ) {
         auto effective_color = material.color * light.intensity;
         auto light_vec = Vec(light.position - point).normalize();
         auto ambient = effective_color * material.ambient;
+
+        if (in_shadow) return ambient;
+
         auto diffuse = Color::black_;
         auto specular = Color::black_;
 

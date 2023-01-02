@@ -11,8 +11,8 @@ you can input the following code:
 ```json
 {
     "camera": {
-        "h_size": 1000,
-        "v_size": 500,
+        "h_size": 700,
+        "v_size": 350,
         "field_of_view": 1.0471975512,
         "transform": [[0, 1.5, -5], [0, 1, 0], [0, 1, 0]]
     },

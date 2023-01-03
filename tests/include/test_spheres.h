@@ -10,11 +10,7 @@ namespace rt::tests::spheres {
 
     void intersections();
 
-    void transformations();
-
     void normals();
-
-    void materials();
 }
 
 #endif //ECENA_TEST_SPHERES_H

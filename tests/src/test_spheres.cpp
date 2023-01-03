@@ -12,9 +12,7 @@ namespace rt::tests::spheres {
     void all() {
         set("Spheres", [] {
             intersections();
-            transformations();
             normals();
-            materials();
         });
     }
 
@@ -74,22 +72,6 @@ namespace rt::tests::spheres {
         });
     }
 
-    void transformations() {
-        rt::shapes::Sphere sphere;
-
-        set("Transformations", [&] {
-            auto id = math::matrix::identity<4, 4>();
-
-            ASSERT_EQ_MSG("Default", id, sphere.transformation);
-
-            scenario("Setting a different transformation", [&]() mutable {
-                auto t = math::matrix::translation(2, 3, 4);
-                sphere.transformation = t;
-                ASSERT_EQ(t, sphere.transformation);
-            });
-        });
-    }
-
     void normals() {
         rt::shapes::Sphere sphere;
 
@@ -127,25 +109,6 @@ namespace rt::tests::spheres {
                 sphere.rotate_z(math::pi / 5).scale(1, 0.5, 1);
                 auto n = sphere.normal_at(Point{0, std::sqrt(2) / 2, -std::sqrt(2) / 2});
                 ASSERT_EQ(Vec(0, 0.97014, -0.24254), n);
-            });
-        });
-    }
-
-    void materials() {
-        set("Materials", [] {
-            scenario("A sphere has a default material", [] {
-                rt::shapes::Sphere sphere;
-                ASSERT_EQ(sphere.material, rt::Material{});
-            });
-            set("A sphere may be assigned material", [] {
-                rt::shapes::Sphere sphere;
-                rt::Material mat;
-                mat.ambient = 1;
-
-                ASSERT_FALSE_MSG("Material is not equal to default", sphere.material == mat);
-
-                sphere.material = mat;
-                ASSERT_EQ_MSG("Material is equal to the sphere's material ", mat, sphere.material);
             });
         });
     }

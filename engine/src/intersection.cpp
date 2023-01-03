@@ -5,14 +5,13 @@
 #include "../include/intersection.h"
 
 namespace rt::intersections {
-    Intersection::Intersection(real t, const Shape *object) : t{t}, object{object} {}
+    Intersection::Intersection(real t, Shape *object) : t{t}, object{object} {}
 
     bool Intersection::operator<(const Intersection &that) const {
         return this->t < that.t;
     }
 
     Aggregate::Aggregate(AggregateData elems) : elems{std::move(elems)} {
-        is_sorted = false;
         sort();
     }
 

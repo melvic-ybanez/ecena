@@ -22,4 +22,17 @@ namespace rt::tests {
 
         return world;
     }
+
+    shapes::Type TestShape::type() const {
+        return shapes::Type::test;
+    }
+
+    Aggregate TestShape::local_intersect(const Ray &local_ray) {
+        this->saved_ray = local_ray;
+        return {};
+    }
+
+    Vec TestShape::local_normal_at(const Point &local_point) {
+        return {local_point.x(), local_point.y(), local_point.z()};
+    }
 }

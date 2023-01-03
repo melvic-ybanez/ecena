@@ -14,7 +14,8 @@
 namespace rt::shapes {
     enum class Type {
         shape,
-        sphere
+        sphere,
+        test
     };
 
     std::ostream &operator<<(std::ostream &out, const Type &type);
@@ -37,11 +38,11 @@ namespace rt::shapes {
 
         Shape &operator=(Shape &&shape) noexcept = delete;
 
-        virtual intersections::Aggregate intersect(const Ray &ray) const = 0;
+        Aggregate intersect(const Ray &ray);
 
         virtual Type type() const;
 
-        virtual Vec normal_at(const Point &point) const = 0;
+        Vec normal_at(const Point &point);
 
         Shape &translate(real x, real y, real z);
 
@@ -54,15 +55,20 @@ namespace rt::shapes {
         Shape &rotate_z(real r);
 
         Shape &shear(real xy, real xz, real yx, real yz, real zx, real zy);
+
+    protected:
+        virtual Aggregate local_intersect(const Ray &local_ray) = 0;
+
+        virtual Vec local_normal_at(const Point &local_point) = 0;
     };
 
     class Sphere : public Shape {
     public:
-        intersections::Aggregate intersect(const Ray &ray) const override;
-
         Type type() const override;
 
-        Vec normal_at(const Point &point) const override;
+        Aggregate local_intersect(const Ray &ray) override;
+
+        Vec local_normal_at(const Point &local_point) override;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

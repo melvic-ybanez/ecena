@@ -14,7 +14,9 @@
 #define ASSERT_TRUE(cond) ASSERT_TRUE_MSG(scenario_msg, cond)
 #define ASSERT_FALSE(cond) ASSERT_FALSE_MSG(scenario_msg, cond)
 #define ASSERT_EQ_MSG(message, a, b) assert_equals(message, a, b, __PRETTY_FUNCTION__, __LINE__)
+#define ASSERT_NEQ_MSG(message, a, b) ASSERT_FALSE_MSG(message, a == b)
 #define ASSERT_EQ(a, b) ASSERT_EQ_MSG(scenario_msg, a, b)
+#define ASSERT_NEQ(a, b) ASSERT_NEQ_MSG(scenario_msg, a, b)
 
 namespace rt::tests {
     extern int test_count;

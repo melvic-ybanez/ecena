@@ -22,13 +22,24 @@ namespace rt::shapes {
         return Type::shape;
     }
 
-    intersections::Aggregate Sphere::intersect(const Ray &ray) const {
-        auto transformed_ray = ray.transform(transformation.inverse());
+    Aggregate Shape::intersect(const Ray &ray) {
+        auto local_ray = ray.transform(transformation.inverse());
+        return local_intersect(local_ray);
+    }
 
+    Vec Shape::normal_at(const Point &point) {
+        auto inverse = transformation.inverse();
+        auto local_point = inverse * point;
+        auto local_normal = local_normal_at(local_point);
+        auto world_normal = inverse.transpose() * local_normal;
+        return Vec{world_normal}.normalize();
+    }
+
+    Aggregate Sphere::local_intersect(const Ray &local_ray) {
         // compute the discriminant
-        auto sphere_to_ray = transformed_ray.origin - Point{0, 0, 0};
-        auto a = transformed_ray.direction.dot(transformed_ray.direction);
-        auto b = 2 * transformed_ray.direction.dot(sphere_to_ray);
+        auto sphere_to_ray = local_ray.origin - Point{0, 0, 0};
+        auto a = local_ray.direction.dot(local_ray.direction);
+        auto b = 2 * local_ray.direction.dot(sphere_to_ray);
         auto c = Vec{sphere_to_ray}.dot(sphere_to_ray) - 1;
         auto discriminant = b * b - 4 * a * c;
 
@@ -74,12 +85,8 @@ namespace rt::shapes {
         return *this;
     }
 
-    Vec Sphere::normal_at(const Point &world_point) const {
-        auto inverse = transformation.inverse();
-        auto object_point = inverse * world_point;
-        auto object_normal = object_point - Point{0, 0, 0};
-        auto world_normal = inverse.transpose() * object_normal;
-        return Vec{world_normal}.normalize();
+    Vec Sphere::local_normal_at(const Point &local_point) {
+        return local_point - Point{0, 0, 0};
     }
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {

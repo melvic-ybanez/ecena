@@ -15,6 +15,7 @@
 #include "../include/test_materials.h"
 #include "../include/test_world.h"
 #include "../include/test_camera.h"
+#include "../include/test_shapes.h"
 
 int main() {
     using namespace rt::tests;
@@ -31,6 +32,7 @@ int main() {
     materials::all();
     world::all();
     camera::all();
+    shapes::all();
     std::cout << "Ran " << test_count << " tests. Successful: " << success_count << ". Failed: "
               << test_count - success_count << ".";
 }

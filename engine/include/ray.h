@@ -14,6 +14,8 @@ namespace rt {
         Point origin;
         Vec direction;
 
+        Ray() = default;
+
         Ray(const Point &origin, const Vec &direction);
 
         Ray(Point &&origin, Vec &&direction);

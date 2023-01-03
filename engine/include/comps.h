@@ -10,7 +10,7 @@
 namespace rt {
     struct Comps {
         real t;
-        const Shape *object;
+        Shape *object;
         Point point;
         Point over_point;
         Vec eye_vec;

@@ -20,9 +20,9 @@ namespace rt::intersections {
     class Intersection {
     public:
         real t;
-        const Shape *object;
+        Shape *object;
 
-        Intersection(real t, const Shape *object);
+        Intersection(real t, Shape *object);
 
         bool operator<(const Intersection &that) const;
     };
@@ -50,7 +50,7 @@ namespace rt::intersections {
         void sort();
 
     private:
-        bool is_sorted;
+        bool is_sorted = false;
     };
 }
 

@@ -89,6 +89,25 @@ namespace rt::shapes {
         return local_point - Point{0, 0, 0};
     }
 
+    Type Plane::type() const {
+        return Type::plane;
+    }
+
+    Vec Plane::local_normal_at(const Point &local_point) {
+        // all the points on a plane maps to the same normal
+        return {0, 1, 0};
+    }
+
+    Aggregate Plane::local_intersect(const Ray &ray) {
+        if (std::abs(ray.direction.y()) < math::epsilon) return {};
+
+        // the formula works only if the plane is in xz (left-hand rule) and the
+        // normal is pointing upwards (+y)
+        auto t = -ray.origin.y() / ray.direction.y();
+
+        return {{new Intersection{t, this}}};
+    }
+
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {
         return out << "{ type: " << shape.type() << " }";
     }

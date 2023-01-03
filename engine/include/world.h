@@ -17,7 +17,7 @@ namespace rt {
         std::vector<std::unique_ptr<Shape>> objects;
         std::optional<PointLight> light;
 
-        intersections::Aggregate intersect(const Ray &ray) const;
+        Aggregate intersect(const Ray &ray) const;
 
         Color shade_hit(const Comps &comps) const;
 

@@ -17,7 +17,7 @@ namespace rt::tests::spheres {
     }
 
     void intersections() {
-        rt::shapes::Sphere sphere;
+        shapes::Sphere sphere;
 
         set("Intersections", [&] {
             set("A ray intersects the sphere at a tangent", [&] {
@@ -73,7 +73,7 @@ namespace rt::tests::spheres {
     }
 
     void normals() {
-        rt::shapes::Sphere sphere;
+        shapes::Sphere sphere;
 
         set("Normals", [&] {
             scenario("The normal on a sphere at a point on the x-axis", [&] {
@@ -99,13 +99,13 @@ namespace rt::tests::spheres {
                 ASSERT_EQ(n.normalize(), n);
             });
             scenario("Computing the normal on a translated sphere", [] {
-                rt::shapes::Sphere sphere;
+                shapes::Sphere sphere;
                 sphere.translate(0, 1, 0);
                 auto n = sphere.normal_at(Point{0, 1.70711, -0.70711});
                 ASSERT_EQ(Vec(0, 0.70711, -0.70711), n);
             });
             scenario("Computing the normal on a transformed sphere", [] {
-                rt::shapes::Sphere sphere;
+                shapes::Sphere sphere;
                 sphere.rotate_z(math::pi / 5).scale(1, 0.5, 1);
                 auto n = sphere.normal_at(Point{0, std::sqrt(2) / 2, -std::sqrt(2) / 2});
                 ASSERT_EQ(Vec(0, 0.97014, -0.24254), n);

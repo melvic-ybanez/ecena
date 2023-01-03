@@ -15,6 +15,13 @@ namespace rt::intersections {
         sort();
     }
 
+    Aggregate::~Aggregate() {
+        for (auto elem: elems) {
+            delete elem;
+        }
+        elems.clear();
+    }
+
     size_t Aggregate::count() const {
         return elems.size();
     }
@@ -35,9 +42,12 @@ namespace rt::intersections {
         return nullptr;
     }
 
-    void Aggregate::combine_with(const Aggregate &agg) {
-        std::copy(agg.elems.begin(), agg.elems.end(), std::back_inserter(this->elems));
-        is_sorted = is_sorted && agg.count() == 0;
+    void Aggregate::combine_with(Aggregate &that) {
+        std::copy(that.elems.begin(), that.elems.end(), std::back_inserter(this->elems));
+        for (auto &elem: that.elems) {
+            elem = nullptr;
+        }
+        is_sorted = is_sorted && that.count() == 0;
         sort();
     }
 

@@ -37,6 +37,16 @@ namespace rt::intersections {
 
         Aggregate() = default;
 
+        Aggregate(const Aggregate &from) = default;
+
+        Aggregate(Aggregate &&from) = default;
+
+        Aggregate &operator=(const Aggregate &from) = default;
+
+        Aggregate &operator=(Aggregate &&from) = default;
+
+        ~Aggregate();
+
         size_t count() const;
 
         Intersection *operator[](size_t i);
@@ -45,7 +55,7 @@ namespace rt::intersections {
 
         Intersection *hit();
 
-        void combine_with(const Aggregate &agg);
+        void combine_with(Aggregate &that);
 
         void sort();
 

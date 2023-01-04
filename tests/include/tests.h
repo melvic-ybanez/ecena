@@ -31,6 +31,8 @@ namespace rt::tests {
     void tuples();
 
     void world();
+
+    void patterns();
 }
 
 #endif //ECENA_TESTS_H

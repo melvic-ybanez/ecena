@@ -10,6 +10,7 @@ int main() {
     using namespace rt::tests;
 
     reset();
+
     tuples();
     canvas();
     matrices();
@@ -23,6 +24,8 @@ int main() {
     camera();
     shapes();
     planes();
+    patterns();
+
     std::cout << "Ran " << test_count << " tests. Successful: " << success_count << ". Failed: "
               << test_count - success_count << ".";
 }

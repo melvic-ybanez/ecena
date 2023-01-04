@@ -3,13 +3,17 @@
 //
 
 #include <cmath>
-#include "../include/test_materials.h"
+#include "../include/tests.h"
 #include "../include/asserts.h"
 #include "../../engine/include/material.h"
 #include "../../engine/include/light.h"
 
-namespace rt::tests::materials {
-    void all() {
+namespace rt::tests {
+    static void init();
+
+    static void lighting();
+
+    void materials() {
         set("Materials", [] {
             init();
             lighting();

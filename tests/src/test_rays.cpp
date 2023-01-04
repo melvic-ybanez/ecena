@@ -2,16 +2,22 @@
 // Created by Melvic Ybanez on 12/17/22.
 //
 
-#include "../include/test_rays.h"
+#include "../include/tests.h"
 #include "../include/asserts.h"
 #include "../../engine/include/ray.h"
 
-namespace rt::tests::rays {
-    void all() {
+namespace rt::tests {
+    static void init();
+
+    static void distance();
+
+    static void ray_transformations();
+
+    void rays() {
         set("Rays", [] {
             init();
             distance();
-            transformations();
+            ray_transformations();
         });
     }
 
@@ -35,7 +41,7 @@ namespace rt::tests::rays {
         });
     }
 
-    void transformations() {
+    void ray_transformations() {
         set("Transformations", [] {
             Ray ray{Point{1, 2, 3}, Vec{0, 1, 0}};
             scenario("Translation", [=] {

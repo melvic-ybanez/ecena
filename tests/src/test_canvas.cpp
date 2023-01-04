@@ -2,13 +2,19 @@
 // Created by Melvic Ybanez on 12/10/22.
 //
 
-#include "../include/test_canvas.h"
+#include "../include/tests.h"
 #include "../include/asserts.h"
 #include "../../engine/include/canvas.h"
 #include "../../engine/include/ppm.h"
 
-namespace rt::tests::canvas {
-    void all() {
+namespace rt::tests {
+    static void init();
+
+    static void access();
+
+    static void ppm();
+
+    void canvas() {
         set("Canvas", [] {
             init();
             access();

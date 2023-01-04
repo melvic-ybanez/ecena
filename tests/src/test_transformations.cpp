@@ -5,11 +5,23 @@
 #include <array>
 #include<cmath>
 #include "../include/asserts.h"
-#include "../include/test_transformations.h"
+#include "../include/tests.h"
 #include "../../engine/math/include/matrix.h"
 
-namespace rt::tests::transformations {
-    void all() {
+namespace rt::tests {
+    static void translations();
+
+    static void scaling();
+
+    static void rotations();
+
+    static void shearing();
+
+    static void multiple_transformations();
+
+    static void view_transformations();
+
+    void transformations() {
         set("Transformations", [] {
             translations();
             scaling();

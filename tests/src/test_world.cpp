@@ -2,16 +2,27 @@
 // Created by Melvic Ybanez on 12/30/22.
 //
 
-#include "../include/test_world.h"
+#include "../include/tests.h"
 #include "../include/asserts.h"
 #include "../../engine/include/world.h"
 #include "../include/test_utils.h"
 
-namespace rt::tests::world {
-    void all() {
+namespace rt::tests {
+    static void init();
+
+    static void world_intersections();
+
+    static void shading();
+
+    static void colors();
+
+    static void shadows();
+
+
+    void world() {
         set("World", [] {
             init();
-            intersections();
+            world_intersections();
             shading();
             colors();
             shadows();
@@ -26,7 +37,7 @@ namespace rt::tests::world {
         });
     }
 
-    void intersections() {
+    void world_intersections() {
         set("Intersections", [] {
             auto world = default_world();
             Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};

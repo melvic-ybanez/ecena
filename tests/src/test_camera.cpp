@@ -3,13 +3,20 @@
 //
 
 #include <cmath>
-#include "../include/test_camera.h"
 #include "../include/asserts.h"
 #include "../../engine/include/camera.h"
 #include "../include/test_utils.h"
 
-namespace rt::tests::camera {
-    void all() {
+namespace rt::tests {
+    static void init();
+
+    static void pixel_size();
+
+    static void rays();
+
+    static void rendering();
+
+    void camera() {
         set("Camera", [] {
             init();
             pixel_size();

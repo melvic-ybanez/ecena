@@ -3,12 +3,26 @@
 //
 
 #include <cmath>
-#include "../include/test_tuples.h"
+#include "../include/tests.h"
 #include "../include/asserts.h"
 #include "../../engine/math/include/tuples.h"
 
-namespace rt::tests::tuples {
-    void all() {
+namespace rt::tests {
+    static void identities();
+
+    static void operations();
+
+    static void magnitude();
+
+    static void normalize();
+
+    static void products();
+
+    static void colors();
+
+    static void reflections();
+
+    void tuples() {
         set("Tuples", [] {
             identities();
             operations();

@@ -3,13 +3,31 @@
 //
 
 #include <array>
-#include "../include/test_matrices.h"
 #include "../include/asserts.h"
 #include "../../engine/math/include/math_utils.h"
 #include "../../engine/math/include/matrix.h"
+#include "../include/tests.h"
 
-namespace rt::tests::matrices {
-    void all() {
+namespace rt::tests {
+    static void init();
+
+    static void compare();
+
+    static void multiplications();
+
+    static void transpose();
+
+    static void determinants();
+
+    static void submatrices();
+
+    static void minors();
+
+    static void cofactors();
+
+    static void inversion();
+
+    void matrices() {
         set("Matrices", [] {
             init();
             compare();

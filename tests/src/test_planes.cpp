@@ -2,15 +2,19 @@
 // Created by Melvic Ybanez on 1/4/23.
 //
 
-#include "../include/test_planes.h"
 #include "../include/asserts.h"
 #include "../../engine/include/shapes.h"
+#include "../include/tests.h"
 
-namespace rt::tests::planes {
-    void all() {
+namespace rt::tests {
+    static void normal();
+
+    static void plane_intersections();
+
+    void planes() {
         set("Planes", [] {
             normal();
-            intersections();
+            plane_intersections();
         });
     }
 
@@ -29,7 +33,7 @@ namespace rt::tests::planes {
         });
     }
 
-    void intersections() {
+    void plane_intersections() {
         set("Intersections", [] {
             scenario("With a ray parallel to the plane", [] {
                 shapes::Plane plane;

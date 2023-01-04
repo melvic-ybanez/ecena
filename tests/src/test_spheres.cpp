@@ -3,20 +3,34 @@
 //
 
 #include <cmath>
-#include "../include/test_spheres.h"
+#include "../include/tests.h"
 #include "../include/asserts.h"
 #include "../../engine/include/ray.h"
 #include "../../engine/include/shapes.h"
 
-namespace rt::tests::spheres {
-    void all() {
+namespace {
+    class Spec {
+    public:
+        static void intersections();
+
+        static void normals();
+    };
+}
+
+namespace rt::tests {
+    void spheres() {
         set("Spheres", [] {
-            intersections();
-            normals();
+            Spec::intersections();
+            Spec::normals();
         });
     }
+}
 
-    void intersections() {
+namespace {
+    using namespace rt;
+    using namespace rt::tests;
+
+    void Spec::intersections() {
         shapes::Sphere sphere;
 
         set("Intersections", [&] {
@@ -72,7 +86,7 @@ namespace rt::tests::spheres {
         });
     }
 
-    void normals() {
+    void Spec::normals() {
         shapes::Sphere sphere;
 
         set("Normals", [&] {

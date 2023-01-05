@@ -54,16 +54,18 @@ namespace {
             scenario("Default", [] {
                 TestShape shape;
                 Material mat;
-                ASSERT_EQ(mat, shape.material);
+                ASSERT_EQ(mat, *shape.material);
             });
             scenario("Update", [] {
                 TestShape shape;
-                auto old_mat = shape.material;
-                Material mat;
-                mat.ambient = 1;
-                shape.material = mat;
-                ASSERT_EQ(mat, shape.material);
-                ASSERT_NEQ(shape.material, old_mat);
+                auto old_mat = std::move(shape.material);
+                auto mat = std::make_unique<Material>();
+                auto mat1 = std::make_unique<Material>();
+                mat->ambient = 1;
+                mat1->ambient = 1;
+                shape.material = std::move(mat);
+                ASSERT_EQ(*mat1, *shape.material);
+                ASSERT_NEQ(*shape.material, *old_mat);
             });
         });
     }

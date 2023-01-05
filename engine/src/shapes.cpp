@@ -7,7 +7,7 @@
 #include "../include/shapes.h"
 
 namespace rt::shapes {
-    Shape::Shape() : transformation{math::matrix::identity<4, 4>()} {}
+    Shape::Shape() : transformation{math::matrix::identity<4, 4>()}, material(std::make_unique<Material>()) {}
 
     std::ostream &operator<<(std::ostream &out, const Type &type) {
         switch (type) {

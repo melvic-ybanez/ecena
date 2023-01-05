@@ -9,6 +9,7 @@
 namespace rt {
     Aggregate World::intersect(const Ray &ray) const {
         Aggregate aggregate;
+
         for (auto &obj: objects) {
             auto agg = obj->intersect(ray);
             aggregate.combine_with(agg);
@@ -19,7 +20,7 @@ namespace rt {
     Color World::shade_hit(const Comps &comps) const {
         if (!light.has_value()) return Color::black_;
         auto shadowed = is_shadowed_at(comps.over_point);
-        return lights::lighting(comps.object->material, light.value(), comps.point, comps.eye_vec, comps.normal_vec,
+        return lights::lighting(*comps.object->material, light.value(), comps.point, comps.eye_vec, comps.normal_vec,
                                 shadowed);
     }
 

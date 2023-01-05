@@ -13,10 +13,13 @@ namespace rt::tests {
 
     static void lighting();
 
+    static void material_patterns();
+
     void materials() {
         set("Materials", [] {
             init();
             lighting();
+            material_patterns();
         });
     }
 
@@ -37,7 +40,7 @@ namespace rt::tests {
             Point position{0, 0, 0};
             auto light_intensity = Color::white_;
 
-            scenario("Lighting with the eye between the light and the surface", [=] {
+            scenario("Lighting with the eye between the light and the surface", [&] {
                 Vec eye_vec{0, 0, -1};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{Point{0, 0, -10}, light_intensity};
@@ -46,7 +49,7 @@ namespace rt::tests {
                 // ambient, diffuse, and specular should be at their peak
                 ASSERT_EQ(Color(1.9, 1.9, 1.9), result);
             });
-            scenario("Lighting with the eye between light and surface, eye offset 45 degrees", [=] {
+            scenario("Lighting with the eye between light and surface, eye offset 45 degrees", [&] {
                 Vec eye_vec{0, std::sqrt(2) / 2, -std::sqrt(2) / 2};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{Point{0, 0, -10}, light_intensity};
@@ -55,14 +58,14 @@ namespace rt::tests {
                 // specular value should fall to 0
                 ASSERT_EQ(Color(1.0, 1.0, 1.0), result);
             });
-            scenario("Lighting with eye opposite surface, light offset 45 degrees", [=] {
+            scenario("Lighting with eye opposite surface, light offset 45 degrees", [&] {
                 Vec eye_vec{0, 0, -1};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{Point{0, 10, -10}, light_intensity};
                 auto result = lights::lighting(mat, light, position, eye_vec, normal_vec);
                 ASSERT_EQ(Color(0.7364, 0.7364, 0.7364), result);
             });
-            scenario("Lighting with eye in the path of the reflection vector", [=] {
+            scenario("Lighting with eye in the path of the reflection vector", [&] {
                 Vec eye_vec{0, -std::sqrt(2) / 2, -std::sqrt(2) / 2};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{Point{0, 10, -10}, light_intensity};
@@ -71,7 +74,7 @@ namespace rt::tests {
                 // like the previous test, but specular is peak
                 ASSERT_EQ(Color(1.6364, 1.6364, 1.6364), result);
             });
-            scenario("Lighting with the light behind the surface", [=] {
+            scenario("Lighting with the light behind the surface", [&] {
                 Vec eye_vec{0, 0, -1};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{Point{0, 0, 10}, light_intensity};
@@ -80,13 +83,33 @@ namespace rt::tests {
                 // diffuse and specular fall down to 0
                 ASSERT_EQ(Color(0.1, 0.1, 0.1), result);
             });
-            scenario("Lighting with the surface in shadow", [=] {
+            scenario("Lighting with the surface in shadow", [&] {
                 Vec eye_vec{0, 0, -1};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{{0, 0, -10}, Color::white_};
                 auto in_shadow = true;
                 auto result = lights::lighting(mat, light, position, eye_vec, normal_vec, in_shadow);
                 ASSERT_EQ(Color(0.1, 0.1, 0.1), result);
+            });
+        });
+    }
+
+    void material_patterns() {
+        set("Patterns", [] {
+            set("Lighting with a pattern applied", [] {
+                Material mat;
+                mat.pattern = std::make_unique<patterns::Stripe>(Color::white_, Color::black_);
+                mat.ambient = 1;
+                mat.diffuse = 0;
+                mat.specular = 0;
+                Vec eye_vec{0, 0, -1};
+                Vec normal_vec{0, 0, -1};
+                PointLight light{{0, 0, -10}, Color::white_};
+                auto c1 = lights::lighting(mat, light, {0.9, 0, 0}, eye_vec, normal_vec, false);
+                auto c2 = lights::lighting(mat, light, {1.1, 0, 0}, eye_vec, normal_vec, false);
+
+                ASSERT_EQ(Color::white_, c1);
+                ASSERT_EQ(Color::black_, c2);
             });
         });
     }

@@ -22,7 +22,7 @@ namespace rt::shapes {
     public:
         Matrix<4, 4> transformation;
 
-        Material material;
+        std::unique_ptr<Material> material;
 
         Shape();
 

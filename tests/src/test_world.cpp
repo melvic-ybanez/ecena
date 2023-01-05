@@ -112,12 +112,12 @@ namespace rt::tests {
             scenario("An intersection behind the ray", [] {
                 auto world = default_world();
                 auto &outer = world.objects[0];
-                outer->material.ambient = 1;
+                outer->material->ambient = 1;
                 auto &inner = world.objects[1];
-                inner->material.ambient = 1;
+                inner->material->ambient = 1;
                 Ray ray{Point{0, 0, 0.75}, Vec{0, 0, -1}};
                 auto color = world.color_at(ray);
-                ASSERT_EQ(inner->material.color, color);
+                ASSERT_EQ(inner->material->color, color);
             });
         });
     }

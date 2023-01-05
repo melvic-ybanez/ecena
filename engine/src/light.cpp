@@ -14,7 +14,7 @@ namespace rt::lights {
             const Vec &normal_vec,
             bool in_shadow
     ) {
-        auto effective_color = material.color * light.intensity;
+        auto effective_color = material.color_at(point) * light.intensity;
         auto light_vec = Vec(light.position - point).normalize();
         auto ambient = effective_color * material.ambient;
 

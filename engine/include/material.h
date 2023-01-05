@@ -7,6 +7,7 @@
 
 #include "../math/include/math_utils.h"
 #include "../math/include/tuples.h"
+#include "patterns.h"
 
 namespace rt::materials {
     class Material {
@@ -16,12 +17,15 @@ namespace rt::materials {
         real diffuse;
         real specular;
         real shininess;
+        std::unique_ptr<Pattern> pattern;
 
         Material();
 
         bool operator==(const Material &other) const;
 
         bool operator!=(const Material &other) const;
+
+        Color color_at(const Point &point) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Material &mat);

@@ -16,7 +16,7 @@ namespace rt::dsl::eval {
 
     std::vector<std::unique_ptr<Shape>> to_shapes(const Expr &expr, int line);
 
-    Material to_material(const Expr &expr, int line);
+    std::unique_ptr<Material> to_material(const Expr &expr, int line);
 
     PointLight to_point_light(const Expr &expr, int line);
 

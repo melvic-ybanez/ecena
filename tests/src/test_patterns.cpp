@@ -19,21 +19,21 @@ namespace rt::tests {
         set("Stripe", [] {
             patterns::Stripe pattern{Color::white_, Color::black_};
 
-            scenario("Creating a stripe pattern", [=] {
+            scenario("Creating a stripe pattern", [&] {
                 ASSERT_EQ(Color::white_, pattern.first);
                 ASSERT_EQ(Color::black_, pattern.second);
             });
-            scenario("A stripe pattern is constant in y", [=] {
+            scenario("A stripe pattern is constant in y", [&] {
                 ASSERT_EQ(Color::white_, pattern.at({0, 0, 0}));
                 ASSERT_EQ(Color::white_, pattern.at({0, 1, 0}));
                 ASSERT_EQ(Color::white_, pattern.at({0, 2, 0}));
             });
-            scenario("A stripe pattern is constant in z", [=] {
+            scenario("A stripe pattern is constant in z", [&] {
                 ASSERT_EQ(Color::white_, pattern.at({0, 0, 0}));
                 ASSERT_EQ(Color::white_, pattern.at({0, 0, 1}));
                 ASSERT_EQ(Color::white_, pattern.at({0, 0, 2}));
             });
-            scenario("A stripe pattern alternates i x", [=] {
+            scenario("A stripe pattern alternates i x", [&] {
                 ASSERT_EQ(Color::white_, pattern.at({0, 0, 0}));
                 ASSERT_EQ(Color::white_, pattern.at({0.9, 0, 0}));
                 ASSERT_EQ(Color::black_, pattern.at({1, 0, 0}));

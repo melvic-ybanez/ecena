@@ -104,14 +104,14 @@ namespace rt::dsl::eval {
         return shape;
     }
 
-    Material to_material(const Expr &expr, int line) {
+    std::unique_ptr<Material> to_material(const Expr &expr, int line) {
         auto obj = to_object(expr, line);
-        Material material;
+        auto material = std::make_unique<Material>();
 
         for (auto &field: obj->fields) {
-            if (field.key() == "color") material.color = to_color(*field.value_, field.line);
-            if (field.key() == "specular") material.specular = to_real(*field.value_, field.line);
-            if (field.key() == "diffuse") material.diffuse = to_real(*field.value_, field.line);
+            if (field.key() == "color") material->color = to_color(*field.value_, field.line);
+            if (field.key() == "specular") material->specular = to_real(*field.value_, field.line);
+            if (field.key() == "diffuse") material->diffuse = to_real(*field.value_, field.line);
         }
 
         return material;

@@ -25,7 +25,7 @@ namespace rt::materials {
 
         bool operator!=(const Material &other) const;
 
-        Color color_at(const Point &point) const;
+        Color color_at(const Shape &object, const Point &point) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Material &mat);

@@ -6,11 +6,23 @@
 #define ECENA_PATTERNS_H
 
 #include "../math/include/tuples.h"
+#include "../math/include/matrix.h"
+
+
+namespace rt::shapes {
+    class Shape;
+}
+
+namespace rt {
+    using Shape = shapes::Shape;
+}
 
 namespace rt::patterns {
     class Pattern {
     public:
-        Pattern() = default;
+        Matrix<4, 4> transformation;
+
+        Pattern();
 
         Pattern(const Pattern &from) = delete;
 
@@ -23,6 +35,8 @@ namespace rt::patterns {
         virtual ~Pattern() = default;
 
         virtual Color at(const Point &point) const = 0;
+
+        virtual Color at(const Shape &shape, const Point &world_point) const = 0;
     };
 
     class Stripe : public Pattern {
@@ -33,6 +47,8 @@ namespace rt::patterns {
         Stripe(Color first, Color second);
 
         Color at(const Point &point) const override;
+
+        Color at(const Shape &shape, const Point &world_point) const override;
     };
 }
 

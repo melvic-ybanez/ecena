@@ -26,8 +26,8 @@ namespace rt::materials {
                    << ", " << mat.shininess << " }";
     }
 
-    Color Material::color_at(const Point &point) const {
+    Color Material::color_at(const Shape &object, const Point &point) const {
         if (pattern == nullptr) return color;
-        return pattern->at(point);
+        return pattern->at(object, point);
     }
 }

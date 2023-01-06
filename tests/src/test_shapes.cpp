@@ -7,6 +7,7 @@
 #include "../include/asserts.h"
 #include "../../engine/include/shapes.h"
 #include "../include/test_utils.h"
+#include "../../engine/math/include/transform.h"
 
 namespace {
     class Spec {
@@ -44,7 +45,7 @@ namespace {
         });
         scenario("Assigning a transformation", [] {
             TestShape shape;
-            shape.translate(2, 3, 4);
+            math::translate(shape, 2, 3, 4);
             ASSERT_EQ(matrix::translation(2, 3, 4), shape.transformation);
         });
     }
@@ -75,7 +76,7 @@ namespace {
             scenario("A scaled shape with a ray", [] {
                 Ray ray{{0, 0, -5}, {0, 0, 1}};
                 TestShape shape;
-                shape.scale(2, 2, 2);
+                math::scale(shape, 2, 2, 2);
                 auto xs = shape.intersect(ray);
                 Ray expected{{0, 0, -2.5}, {0, 0, 0.5}};
 
@@ -84,7 +85,7 @@ namespace {
             scenario("A translated shape with a ray", [] {
                 Ray ray{{0, 0, -5}, {0, 0, 1}};
                 TestShape shape;
-                shape.translate(5, 0, 0);
+                math::translate(shape, 5, 0, 0);
                 auto xs = shape.intersect(ray);
                 Ray expected{{-5, 0, -5}, {0, 0, 1}};
 
@@ -97,14 +98,14 @@ namespace {
         set("Normals", [] {
             scenario("On a translated shape", [] {
                 TestShape shape;
-                shape.translate(0, 1, 0);
+                math::translate(shape, 0, 1, 0);
                 auto normal = shape.normal_at({0, 1.70711, -0.70711});
                 Vec expected{0, 0.70711, -0.70711};
                 ASSERT_EQ(expected, normal);
             });
             scenario("On a transformed shape", [] {
                 TestShape shape;
-                shape.rotate_z(math::pi / 5).scale(1, 0.5, 1);
+                math::scale(math::rotate_z(shape, math::pi / 5), 1, 0.5, 1);
                 auto normal = shape.normal_at({0, std::sqrt(2) / 2, -std::sqrt(2) / 2});
                 Vec expected{0, 0.97014, -0.24254};
                 ASSERT_EQ(expected, normal);

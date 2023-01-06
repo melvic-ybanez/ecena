@@ -42,18 +42,6 @@ namespace rt::shapes {
 
         Vec normal_at(const Point &point);
 
-        Shape &translate(real x, real y, real z);
-
-        Shape &scale(real x, real y, real z);
-
-        Shape &rotate_x(real r);
-
-        Shape &rotate_y(real r);
-
-        Shape &rotate_z(real r);
-
-        Shape &shear(real xy, real xz, real yx, real yz, real zx, real zy);
-
     protected:
         virtual Aggregate local_intersect(const Ray &local_ray) = 0;
 

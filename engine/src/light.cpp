@@ -7,6 +7,7 @@
 
 namespace rt::lights {
     Color lighting(
+            const Shape &object,
             const Material &material,
             const PointLight &light,
             const Point &point,
@@ -14,7 +15,7 @@ namespace rt::lights {
             const Vec &normal_vec,
             bool in_shadow
     ) {
-        auto effective_color = material.color_at(point) * light.intensity;
+        auto effective_color = material.color_at(object, point) * light.intensity;
         auto light_vec = Vec(light.position - point).normalize();
         auto ambient = effective_color * material.ambient;
 

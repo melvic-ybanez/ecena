@@ -8,6 +8,7 @@
 #include "../../engine/include/intersection.h"
 #include "../../engine/include/shapes.h"
 #include "../../engine/include/comps.h"
+#include "../../engine/math/include/transform.h"
 
 namespace rt::tests {
     static void init();
@@ -93,7 +94,7 @@ namespace rt::tests {
                 Ray ray{{0, 0, -5},
                         {0, 0, 1}};
                 shapes::Sphere sphere;
-                sphere.translate(0, 0, 1);
+                math::translate(sphere, 0, 0, 1);
                 Intersection i{5, &sphere};
                 Comps comps{i, ray};
 

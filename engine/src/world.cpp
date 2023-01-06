@@ -20,8 +20,8 @@ namespace rt {
     Color World::shade_hit(const Comps &comps) const {
         if (!light.has_value()) return Color::black_;
         auto shadowed = is_shadowed_at(comps.over_point);
-        return lights::lighting(*comps.object->material, light.value(), comps.point, comps.eye_vec, comps.normal_vec,
-                                shadowed);
+        return lights::lighting(*comps.object, *comps.object->material, light.value(), comps.point, comps.eye_vec,
+                                comps.normal_vec, shadowed);
     }
 
     Color World::color_at(const Ray &ray) const {

@@ -6,6 +6,7 @@
 #include "../include/asserts.h"
 #include "../../engine/include/world.h"
 #include "../include/test_utils.h"
+#include "../../engine/math/include/transform.h"
 
 namespace rt::tests {
     static void init();
@@ -81,7 +82,7 @@ namespace rt::tests {
 
                 std::unique_ptr<shapes::Shape> s1 = std::make_unique<shapes::Sphere>();
                 std::unique_ptr<shapes::Shape> s2 = std::make_unique<shapes::Sphere>();
-                s2->translate(0, 0, 10);
+                math::translate(*s2, 0, 0, 10);
                 Intersection i{4, s2.get()};
                 world.add_object(s1);
                 world.add_object(s2);

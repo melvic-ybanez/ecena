@@ -7,6 +7,7 @@
 #include "../include/asserts.h"
 #include "../../engine/include/ray.h"
 #include "../../engine/include/shapes.h"
+#include "../../engine/math/include/transform.h"
 
 namespace {
     class Spec {
@@ -114,13 +115,13 @@ namespace {
             });
             scenario("Computing the normal on a translated sphere", [] {
                 shapes::Sphere sphere;
-                sphere.translate(0, 1, 0);
+                math::translate(sphere, 0, 1, 0);
                 auto n = sphere.normal_at(Point{0, 1.70711, -0.70711});
                 ASSERT_EQ(Vec(0, 0.70711, -0.70711), n);
             });
             scenario("Computing the normal on a transformed sphere", [] {
                 shapes::Sphere sphere;
-                sphere.rotate_z(math::pi / 5).scale(1, 0.5, 1);
+                math::scale(math::rotate_z(sphere, math::pi / 5), 1, 0.5, 1);
                 auto n = sphere.normal_at(Point{0, std::sqrt(2) / 2, -std::sqrt(2) / 2});
                 ASSERT_EQ(Vec(0, 0.97014, -0.24254), n);
             });

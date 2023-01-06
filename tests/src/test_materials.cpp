@@ -7,6 +7,7 @@
 #include "../include/asserts.h"
 #include "../../engine/include/material.h"
 #include "../../engine/include/light.h"
+#include "../../engine/include/shapes.h"
 
 namespace rt::tests {
     static void init();
@@ -39,12 +40,13 @@ namespace rt::tests {
             Material mat;
             Point position{0, 0, 0};
             auto light_intensity = Color::white_;
+            shapes::Sphere sphere;
 
             scenario("Lighting with the eye between the light and the surface", [&] {
                 Vec eye_vec{0, 0, -1};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{Point{0, 0, -10}, light_intensity};
-                auto result = lights::lighting(mat, light, position, eye_vec, normal_vec);
+                auto result = lights::lighting(sphere, mat, light, position, eye_vec, normal_vec);
 
                 // ambient, diffuse, and specular should be at their peak
                 ASSERT_EQ(Color(1.9, 1.9, 1.9), result);
@@ -53,7 +55,7 @@ namespace rt::tests {
                 Vec eye_vec{0, std::sqrt(2) / 2, -std::sqrt(2) / 2};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{Point{0, 0, -10}, light_intensity};
-                auto result = lights::lighting(mat, light, position, eye_vec, normal_vec);
+                auto result = lights::lighting(sphere, mat, light, position, eye_vec, normal_vec);
 
                 // specular value should fall to 0
                 ASSERT_EQ(Color(1.0, 1.0, 1.0), result);
@@ -62,14 +64,14 @@ namespace rt::tests {
                 Vec eye_vec{0, 0, -1};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{Point{0, 10, -10}, light_intensity};
-                auto result = lights::lighting(mat, light, position, eye_vec, normal_vec);
+                auto result = lights::lighting(sphere, mat, light, position, eye_vec, normal_vec);
                 ASSERT_EQ(Color(0.7364, 0.7364, 0.7364), result);
             });
             scenario("Lighting with eye in the path of the reflection vector", [&] {
                 Vec eye_vec{0, -std::sqrt(2) / 2, -std::sqrt(2) / 2};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{Point{0, 10, -10}, light_intensity};
-                auto result = lights::lighting(mat, light, position, eye_vec, normal_vec);
+                auto result = lights::lighting(sphere, mat, light, position, eye_vec, normal_vec);
 
                 // like the previous test, but specular is peak
                 ASSERT_EQ(Color(1.6364, 1.6364, 1.6364), result);
@@ -78,7 +80,7 @@ namespace rt::tests {
                 Vec eye_vec{0, 0, -1};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{Point{0, 0, 10}, light_intensity};
-                auto result = lights::lighting(mat, light, position, eye_vec, normal_vec);
+                auto result = lights::lighting(sphere, mat, light, position, eye_vec, normal_vec);
 
                 // diffuse and specular fall down to 0
                 ASSERT_EQ(Color(0.1, 0.1, 0.1), result);
@@ -88,7 +90,7 @@ namespace rt::tests {
                 Vec normal_vec{0, 0, -1};
                 PointLight light{{0, 0, -10}, Color::white_};
                 auto in_shadow = true;
-                auto result = lights::lighting(mat, light, position, eye_vec, normal_vec, in_shadow);
+                auto result = lights::lighting(sphere, mat, light, position, eye_vec, normal_vec, in_shadow);
                 ASSERT_EQ(Color(0.1, 0.1, 0.1), result);
             });
         });
@@ -105,11 +107,13 @@ namespace rt::tests {
                 Vec eye_vec{0, 0, -1};
                 Vec normal_vec{0, 0, -1};
                 PointLight light{{0, 0, -10}, Color::white_};
-                auto c1 = lights::lighting(mat, light, {0.9, 0, 0}, eye_vec, normal_vec, false);
-                auto c2 = lights::lighting(mat, light, {1.1, 0, 0}, eye_vec, normal_vec, false);
+                shapes::Sphere sphere;
+                std::cout << sphere.transformation;
+                auto c1 = lights::lighting(sphere, mat, light, {0.9, 0, 0}, eye_vec, normal_vec, false);
+                auto c2 = lights::lighting(sphere, mat, light, {1.1, 0, 0}, eye_vec, normal_vec, false);
 
-                ASSERT_EQ(Color::white_, c1);
-                ASSERT_EQ(Color::black_, c2);
+                ASSERT_EQ_MSG("First color", Color::white_, c1);
+                ASSERT_EQ_MSG("Second color", Color::black_, c2);
             });
         });
     }

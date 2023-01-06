@@ -7,6 +7,7 @@
 
 #include "../math/include/tuples.h"
 #include "material.h"
+#include "../../engine/include/shapes.h"
 
 namespace rt::lights {
     struct PointLight {
@@ -15,6 +16,7 @@ namespace rt::lights {
     };
 
     Color lighting(
+            const Shape &object,
             const Material &material,
             const PointLight &light,
             const Point &point,

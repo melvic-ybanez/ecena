@@ -73,6 +73,15 @@ namespace rt::patterns {
 
         Color at(const Point &point) const override;
     };
+
+    class Checkers : public TwoComponentPattern {
+    public:
+        using Pattern::at;
+
+        Checkers(Color first, Color second);
+
+        Color at(const Point &point) const override;
+    };
 }
 
 namespace rt {

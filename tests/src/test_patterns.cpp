@@ -5,7 +5,6 @@
 #include "../../engine/include/shapes.h"
 #include "../include/tests.h"
 #include "../include/asserts.h"
-#include "../../engine/include/patterns.h"
 #include "../../engine/math/include/transform.h"
 #include "../include/test_utils.h"
 
@@ -18,12 +17,15 @@ namespace rt::tests::patterns_ {
 
     static void ring();
 
+    static void checkers();
+
     void test() {
         set("Patterns", [] {
             stripe();
             test_pattern();
             gradient();
             ring();
+            checkers();
         });
     }
 
@@ -133,6 +135,28 @@ namespace rt::tests::patterns_ {
                 ASSERT_EQ_MSG("{1, 0, 0}", Color::black_, ring.at({1, 0, 0}));
                 ASSERT_EQ_MSG("{0, 0, 1}", Color::black_, ring.at({0, 0, 1}));
                 ASSERT_EQ_MSG("{0.708, 0, 0.708}", Color::black_, ring.at({0.708, 0, 0.708}));
+            });
+        });
+    }
+
+    void checkers() {
+        set("Checkers", [] {
+            patterns::Checkers pattern{Color::white_, Color::black_};
+
+            scenario("Checkers should repeat in x", [&] {
+                ASSERT_EQ_MSG("{0, 0, 0}", Color::white_, pattern.at({0, 0, 0}));
+                ASSERT_EQ_MSG("{0.99, 0, 0}", Color::white_, pattern.at({0.99, 0, 0}));
+                ASSERT_EQ_MSG("{1.01, 0, 0}", Color::black_, pattern.at({1.01, 0, 0}));
+            });
+            scenario("Checkers should repeat in y", [&] {
+                ASSERT_EQ_MSG("{0, 0, 0}", Color::white_, pattern.at({0, 0, 0}));
+                ASSERT_EQ_MSG("{0, 0.99, 0}", Color::white_, pattern.at({0, 0.99, 0}));
+                ASSERT_EQ_MSG("{0, 1.01, 0}", Color::black_, pattern.at({0, 1.01, 0}));
+            });
+            scenario("Checkers should repeat in z", [&] {
+                ASSERT_EQ_MSG("{0, 0, 0}", Color::white_, pattern.at({0, 0, 0}));
+                ASSERT_EQ_MSG("{0, 0, 0.99}", Color::white_, pattern.at({0, 0, 0.99}));
+                ASSERT_EQ_MSG("{0, 0, 1.01}", Color::black_, pattern.at({0, 0, 1.01}));
             });
         });
     }

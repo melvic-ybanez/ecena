@@ -48,4 +48,12 @@ namespace rt::patterns {
         if (static_cast<int>(floor(std::sqrt(px2 + pz2))) % 2 == 0) return first;
         return second;
     }
+
+    Checkers::Checkers(Color first, Color second) : TwoComponentPattern(std::move(first), std::move(second)) {}
+
+    Color Checkers::at(const Point &point) const {
+        if (static_cast<int>(std::abs(point.x()) + std::abs(point.y()) + std::abs(point.z())) % 2 == 0)
+            return first;
+        return second;
+    }
 }

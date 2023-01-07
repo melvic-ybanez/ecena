@@ -6,10 +6,10 @@
 #include "../include/asserts.h"
 #include "../../engine/include/light.h"
 
-namespace rt::tests {
+namespace rt::tests::lights_ {
     static void init();
 
-    void lights() {
+    void test() {
         set("Lights", [] {
             init();
         });

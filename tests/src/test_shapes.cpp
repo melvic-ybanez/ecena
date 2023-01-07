@@ -9,35 +9,25 @@
 #include "../include/test_utils.h"
 #include "../../engine/math/include/transform.h"
 
-namespace {
-    class Spec {
-    public:
-        static void transformations();
+namespace rt::tests::shapes_ {
+    static void transformations();
 
-        static void materials();
+    static void materials();
 
-        static void intersections();
+    static void intersections();
 
-        static void normals();
-    };
-}
+    static void normals();
 
-namespace rt::tests {
-    void shapes() {
+    void test() {
         set("Shapes", [] {
-            Spec::transformations();
-            Spec::materials();
-            Spec::intersections();
-            Spec::normals();
+            transformations();
+            materials();
+            intersections();
+            normals();
         });
     }
-}
 
-namespace {
-    using namespace rt::tests;
-    using namespace rt;
-
-    void Spec::transformations() {
+    void transformations() {
         scenario("Default transformation", [] {
             TestShape shape;
             auto expected = matrix::identity<4, 4>();
@@ -50,7 +40,7 @@ namespace {
         });
     }
 
-    void Spec::materials() {
+    void materials() {
         set("Material", [] {
             scenario("Default", [] {
                 TestShape shape;
@@ -71,7 +61,7 @@ namespace {
         });
     }
 
-    void Spec::intersections() {
+    void intersections() {
         set("Intersection", [] {
             scenario("A scaled shape with a ray", [] {
                 Ray ray{{0, 0, -5}, {0, 0, 1}};
@@ -94,7 +84,7 @@ namespace {
         });
     }
 
-    void Spec::normals() {
+    void normals() {
         set("Normals", [] {
             scenario("On a translated shape", [] {
                 TestShape shape;

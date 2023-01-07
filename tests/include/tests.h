@@ -6,33 +6,61 @@
 #define ECENA_TESTS_H
 
 namespace rt::tests {
-    void camera();
+    namespace camera {
+        void test();
+    }
 
-    void canvas();
+    namespace canvas {
+        void test();
+    }
 
-    void intersections();
+    namespace intersections {
+        void test();
+    }
 
-    void lights();
+    namespace lights_ {
+        void test();
+    }
 
-    void materials();
+    namespace materials {
+        void test();
+    }
 
-    void matrices();
+    namespace matrices {
+        void test();
+    }
 
-    void planes();
+    namespace planes {
+        void test();
+    }
 
-    void rays();
+    namespace rays {
+        void test();
+    }
 
-    void shapes();
+    namespace shapes_ {
+        void test();
+    }
 
-    void spheres();
+    namespace spheres {
+        void test();
+    }
 
-    void transformations();
+    namespace transformations {
+        void test();
+    }
 
-    void tuples();
+    namespace tuples {
+        void test();
+    }
 
-    void world();
+    namespace world {
+        void test();
+    }
 
-    void patterns();
+    namespace patterns_ {
+        void test();
+    }
 }
 
 #endif //ECENA_TESTS_H

@@ -7,7 +7,7 @@
 #include "../include/asserts.h"
 #include "../../engine/math/include/tuples.h"
 
-namespace rt::tests {
+namespace rt::tests::tuples {
     static void identities();
 
     static void operations();
@@ -22,7 +22,7 @@ namespace rt::tests {
 
     static void reflections();
 
-    void tuples() {
+    void test() {
         set("Tuples", [] {
             identities();
             operations();

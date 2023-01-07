@@ -7,14 +7,14 @@
 #include "../../engine/include/canvas.h"
 #include "../../engine/include/ppm.h"
 
-namespace rt::tests {
+namespace rt::tests::canvas {
     static void init();
 
     static void access();
 
     static void ppm();
 
-    void canvas() {
+    void test() {
         set("Canvas", [] {
             init();
             access();

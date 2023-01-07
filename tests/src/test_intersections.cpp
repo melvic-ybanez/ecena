@@ -10,7 +10,7 @@
 #include "../../engine/include/comps.h"
 #include "../../engine/math/include/transform.h"
 
-namespace rt::tests {
+namespace rt::tests::intersections {
     static void init();
 
     static void aggregations();
@@ -19,7 +19,7 @@ namespace rt::tests {
 
     static void computations();
 
-    void intersections() {
+    void test() {
         set("Intersections", [] {
             init();
             aggregations();

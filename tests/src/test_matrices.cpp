@@ -8,7 +8,7 @@
 #include "../../engine/math/include/matrix.h"
 #include "../include/tests.h"
 
-namespace rt::tests {
+namespace rt::tests::matrices {
     static void init();
 
     static void compare();
@@ -27,7 +27,7 @@ namespace rt::tests {
 
     static void inversion();
 
-    void matrices() {
+    void test() {
         set("Matrices", [] {
             init();
             compare();

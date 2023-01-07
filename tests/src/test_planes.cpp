@@ -6,15 +6,15 @@
 #include "../../engine/include/shapes.h"
 #include "../include/tests.h"
 
-namespace rt::tests {
+namespace rt::tests::planes {
     static void normal();
 
-    static void plane_intersections();
+    static void intersections();
 
-    void planes() {
+    void test() {
         set("Planes", [] {
             normal();
-            plane_intersections();
+            intersections();
         });
     }
 
@@ -33,7 +33,7 @@ namespace rt::tests {
         });
     }
 
-    void plane_intersections() {
+    void intersections() {
         set("Intersections", [] {
             scenario("With a ray parallel to the plane", [] {
                 shapes::Plane plane;

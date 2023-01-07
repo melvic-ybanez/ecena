@@ -11,20 +11,20 @@ int main() {
 
     reset();
 
-    tuples();
-    canvas();
-    matrices();
-    transformations();
-    rays();
-    spheres();
-    intersections();
-    lights();
-    materials();
-    world();
-    camera();
-    shapes();
-    planes();
-    patterns();
+    tuples::test();
+    canvas::test();
+    matrices::test();
+    transformations::test();
+    rays::test();
+    spheres::test();
+    intersections::test();
+    lights_::test();
+    materials::test();
+    world::test();
+    camera::test();
+    shapes_::test();
+    planes::test();
+    patterns_::test();
 
     std::cout << "Ran " << test_count << " tests. Successful: " << success_count << ". Failed: "
               << test_count - success_count << ".";

@@ -20,6 +20,13 @@ namespace rt::tests {
 
         Vec local_normal_at(const Point &local_point) override;
     };
+
+    class TestPattern : public Pattern {
+    public:
+        using Pattern::at;
+
+        Color at(const Point &point) const override;
+    };
 }
 
 #endif //ECENA_TEST_UTILS_H

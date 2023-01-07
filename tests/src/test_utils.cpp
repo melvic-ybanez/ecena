@@ -35,4 +35,8 @@ namespace rt::tests {
     Vec TestShape::local_normal_at(const Point &local_point) {
         return {local_point.x(), local_point.y(), local_point.z()};
     }
+
+    Color TestPattern::at(const Point &point) const {
+        return point;
+    }
 }

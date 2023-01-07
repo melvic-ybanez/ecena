@@ -36,7 +36,7 @@ namespace rt::patterns {
 
         virtual Color at(const Point &point) const = 0;
 
-        virtual Color at(const Shape &shape, const Point &world_point) const = 0;
+        Color at(const Shape &shape, const Point &world_point) const;
     };
 
     class Stripe : public Pattern {
@@ -46,9 +46,21 @@ namespace rt::patterns {
 
         Stripe(Color first, Color second);
 
-        Color at(const Point &point) const override;
+        using Pattern::at;
 
-        Color at(const Shape &shape, const Point &world_point) const override;
+        Color at(const Point &point) const override;
+    };
+
+    class Gradient : public Pattern {
+    public:
+        Color first;
+        Color second;
+
+        Gradient(Color first, Color second);
+
+        using Pattern::at;
+
+        Color at(const Point &point) const override;
     };
 }
 

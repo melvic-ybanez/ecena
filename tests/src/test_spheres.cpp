@@ -9,29 +9,20 @@
 #include "../../engine/include/shapes.h"
 #include "../../engine/math/include/transform.h"
 
-namespace {
-    class Spec {
-    public:
-        static void intersections();
 
-        static void normals();
-    };
-}
+namespace rt::tests::spheres {
+    static void intersections();
 
-namespace rt::tests {
-    void spheres() {
+    static void normals();
+
+    void test() {
         set("Spheres", [] {
-            Spec::intersections();
-            Spec::normals();
+            intersections();
+            normals();
         });
     }
-}
 
-namespace {
-    using namespace rt;
-    using namespace rt::tests;
-
-    void Spec::intersections() {
+    void intersections() {
         shapes::Sphere sphere;
 
         set("Intersections", [&] {
@@ -87,7 +78,7 @@ namespace {
         });
     }
 
-    void Spec::normals() {
+    void normals() {
         shapes::Sphere sphere;
 
         set("Normals", [&] {

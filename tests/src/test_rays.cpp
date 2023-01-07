@@ -6,18 +6,18 @@
 #include "../include/asserts.h"
 #include "../../engine/include/ray.h"
 
-namespace rt::tests {
+namespace rt::tests::rays {
     static void init();
 
     static void distance();
 
-    static void ray_transformations();
+    static void transformations();
 
-    void rays() {
+    void test() {
         set("Rays", [] {
             init();
             distance();
-            ray_transformations();
+            transformations();
         });
     }
 
@@ -41,7 +41,7 @@ namespace rt::tests {
         });
     }
 
-    void ray_transformations() {
+    void transformations() {
         set("Transformations", [] {
             Ray ray{Point{1, 2, 3}, Vec{0, 1, 0}};
             scenario("Translation", [=] {

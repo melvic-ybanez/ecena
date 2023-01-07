@@ -9,18 +9,18 @@
 #include "../../engine/include/light.h"
 #include "../../engine/include/shapes.h"
 
-namespace rt::tests {
+namespace rt::tests::materials {
     static void init();
 
     static void lighting();
 
-    static void material_patterns();
+    static void patterns();
 
-    void materials() {
+    void test() {
         set("Materials", [] {
             init();
             lighting();
-            material_patterns();
+            patterns();
         });
     }
 
@@ -96,7 +96,7 @@ namespace rt::tests {
         });
     }
 
-    void material_patterns() {
+    void patterns() {
         set("Patterns", [] {
             set("Lighting with a pattern applied", [] {
                 Material mat;

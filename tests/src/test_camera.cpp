@@ -7,7 +7,7 @@
 #include "../../engine/include/camera.h"
 #include "../include/test_utils.h"
 
-namespace rt::tests {
+namespace rt::tests::camera {
     static void init();
 
     static void pixel_size();
@@ -16,7 +16,7 @@ namespace rt::tests {
 
     static void rendering();
 
-    void camera() {
+    void test() {
         set("Camera", [] {
             init();
             pixel_size();

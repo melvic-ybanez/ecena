@@ -8,7 +8,7 @@
 #include "../include/tests.h"
 #include "../../engine/math/include/matrix.h"
 
-namespace rt::tests {
+namespace rt::tests::transformations {
     static void translations();
 
     static void scaling();
@@ -21,7 +21,7 @@ namespace rt::tests {
 
     static void view_transformations();
 
-    void transformations() {
+    void test() {
         set("Transformations", [] {
             translations();
             scaling();

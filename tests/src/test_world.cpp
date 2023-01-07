@@ -8,10 +8,10 @@
 #include "../include/test_utils.h"
 #include "../../engine/math/include/transform.h"
 
-namespace rt::tests {
+namespace rt::tests::world {
     static void init();
 
-    static void world_intersections();
+    static void intersections();
 
     static void shading();
 
@@ -20,10 +20,10 @@ namespace rt::tests {
     static void shadows();
 
 
-    void world() {
+    void test() {
         set("World", [] {
             init();
-            world_intersections();
+            intersections();
             shading();
             colors();
             shadows();
@@ -38,7 +38,7 @@ namespace rt::tests {
         });
     }
 
-    void world_intersections() {
+    void intersections() {
         set("Intersections", [] {
             auto world = default_world();
             Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};

@@ -39,26 +39,37 @@ namespace rt::patterns {
         Color at(const Shape &shape, const Point &world_point) const;
     };
 
-    class Stripe : public Pattern {
+    class TwoComponentPattern : public Pattern {
     public:
         Color first;
         Color second;
 
-        Stripe(Color first, Color second);
+        TwoComponentPattern(Color first, Color second);
+    };
 
+    class Stripe : public TwoComponentPattern {
+    public:
         using Pattern::at;
+
+        Stripe(Color first, Color second);
 
         Color at(const Point &point) const override;
     };
 
-    class Gradient : public Pattern {
+    class Gradient : public TwoComponentPattern {
     public:
-        Color first;
-        Color second;
+        using Pattern::at;
 
         Gradient(Color first, Color second);
 
+        Color at(const Point &point) const override;
+    };
+
+    class Ring : public TwoComponentPattern {
+    public:
         using Pattern::at;
+
+        Ring(Color first, Color second);
 
         Color at(const Point &point) const override;
     };

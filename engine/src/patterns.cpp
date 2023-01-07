@@ -16,14 +16,17 @@ namespace rt::patterns {
         return at(pattern_point);
     }
 
-    Stripe::Stripe(Color first, Color second) : first{std::move(first)}, second{std::move(second)} {}
+    TwoComponentPattern::TwoComponentPattern(Color first, Color second) : first{std::move(first)},
+                                                                          second{std::move(second)} {}
+
+    Stripe::Stripe(Color first, Color second) : TwoComponentPattern(std::move(first), std::move(second)) {}
 
     Color Stripe::at(const Point &point) const {
-        if ((static_cast<int>(floor(point.x())) % 2) == 0) return first;
+        if (static_cast<int>(floor(point.x())) % 2 == 0) return first;
         return second;
     }
 
-    Gradient::Gradient(Color first, Color second) : first{std::move(first)}, second{std::move(second)} {}
+    Gradient::Gradient(Color first, Color second) : TwoComponentPattern(std::move(first), std::move(second)) {}
 
     /**
      * We are following this formula for the blending function:
@@ -33,7 +36,16 @@ namespace rt::patterns {
      */
     Color Gradient::at(const Point &point) const {
         auto distance = second - first;
-        auto fraction = point.x() - static_cast<int>(floor(point.x()));
+        auto fraction = point.x() - floor(point.x());
         return first + distance * fraction;
+    }
+
+    Ring::Ring(Color first, Color second) : TwoComponentPattern(std::move(first), std::move(second)) {}
+
+    Color Ring::at(const Point &point) const {
+        auto px2 = std::pow(point.x(), 2);
+        auto pz2 = std::pow(point.z(), 2);
+        if (static_cast<int>(floor(std::sqrt(px2 + pz2))) % 2 == 0) return first;
+        return second;
     }
 }

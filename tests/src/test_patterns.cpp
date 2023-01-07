@@ -16,11 +16,14 @@ namespace rt::tests::patterns_ {
 
     static void gradient();
 
+    static void ring();
+
     void test() {
         set("Patterns", [] {
             stripe();
             test_pattern();
             gradient();
+            ring();
         });
     }
 
@@ -118,6 +121,18 @@ namespace rt::tests::patterns_ {
                 ASSERT_EQ_MSG("{0.25, 0, 0}", Color(0.75, 0.75, 0.75), pattern.at({0.25, 0, 0}));
                 ASSERT_EQ_MSG("{0.5, 0, 0}", Color(0.5, 0.5, 0.5), pattern.at({0.5, 0, 0}));
                 ASSERT_EQ_MSG("{0.75, 0, 0}", Color(0.25, 0.25, 0.25), pattern.at({0.75, 0, 0}));
+            });
+        });
+    }
+
+    void ring() {
+        set("Ring", [] {
+            set("A ring should extend in both x and z", [] {
+                patterns::Ring ring{Color::white_, Color::black_};
+                ASSERT_EQ_MSG("{0, 0, 0}", Color::white_, ring.at({0, 0, 0}));
+                ASSERT_EQ_MSG("{1, 0, 0}", Color::black_, ring.at({1, 0, 0}));
+                ASSERT_EQ_MSG("{0, 0, 1}", Color::black_, ring.at({0, 0, 1}));
+                ASSERT_EQ_MSG("{0.708, 0, 0.708}", Color::black_, ring.at({0.708, 0, 0.708}));
             });
         });
     }

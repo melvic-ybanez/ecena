@@ -74,6 +74,9 @@ You should get the following result:
 
 ![shadowed_spheres](https://user-images.githubusercontent.com/4519785/210240177-7d0a4f94-cf7b-45dd-b1a9-f0b411f110ad.png)
 
+**Note**: The DSL hasn't caught up to the engine yet. There are some features implemented in the engine
+that currently do not have corresponding DSL syntax, but they will be added soon.
+
 ---
 
 Primary resource for the Ray Tracer: [The Ray Tracer Challenge](http://raytracerchallenge.com/). This book

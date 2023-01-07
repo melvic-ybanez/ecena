@@ -30,7 +30,7 @@ namespace rt {
         auto xs = intersect(ray);
         auto hit = xs.hit();
         if (hit == nullptr) return Color::black_;
-        Comps comps{*hit, ray};
+        auto comps = comps::prepare(*hit, ray);
         return shade_hit(comps, remaining);
     }
 

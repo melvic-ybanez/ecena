@@ -19,6 +19,8 @@ namespace rt::materials {
         real shininess;
         std::unique_ptr<Pattern> pattern;
         real reflectivity;
+        real transparency;
+        real refractive_index;
 
         Material();
 
@@ -32,6 +34,14 @@ namespace rt::materials {
     };
 
     std::ostream &operator<<(std::ostream &out, const Material &mat);
+}
+
+namespace rt::materials::refractive_indices {
+     constexpr inline real vacuum = 1;
+     constexpr inline real air = 1.00029;
+     constexpr inline real water = 1.333;
+     constexpr inline real glass = 1.52;
+     constexpr inline real diamond = 2.417;
 }
 
 namespace rt {

@@ -62,7 +62,7 @@ namespace rt::tests::world {
                 Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 auto &shape = world.objects[0];
                 Intersection i{4, shape.get()};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
                 auto color = world.shade_hit(comps);
 
                 ASSERT_EQ(rt::Color(0.38066, 0.47583, 0.2855), color);
@@ -73,7 +73,7 @@ namespace rt::tests::world {
                 Ray ray{Point{0, 0, 0}, Vec{0, 0, 1}};
                 auto &shape = world.objects[1];
                 Intersection i{0.5, shape.get()};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
                 auto color = world.shade_hit(comps);
 
                 ASSERT_EQ(Color(0.90498, 0.90498, 0.90498), color);
@@ -91,7 +91,7 @@ namespace rt::tests::world {
 
                 Ray ray{{0, 0, 5},
                         {0, 0, 1}};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
                 auto c = world.shade_hit(comps);
 
                 ASSERT_EQ(Color(0.1, 0.1, 0.1), c);
@@ -105,7 +105,7 @@ namespace rt::tests::world {
 
                 Ray ray{Point{0, 0, -3}, Vec{0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
                 Intersection i{std::sqrt(2), shape.get()};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
 
                 world.add_object(shape);
 
@@ -201,7 +201,7 @@ namespace rt::tests::world {
                 shape->material->ambient = 1;
 
                 Intersection i{1, shape.get()};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
                 auto color = world.reflected_color(comps);
                 ASSERT_EQ(Color::black_, color);
             });
@@ -215,7 +215,7 @@ namespace rt::tests::world {
                 Ray ray{Point{0, 0, -3},
                         Vec{0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
                 Intersection i{std::sqrt(2), shape.get()};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
 
                 world.add_object(shape);
 
@@ -232,7 +232,7 @@ namespace rt::tests::world {
                 Ray ray{Vec{0, 0, -3},
                         Point{0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
                 Intersection i{std::sqrt(2), shape.get()};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
 
                 world.add_object(shape);
 

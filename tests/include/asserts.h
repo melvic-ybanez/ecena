@@ -19,10 +19,10 @@
 #define ASSERT_NEQ(a, b) ASSERT_NEQ_MSG(scenario_msg, a, b)
 
 namespace rt::tests {
-    extern int test_count;
-    extern int success_count;
-    extern int set_level;
-    extern std::string scenario_msg;
+    inline int test_count;
+    inline int success_count;
+    inline int set_level;
+    inline std::string scenario_msg;
 
     void reset();
 

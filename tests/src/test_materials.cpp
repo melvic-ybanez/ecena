@@ -7,10 +7,9 @@
 #include "../include/asserts.h"
 #include "../../engine/include/materials.h"
 #include "../../engine/include/light.h"
-#include "../../engine/include/shapes.h"
 
 namespace rt::tests::materials {
-    static void init();
+    static void default_values();
 
     static void lighting();
 
@@ -18,13 +17,13 @@ namespace rt::tests::materials {
 
     void test() {
         set("Materials", [] {
-            init();
+            default_values();
             lighting();
             patterns();
         });
     }
 
-    void init() {
+    void default_values() {
         set("Default", [] {
             Material mat;
             ASSERT_EQ_MSG("Color", Color::white_, mat.color);
@@ -33,6 +32,8 @@ namespace rt::tests::materials {
             ASSERT_EQ_MSG("Specular", 0.9, mat.specular);
             ASSERT_EQ_MSG("Shininess", 200, mat.shininess);
             ASSERT_EQ_MSG("Reflective", 0, mat.reflectivity);
+            ASSERT_EQ_MSG("Transparency", 0, mat.transparency);
+            ASSERT_EQ_MSG("Refractive Index", 1, mat.refractive_index);
         });
     }
 

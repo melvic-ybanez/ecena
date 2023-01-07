@@ -4,20 +4,23 @@
 
 #include "../include/comps.h"
 
-namespace rt {
-    Comps::Comps(const Intersection &intersection, const Ray &ray)
-            : t{intersection.t},
-              object{intersection.object},
-              point{ray.at(t)},
-              eye_vec{-ray.direction},
-              normal_vec{object->normal_at(point)} {
-        if (normal_vec.dot(eye_vec) < 0) {
-            inside = true;
-            normal_vec = -normal_vec;
+namespace rt::comps {
+    Comps prepare(const Intersection &intersection, const Ray &ray) {
+        Comps comps;
+        comps.t = intersection.t;
+        comps.object = intersection.object;
+        comps.point = ray.at(comps.t);
+        comps.eye_vec = -ray.direction;
+        comps.normal_vec = comps.object->normal_at(comps.point);
+
+        if (comps.normal_vec.dot(comps.eye_vec) < 0) {
+            comps.inside = true;
+            comps.normal_vec = -comps.normal_vec;
         } else {
-            inside = false;
+            comps.inside = false;
         }
-        over_point = point + normal_vec * math::epsilon;
-        reflect_vec = ray.direction.reflect(normal_vec);
+        comps.over_point = comps.point + comps.normal_vec * math::epsilon;
+        comps.reflect_vec = ray.direction.reflect(comps.normal_vec);
+        return comps;
     }
 }

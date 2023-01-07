@@ -39,4 +39,11 @@ namespace rt::tests {
     Color TestPattern::at(const Point &point) const {
         return point;
     }
+
+    std::unique_ptr<Shape> glass_sphere() {
+        std::unique_ptr<Shape> sphere = std::make_unique<shapes::Sphere>();
+        sphere->material->transparency = 1.0;
+        sphere->material->refractive_index = materials::refractive_indices::glass;
+        return sphere;
+    }
 }

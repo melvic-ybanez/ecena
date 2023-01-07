@@ -76,4 +76,5 @@ You should get the following result:
 
 ---
 
-Primary resource for the Ray Tracer: [The Ray Tracer Challenge](http://raytracerchallenge.com/).
+Primary resource for the Ray Tracer: [The Ray Tracer Challenge](http://raytracerchallenge.com/). This book
+also serves as a source for test data.

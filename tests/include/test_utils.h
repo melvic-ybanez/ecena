@@ -27,6 +27,8 @@ namespace rt::tests {
 
         Color at(const Point &point) const override;
     };
+
+    std::unique_ptr<Shape> glass_sphere();
 }
 
 #endif //ECENA_TEST_UTILS_H

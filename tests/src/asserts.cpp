@@ -6,11 +6,6 @@
 #include "../../engine/math/include/math_utils.h"
 
 namespace rt::tests {
-    int test_count;
-    int success_count;
-    int set_level;
-    std::string scenario_msg;
-
     void reset() {
         test_count = 0;
         success_count = 0;

@@ -8,6 +8,7 @@
 #include "../../engine/include/ray.h"
 #include "../../engine/include/shapes.h"
 #include "../../engine/math/include/transform.h"
+#include "../include/test_utils.h"
 
 
 namespace rt::tests::spheres {
@@ -15,10 +16,13 @@ namespace rt::tests::spheres {
 
     static void normals();
 
+    static void dielectrics();
+
     void test() {
         set("Spheres", [] {
             intersections();
             normals();
+            dielectrics();
         });
     }
 
@@ -115,6 +119,19 @@ namespace rt::tests::spheres {
                 math::scale(math::rotate_z(sphere, math::pi / 5), 1, 0.5, 1);
                 auto n = sphere.normal_at(Point{0, std::sqrt(2) / 2, -std::sqrt(2) / 2});
                 ASSERT_EQ(Vec(0, 0.97014, -0.24254), n);
+            });
+        });
+    }
+
+    void dielectrics() {
+        set("Dielectrics", [] {
+            set("A helper for producing sphere with a glassy material", [] {
+                auto shape = glass_sphere();
+                auto id = matrix::identity<4, 4>();
+
+                ASSERT_EQ_MSG("Transform", id, shape->transformation);
+                ASSERT_EQ_MSG("Transparency", 1.0, shape->material->transparency);
+                ASSERT_EQ_MSG("Refractive index", 1.52, shape->material->refractive_index);
             });
         });
     }

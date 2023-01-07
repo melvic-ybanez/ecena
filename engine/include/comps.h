@@ -7,19 +7,23 @@
 
 #include "shapes.h"
 
-namespace rt {
+namespace rt::comps {
     struct Comps {
-        real t;
-        Shape *object;
+        real t{};
+        Shape *object{};
         Point point;
         Point over_point;
         Vec eye_vec;
         Vec normal_vec;
         Vec reflect_vec;
-        bool inside;
-
-        Comps(const Intersection &intersection, const Ray &ray);
+        bool inside{};
     };
+
+    Comps prepare(const Intersection &intersection, const Ray &ray);
+}
+
+namespace rt {
+    using Comps = comps::Comps;
 }
 
 #endif //ECENA_COMPS_H

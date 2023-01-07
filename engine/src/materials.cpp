@@ -7,7 +7,7 @@
 
 namespace rt::materials {
     Material::Material() : color{Color::white_}, ambient{0.1}, diffuse{0.9}, specular{0.9}, shininess{200},
-                           pattern{nullptr}, reflectivity{0} {}
+                           pattern{nullptr}, reflectivity{0}, transparency{0}, refractive_index{1.0} {}
 
     bool Material::operator==(const Material &other) const {
         return this->color == other.color

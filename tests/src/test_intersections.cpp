@@ -10,6 +10,7 @@
 #include "../../engine/include/shapes.h"
 #include "../../engine/include/comps.h"
 #include "../../engine/math/include/transform.h"
+#include "../include/test_utils.h"
 
 namespace rt::tests::intersections {
     static void init();
@@ -100,7 +101,7 @@ namespace rt::tests::intersections {
                 shapes::Sphere sphere;
                 math::translate(sphere, 0, 0, 1);
                 Intersection i{5, &sphere};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
 
                 ASSERT_TRUE_MSG("Over point z", comps.over_point.z() < -math::epsilon / 2);
                 ASSERT_TRUE_MSG("Point z", comps.point.z() > comps.over_point.z());
@@ -113,9 +114,10 @@ namespace rt::tests::intersections {
             shapes::Sphere shape;
 
             set("Precomputing the state of an intersection", [&] {
-                Ray ray{{0, 0, -5}, {0, 0, 1}};
+                Ray ray{{0, 0, -5},
+                        {0, 0, 1}};
                 Intersection i{4, &shape};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
 
                 ASSERT_EQ_MSG("t", i.t, comps.t);
                 ASSERT_EQ_MSG("object", i.object, comps.object);
@@ -126,14 +128,14 @@ namespace rt::tests::intersections {
             scenario("The hit, when an intersection occurs on the outside", [&] {
                 Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 Intersection i{4, &shape};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
 
                 ASSERT_FALSE(comps.inside);
             });
             set("The hit, when an intersection occurs on the inside", [&] {
                 Ray ray{Point{0, 0, 0}, Vec{0, 0, 1}};
                 Intersection i{1, &shape};
-                Comps comps{i, ray};
+                auto comps = comps::prepare(i, ray);
 
                 ASSERT_EQ_MSG("point", Point(0, 0, 1), comps.point);
                 ASSERT_EQ_MSG("eye vector", Vec(0, 0, -1), comps.eye_vec);
@@ -146,9 +148,10 @@ namespace rt::tests::intersections {
     void reflections() {
         scenario("Precomputing the reflection vector", [] {
             shapes::Plane shape;
-            Ray ray{{0, 1, -1}, {0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
+            Ray ray{{0, 1,                 -1},
+                    {0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
             Intersection i{std::sqrt(2), &shape};
-            Comps comps{i, ray};
+            auto comps = comps::prepare(i, ray);
             ASSERT_EQ(Vec(0, std::sqrt(2) / 2, std::sqrt(2) / 2), comps.reflect_vec);
         });
     }

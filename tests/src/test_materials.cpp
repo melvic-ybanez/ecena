@@ -5,7 +5,7 @@
 #include <cmath>
 #include "../include/tests.h"
 #include "../include/asserts.h"
-#include "../../engine/include/material.h"
+#include "../../engine/include/materials.h"
 #include "../../engine/include/light.h"
 #include "../../engine/include/shapes.h"
 
@@ -32,6 +32,7 @@ namespace rt::tests::materials {
             ASSERT_EQ_MSG("Diffuse", 0.9, mat.diffuse);
             ASSERT_EQ_MSG("Specular", 0.9, mat.specular);
             ASSERT_EQ_MSG("Shininess", 200, mat.shininess);
+            ASSERT_EQ_MSG("Reflective", 0, mat.reflectivity);
         });
     }
 

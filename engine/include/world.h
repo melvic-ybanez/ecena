@@ -19,13 +19,18 @@ namespace rt {
 
         Aggregate intersect(const Ray &ray) const;
 
-        Color shade_hit(const Comps &comps) const;
+        Color shade_hit(const Comps &comps, int remaining = default_depth) const;
 
-        Color color_at(const Ray &ray) const;
+        Color color_at(const Ray &ray, int remaining = default_depth) const;
 
         bool is_shadowed_at(const Point &point) const;
 
         World &add_object(std::unique_ptr<Shape> &shape);
+
+        Color reflected_color(const Comps &comps, int remaining = default_depth) const;
+
+    private:
+        static inline int default_depth = 4;
     };
 
     std::ostream &operator<<(std::ostream &out, const World &world);

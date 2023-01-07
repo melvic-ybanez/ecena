@@ -6,7 +6,7 @@
 #define ECENA_LIGHT_H
 
 #include "../math/include/tuples.h"
-#include "material.h"
+#include "materials.h"
 #include "../../engine/include/shapes.h"
 
 namespace rt::lights {

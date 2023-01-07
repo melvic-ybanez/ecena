@@ -18,5 +18,6 @@ namespace rt {
             inside = false;
         }
         over_point = point + normal_vec * math::epsilon;
+        reflect_vec = ray.direction.reflect(normal_vec);
     }
 }

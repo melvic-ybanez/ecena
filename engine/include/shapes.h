@@ -9,7 +9,7 @@
 #include "../math/include/math_utils.h"
 #include "ray.h"
 #include "intersection.h"
-#include "material.h"
+#include "materials.h"
 
 namespace rt::shapes {
     enum class Type {

@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 12/19/22.
 //
 
+#include <cmath>
 #include <array>
 #include "../include/tests.h"
 #include "../include/asserts.h"
@@ -19,12 +20,15 @@ namespace rt::tests::intersections {
 
     static void computations();
 
+    static void reflections();
+
     void test() {
         set("Intersections", [] {
             init();
             aggregations();
             hits();
             computations();
+            reflections();
         });
     }
 
@@ -136,6 +140,16 @@ namespace rt::tests::intersections {
                 ASSERT_TRUE_MSG("inside", comps.inside);
                 ASSERT_EQ_MSG("normal", Vec(0, 0, -1), comps.normal_vec);   // normal is inverted
             });
+        });
+    }
+
+    void reflections() {
+        scenario("Precomputing the reflection vector", [] {
+            shapes::Plane shape;
+            Ray ray{{0, 1, -1}, {0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
+            Intersection i{std::sqrt(2), &shape};
+            Comps comps{i, ray};
+            ASSERT_EQ(Vec(0, std::sqrt(2) / 2, std::sqrt(2) / 2), comps.reflect_vec);
         });
     }
 }

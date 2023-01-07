@@ -15,6 +15,7 @@ namespace rt {
         Point over_point;
         Vec eye_vec;
         Vec normal_vec;
+        Vec reflect_vec;
         bool inside;
 
         Comps(const Intersection &intersection, const Ray &ray);

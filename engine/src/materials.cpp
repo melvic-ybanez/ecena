@@ -3,11 +3,11 @@
 //
 
 #include <ostream>
-#include "../include/material.h"
+#include "../include/materials.h"
 
 namespace rt::materials {
     Material::Material() : color{Color::white_}, ambient{0.1}, diffuse{0.9}, specular{0.9}, shininess{200},
-                           pattern{nullptr} {}
+                           pattern{nullptr}, reflectivity{0} {}
 
     bool Material::operator==(const Material &other) const {
         return this->color == other.color
@@ -29,5 +29,9 @@ namespace rt::materials {
     Color Material::color_at(const Shape &object, const Point &point) const {
         if (pattern == nullptr) return color;
         return pattern->at(object, point);
+    }
+
+    bool Material::is_reflective() const {
+        return reflectivity > 0;
     }
 }

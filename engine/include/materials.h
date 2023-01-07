@@ -2,8 +2,8 @@
 // Created by Melvic Ybanez on 12/23/22.
 //
 
-#ifndef ECENA_MATERIAL_H
-#define ECENA_MATERIAL_H
+#ifndef ECENA_MATERIALS_H
+#define ECENA_MATERIALS_H
 
 #include "../math/include/math_utils.h"
 #include "../math/include/tuples.h"
@@ -18,6 +18,7 @@ namespace rt::materials {
         real specular;
         real shininess;
         std::unique_ptr<Pattern> pattern;
+        real reflectivity;
 
         Material();
 
@@ -26,6 +27,8 @@ namespace rt::materials {
         bool operator!=(const Material &other) const;
 
         Color color_at(const Shape &object, const Point &point) const;
+
+        bool is_reflective() const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Material &mat);
@@ -35,4 +38,4 @@ namespace rt {
     using Material = materials::Material;
 }
 
-#endif //ECENA_MATERIAL_H
+#endif //ECENA_MATERIALS_H

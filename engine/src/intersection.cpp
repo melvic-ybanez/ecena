@@ -3,6 +3,7 @@
 //
 
 #include "../include/intersection.h"
+#include "../../engine/include/shapes.h"
 
 namespace rt::intersections {
     Intersection::Intersection(real t, Shape *object) : t{t}, object{object} {}
@@ -11,9 +12,7 @@ namespace rt::intersections {
         return this->t < that.t;
     }
 
-    Aggregate::Aggregate(AggregateData elems) : elems{std::move(elems)} {
-        sort();
-    }
+    Aggregate::Aggregate(AggregateData elems) : elems{std::move(elems)} {}
 
     Aggregate::~Aggregate() {
         for (auto elem: elems) {
@@ -35,11 +34,15 @@ namespace rt::intersections {
     }
 
     Intersection *Aggregate::hit() {
-        sort();
+       sort();
         for (auto e: elems) {
             if (e->t >= 0) return e;
         }
         return nullptr;
+    }
+
+    std::ostream &operator<<(std::ostream &out, const Intersection &intersection) {
+        return out << "{ t: " << intersection.t << ", object: " << *intersection.object << " }";
     }
 
     void Aggregate::combine_with(Aggregate &that) {

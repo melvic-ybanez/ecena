@@ -79,6 +79,6 @@ namespace rt::shapes {
     }
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {
-        return out << "{ type: " << shape.type() << " }";
+        return out << "{ type: " << shape.type() << ", material: " << *shape.material << " }";
     }
 }

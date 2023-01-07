@@ -110,7 +110,7 @@ namespace rt::tests::materials {
                 Vec normal_vec{0, 0, -1};
                 PointLight light{{0, 0, -10}, Color::white_};
                 shapes::Sphere sphere;
-                std::cout << sphere.transformation;
+
                 auto c1 = lights::lighting(sphere, mat, light, {0.9, 0, 0}, eye_vec, normal_vec, false);
                 auto c2 = lights::lighting(sphere, mat, light, {1.1, 0, 0}, eye_vec, normal_vec, false);
 

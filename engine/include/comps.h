@@ -17,9 +17,13 @@ namespace rt::comps {
         Vec normal_vec;
         Vec reflect_vec;
         bool inside{};
+        real n1;
+        real n2;
     };
 
-    Comps prepare(const Intersection &intersection, const Ray &ray);
+    Comps prepare(const Intersection &hit, const Ray &ray, Aggregate &aggregate);
+
+    Comps prepare(const Intersection &hit, const Ray &ray);
 }
 
 namespace rt {

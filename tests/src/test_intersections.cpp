@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 12/19/22.
 //
 
+#include <map>
 #include <cmath>
 #include <array>
 #include "../include/tests.h"
@@ -23,6 +24,8 @@ namespace rt::tests::intersections {
 
     static void reflections();
 
+    static void refractions();
+
     void test() {
         set("Intersections", [] {
             init();
@@ -30,6 +33,7 @@ namespace rt::tests::intersections {
             hits();
             computations();
             reflections();
+            refractions();
         });
     }
 
@@ -153,6 +157,44 @@ namespace rt::tests::intersections {
             Intersection i{std::sqrt(2), &shape};
             auto comps = comps::prepare(i, ray);
             ASSERT_EQ(Vec(0, std::sqrt(2) / 2, std::sqrt(2) / 2), comps.reflect_vec);
+        });
+    }
+
+    void refractions() {
+        set("Finding n1 and n2 at various intersections", [] {
+            auto s1 = glass_sphere();
+            math::scale(*s1, 2, 2, 2);
+            s1->material->refractive_index = 1.5;
+
+            auto s2 = glass_sphere();
+            math::translate(*s2, 0, 0, -0.25);
+            s2->material->refractive_index = 2.0;
+
+            auto s3 = glass_sphere();
+            math::translate(*s3, 0, 0, 0.25);
+            s3->material->refractive_index = 2.5;
+
+            Ray ray{Point{0, 0, -4}, Vec{0, 0, 1}};
+            Aggregate xs{{new Intersection{2, s1.get()}, new Intersection{2.75, s2.get()},
+                          new Intersection{3.25, s3.get()}, new Intersection{4.75, s2.get()},
+                          new Intersection{5.25, s3.get()}, new Intersection{6, s1.get()}}};
+
+            std::map<std::string, std::vector<real>> data{
+                    {"index", {0,   1,   2,   3,   4,   5}},
+                    {"n1",    {1.0, 1.5, 2.0, 2.5, 2.5, 1.5}},
+                    {"n2",    {1.5, 2.0, 2.5, 2.5, 1.5, 1.0}}
+            };
+
+            for (int i = 0; i < data["index"].size(); i++) {
+                auto index = static_cast<size_t>(data["index"][i]);
+                auto n1 = data["n1"][i];
+                auto n2 = data["n2"][i];
+                auto comps = comps::prepare(*xs[index], ray, xs);
+                auto index_label = "{index: " + std::to_string(index);
+
+                ASSERT_EQ_MSG(index_label + ", n1: " + std::to_string(n1) + "}", n1, comps.n1);
+                ASSERT_EQ_MSG(index_label + ", n2: " + std::to_string(n2) + "}", n2, comps.n2);
+            }
         });
     }
 }

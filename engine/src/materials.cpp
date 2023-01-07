@@ -23,7 +23,8 @@ namespace rt::materials {
 
     std::ostream &operator<<(std::ostream &out, const Material &mat) {
         return out << "Material { " << mat.color << ", " << mat.ambient << ", " << mat.diffuse << ", " << mat.specular
-                   << ", " << mat.shininess << " }";
+                   << ", " << mat.shininess << ", transparency: " << mat.transparency << ", reflectivity: "
+                   << mat.reflectivity << ", refractive_index: " << mat.refractive_index << " }";
     }
 
     Color Material::color_at(const Shape &object, const Point &point) const {

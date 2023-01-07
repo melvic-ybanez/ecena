@@ -62,6 +62,8 @@ namespace rt::intersections {
     private:
         bool is_sorted = false;
     };
+
+    std::ostream &operator<<(std::ostream &out, const Intersection &intersection);
 }
 
 namespace rt {

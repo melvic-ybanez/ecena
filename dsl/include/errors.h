@@ -32,6 +32,8 @@ namespace rt::dsl::errors {
     Error wrong_args_count(size_t expected, size_t got, int line);
 
     Error invalid_field(const std::string &field_name, int line);
+
+    Error invalid_kind(const std::string &kind, const std::string &object, int line);
 }
 
 #endif //ECENA_ERRORS_H

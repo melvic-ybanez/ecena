@@ -6,7 +6,6 @@
 #include "../include/errors.h"
 
 #define SKIP_DOC_FIELDS(field) if (field.key() == "name" || field.key() == "description") continue
-#define ELSE_THROW_INVALID_FIELD_ERROR(field) else throw errors::invalid_field(field.key().value, field.line)
 
 namespace rt::dsl::eval {
     static Point to_point(const Expr &expr, int line);
@@ -28,6 +27,10 @@ namespace rt::dsl::eval {
     static real to_real(const Expr &expr, int line);
 
     static std::vector<Matrix<4, 4>> to_transforms(const Expr &expr, int line);
+
+    static void throw_invalid_field_error(const Field &field);
+
+    static void throw_invalid_kind_error(const Field &field, const std::string &object);
 
     Data to_data(const Object &object) {
         Data data;
@@ -94,6 +97,7 @@ namespace rt::dsl::eval {
             if (field.key() == "type") {
                 auto type = to_str(*field.value_, field.line);
                 if (*type == "sphere") shape = std::make_unique<shapes::Sphere>();
+                else if (*type == "plane") shape = std::make_unique<shapes::Plane>();
             } else if (field.key() == "material") {
                 shape->material = to_material(*field.value_, line);
             } else if (field.key() == "transform") {
@@ -102,8 +106,7 @@ namespace rt::dsl::eval {
                 for (auto t: transforms) {
                     shape->transformation = shape->transformation * t;
                 }
-            }
-            ELSE_THROW_INVALID_FIELD_ERROR(field);
+            } else throw_invalid_field_error(field);
         }
 
         return shape;
@@ -118,10 +121,32 @@ namespace rt::dsl::eval {
             if (field.key() == "color") material->color = to_color(*field.value_, field.line);
             else if (field.key() == "specular") material->specular = to_real(*field.value_, field.line);
             else if (field.key() == "diffuse") material->diffuse = to_real(*field.value_, field.line);
-            ELSE_THROW_INVALID_FIELD_ERROR(field);
+            else if (field.key() == "pattern") material->pattern = to_pattern(*field.value_, field.line);
+            else throw_invalid_field_error(field);
         }
 
         return material;
+    }
+
+    std::unique_ptr<Pattern> to_pattern(const Expr &expr, int line) {
+        auto obj = to_object(expr, line);
+        std::unique_ptr<Pattern> pattern;
+
+        // components of the pattern
+        Color first;
+        Color second;
+
+        for (auto &field: obj->fields) {
+            SKIP_DOC_FIELDS(field);
+            if (field.key() == "type") {
+                auto type = to_str(*field.value_, field.line);
+                if (*type == "checkers") pattern = std::make_unique<patterns::Checkers>(first, second);
+                // TODO: Parse the other types of patterns
+                else throw_invalid_kind_error(field, "Pattern");
+            } else throw_invalid_field_error(field);
+        }
+
+        return pattern;
     }
 
     std::vector<Matrix<4, 4>> to_transforms(const Expr &expr, int line) {
@@ -227,9 +252,17 @@ namespace rt::dsl::eval {
             SKIP_DOC_FIELDS(field);
             if (field.key() == "position") light.position = to_point(*field.value_, field.line);
             else if (field.key() == "intensity") light.intensity = to_color(*field.value_, field.line);
-            ELSE_THROW_INVALID_FIELD_ERROR(field);
+            else throw_invalid_field_error(field);
         }
 
         return light;
+    }
+
+    void throw_invalid_field_error(const Field &field) {
+        throw errors::invalid_field(field.key().value, field.line);
+    }
+
+    void throw_invalid_kind_error(const Field &field, const std::string &object) {
+        throw errors::invalid_kind(field.key().value, object, field.line);
     }
 }

@@ -39,4 +39,8 @@ namespace rt::dsl::errors {
     Error invalid_field(const std::string &field_name, int line) {
         return {"Invalid property: " + field_name, line };
     }
+
+    Error invalid_kind(const std::string &kind, const std::string &object, int line) {
+        return {"Invalid type '" + kind + "' for object '" + object + "'", line};
+    }
 }

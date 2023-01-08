@@ -23,6 +23,8 @@ namespace rt::dsl::eval {
     Camera to_camera(const Expr &expr, int line);
 
     World to_world(const Expr &expr, int line);
+
+    std::unique_ptr<Pattern> to_pattern(const Expr &expr, int line);
 }
 
 #endif //ECENA_EVAL_H

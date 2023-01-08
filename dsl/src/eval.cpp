@@ -5,6 +5,9 @@
 #include "../include/eval.h"
 #include "../include/errors.h"
 
+#define SKIP_DOC_FIELDS(field) if (field.key() == "name" || field.key() == "description") continue
+#define ELSE_THROW_INVALID_FIELD_ERROR(field, line) else throw errors::invalid_field(field.key().value, line)
+
 namespace rt::dsl::eval {
     static Point to_point(const Expr &expr, int line);
 
@@ -87,18 +90,20 @@ namespace rt::dsl::eval {
         std::unique_ptr<Shape> shape;
 
         for (auto &field: obj->fields) {
+            SKIP_DOC_FIELDS(field);
             if (field.key() == "type") {
                 auto type = to_str(*field.value_, field.line);
                 if (*type == "sphere") shape = std::make_unique<shapes::Sphere>();
-            }
-            if (field.key() == "material") shape->material = to_material(*field.value_, line);
-            if (field.key() == "transform") {
+            } else if (field.key() == "material") {
+                shape->material = to_material(*field.value_, line);
+            } else if (field.key() == "transform") {
                 auto transforms = to_transforms(*field.value_, line);
                 std::reverse(transforms.begin(), transforms.end());
                 for (auto t: transforms) {
                     shape->transformation = shape->transformation * t;
                 }
             }
+            ELSE_THROW_INVALID_FIELD_ERROR(field, line);
         }
 
         return shape;
@@ -109,9 +114,11 @@ namespace rt::dsl::eval {
         auto material = std::make_unique<Material>();
 
         for (auto &field: obj->fields) {
+            SKIP_DOC_FIELDS(field);
             if (field.key() == "color") material->color = to_color(*field.value_, field.line);
-            if (field.key() == "specular") material->specular = to_real(*field.value_, field.line);
-            if (field.key() == "diffuse") material->diffuse = to_real(*field.value_, field.line);
+            else if (field.key() == "specular") material->specular = to_real(*field.value_, field.line);
+            else if (field.key() == "diffuse") material->diffuse = to_real(*field.value_, field.line);
+            ELSE_THROW_INVALID_FIELD_ERROR(field, line);
         }
 
         return material;
@@ -217,8 +224,10 @@ namespace rt::dsl::eval {
         PointLight light;
 
         for (auto &field: object->fields) {
+            SKIP_DOC_FIELDS(field);
             if (field.key() == "position") light.position = to_point(*field.value_, field.line);
-            if (field.key() == "intensity") light.intensity = to_color(*field.value_, field.line);
+            else if (field.key() == "intensity") light.intensity = to_color(*field.value_, field.line);
+            ELSE_THROW_INVALID_FIELD_ERROR(field, line);
         }
 
         return light;

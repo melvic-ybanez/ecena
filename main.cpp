@@ -24,18 +24,18 @@ int main() {
     }
 
     std::unique_ptr<rt::dsl::Object> object;
+    rt::Data data;
 
     rt::dsl::Lexer lexer{source};
     try {
         auto tokens = lexer.scan_all();
         rt::dsl::Parser parser{tokens};
         object = parser.parse_object();
+        data = rt::dsl::eval::to_data(*object);
     } catch (rt::dsl::errors::Error &error) {
         std::cout << error;
         return 1;
     }
-
-    auto data = rt::dsl::eval::to_data(*object);
 
     std::cout << "Rendering...\n";
 

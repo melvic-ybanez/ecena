@@ -12,7 +12,13 @@ namespace rt::comps {
         real t{};
         Shape *object{};
         Point point;
+
+        // this point lies just above the surface to prevent objects from
+        // shadowing themselves
         Point over_point;
+        // the dual of over point, it lies a fraction beneath the surface
+        Point under_point;
+
         Vec eye_vec;
         Vec normal_vec;
         Vec reflect_vec;

@@ -21,7 +21,11 @@ namespace rt::comps {
         } else {
             comps.inside = false;
         }
-        comps.over_point = comps.point + comps.normal_vec * math::epsilon;
+
+        auto normal_epsilon_prod = comps.normal_vec * math::epsilon;
+        comps.over_point = comps.point + normal_epsilon_prod;
+        comps.under_point = comps.point - normal_epsilon_prod;
+
         comps.reflect_vec = ray.direction.reflect(comps.normal_vec);
 
         compute_n1_and_n2(comps, hit, aggregate);

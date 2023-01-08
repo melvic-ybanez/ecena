@@ -26,6 +26,8 @@ namespace rt::tests::intersections {
 
     static void refractions();
 
+    static void under_point();
+
     void test() {
         set("Intersections", [] {
             init();
@@ -34,6 +36,7 @@ namespace rt::tests::intersections {
             computations();
             reflections();
             refractions();
+            under_point();
         });
     }
 
@@ -195,6 +198,20 @@ namespace rt::tests::intersections {
                 ASSERT_EQ_MSG(index_label + ", n1: " + std::to_string(n1) + "}", n1, comps.n1);
                 ASSERT_EQ_MSG(index_label + ", n2: " + std::to_string(n2) + "}", n2, comps.n2);
             }
+        });
+    }
+
+    void under_point() {
+        set("The under point is offset below the surface", [] {
+            Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
+            auto shape = glass_sphere();
+            math::translate(*shape, 0, 0, 1);
+            auto i = new Intersection{5, shape.get()};
+            Aggregate xs{{i}};
+            auto comps = comps::prepare(*i, ray, xs);
+
+            ASSERT_TRUE_MSG("Under point", comps.under_point.z() > math::epsilon / 2);
+            ASSERT_TRUE_MSG("Point z-axis", comps.point.z() < comps.under_point.z());
         });
     }
 }

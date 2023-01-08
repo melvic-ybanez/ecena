@@ -131,7 +131,7 @@ namespace rt::tests::spheres {
 
                 ASSERT_EQ_MSG("Transform", id, shape->transformation);
                 ASSERT_EQ_MSG("Transparency", 1.0, shape->material->transparency);
-                ASSERT_EQ_MSG("Refractive index", 1.52, shape->material->refractive_index);
+                ASSERT_EQ_MSG("Refractive index", 1.5, shape->material->refractive_index);
             });
         });
     }

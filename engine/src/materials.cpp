@@ -35,4 +35,8 @@ namespace rt::materials {
     bool Material::is_reflective() const {
         return reflectivity > 0;
     }
+
+    bool Material::is_transparent() const {
+        return transparency > 0;
+    }
 }

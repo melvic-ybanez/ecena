@@ -22,6 +22,8 @@ namespace rt::tests::world {
 
     static void reflections();
 
+    static void refractions();
+
     void test() {
         set("World", [] {
             init();
@@ -30,6 +32,7 @@ namespace rt::tests::world {
             colors();
             shadows();
             reflections();
+            refractions();
         });
     }
 
@@ -111,6 +114,53 @@ namespace rt::tests::world {
 
                 auto color = world.shade_hit(comps);
                 ASSERT_EQ(Color(0.87677, 0.92436, 0.82918), color);
+            });
+            scenario("Shading with a transparent material", [] {
+                auto world = default_world();
+
+                std::unique_ptr<Shape> floor = std::make_unique<shapes::Plane>();
+                math::translate(*floor, 0, -1, 0);
+                floor->material->transparency = 0.5;
+                floor->material->refractive_index = 1.5;
+
+                std::unique_ptr<Shape> ball = std::make_unique<shapes::Sphere>();
+                ball->material->color = {1, 0, 0};
+                ball->material->ambient = 0.5;
+                math::translate(*ball, 0, -3.5, -0.5);
+
+                Ray ray{Point{0, 0, -3}, Vec{0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
+                Aggregate xs{{new Intersection{std::sqrt(2), floor.get()}}};
+                auto comps = comps::prepare(*xs[0], ray, xs);
+
+                world.add_object(floor);
+                world.add_object(ball);
+
+                auto color = world.shade_hit(comps, 5);
+                ASSERT_EQ(Color(0.93642, 0.68642, 0.68642), color);
+            });
+            scenario("With a reflective, transparent material", [] {
+                auto world = default_world();
+
+                std::unique_ptr<Shape> floor = std::make_unique<shapes::Plane>();
+                math::translate(*floor, 0, -1, 0);
+                floor->material->transparency = 0.5;
+                floor->material->reflectivity = 0.5;
+                floor->material->refractive_index = 1.5;
+
+                std::unique_ptr<Shape> ball = std::make_unique<shapes::Sphere>();
+                ball->material->color = {1, 0, 0};
+                ball->material->ambient = 0.5;
+                math::translate(*ball, 0, -3.5, -0.5);
+
+                Ray ray{Point{0, 0, -3}, Vec{0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
+                Aggregate xs{{new Intersection{std::sqrt(2), floor.get()}}};
+                auto comps = comps::prepare(*xs[0], ray, xs);
+
+                world.add_object(floor);
+                world.add_object(ball);
+
+                auto color = world.shade_hit(comps, 5);
+                ASSERT_EQ(Color(0.93391, 0.69643, 0.69243), color);
             });
         });
     }
@@ -238,6 +288,68 @@ namespace rt::tests::world {
 
                 auto color = world.reflected_color(comps, 0);
                 ASSERT_EQ(Color::black_, color);
+            });
+        });
+    }
+
+    void refractions() {
+        set("Refractions", [] {
+            scenario("The refracted color with an opaque surface", [] {
+                auto world = default_world();
+                auto &shape = world.objects[0];
+
+                Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
+                Aggregate xs{{new Intersection{4, shape.get()}, new Intersection{6, shape.get()}}};
+                auto comps = comps::prepare(*xs[0], ray, xs);
+
+                auto color = world.refracted_color(comps, 5);
+                ASSERT_EQ(Color::black_, color);
+            });
+            scenario("The refracted color at the maximum recursive depth", [] {
+                auto world = default_world();
+                auto &shape = world.objects[0];
+                shape->material->transparency = 1.0;
+                shape->material->refractive_index = 1.5;
+
+                Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
+                Aggregate xs{{new Intersection{4, shape.get()}, new Intersection{6, shape.get()}}};
+                auto comps = comps::prepare(*xs[0], ray, xs);
+
+                auto color = world.reflected_color(comps, 0);
+                ASSERT_EQ(Color::black_, color);
+            });
+            scenario("The refracted color under total internal reflection", [] {
+                auto world = default_world();
+                auto &shape = world.objects[0];
+                shape->material->transparency = 1.0;
+                shape->material->refractive_index = 1.5;
+
+                Ray ray{Point{0, 0, std::sqrt(2) / 2}, Vec{0, 1, 0}};
+                Aggregate xs{{new Intersection{-std::sqrt(2) / 2, shape.get()},
+                              new Intersection{std::sqrt(2) / 2, shape.get()}}};
+
+                auto comps = comps::prepare(*xs[1], ray, xs);
+                auto color = world.reflected_color(comps, 5);
+                ASSERT_EQ(Color::black_, color);
+            });
+            scenario("The refracted color with a refracted ray", [] {
+                auto world = default_world();
+
+                auto &shape1 = world.objects[0];
+                shape1->material->ambient = 1.0;
+                shape1->material->pattern = std::make_unique<TestPattern>();
+
+                auto &shape2 = world.objects[1];
+                shape2->material->transparency = 1.0;
+                shape2->material->refractive_index = 1.5;
+
+                Ray ray{Point{0, 0, 0.1}, Vec{0, 1, 0}};
+                Aggregate xs{{new Intersection{-0.9899, shape1.get()}, new Intersection{-0.4899, shape2.get()},
+                              new Intersection{0.4899, shape2.get()}, new Intersection{0.9899, shape1.get()}}};
+                auto comps = comps::prepare(*xs[2], ray, xs);
+                auto color = world.refracted_color(comps, 5);
+
+                ASSERT_EQ(Color(0, 0.99888, 0.04725), color);
             });
         });
     }

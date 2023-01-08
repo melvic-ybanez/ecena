@@ -28,6 +28,8 @@ namespace rt::tests::intersections {
 
     static void under_point();
 
+    static void schlick();
+
     void test() {
         set("Intersections", [] {
             init();
@@ -37,6 +39,7 @@ namespace rt::tests::intersections {
             reflections();
             refractions();
             under_point();
+            schlick();
         });
     }
 
@@ -212,6 +215,40 @@ namespace rt::tests::intersections {
 
             ASSERT_TRUE_MSG("Under point", comps.under_point.z() > math::epsilon / 2);
             ASSERT_TRUE_MSG("Point z-axis", comps.point.z() < comps.under_point.z());
+        });
+    }
+
+    void schlick() {
+        set("Schlick Approximation", [] {
+            scenario("Under total internal reflection", [] {
+                auto shape = glass_sphere();
+                Ray ray{Point{0, 0, std::sqrt(2) / 2}, Vec{0, 1, 0}};
+                Aggregate xs{{new Intersection{-std::sqrt(2) / 2, shape.get()}, new Intersection{std::sqrt(2) / 2, shape.get()}}};
+                auto comps = comps::prepare(*xs[1], ray, xs);
+                auto reflectance = schlick(comps);
+                ASSERT_EQ(1.0, reflectance);
+;            });
+            scenario("With a perpendicular viewing angle", [] {
+                auto shape = glass_sphere();
+                Ray ray{Point{0, 0, 0}, Vec{0, 1, 0}};
+                Aggregate xs{{new Intersection{-1, shape.get()}, new Intersection{1, shape.get()}}};
+                auto comps = comps::prepare(*xs[1], ray, xs);
+
+                auto reflectance = schlick(comps);
+                auto rounded_reflectance = std::round(reflectance * 100) / 100;
+
+                ASSERT_EQ(0.04, rounded_reflectance);
+            });
+            scenario("With small angle and n2 > n1", [] {
+                auto shape = glass_sphere();
+                Ray ray{Point{0, 0.99, -2}, Vec{0, 0, 1}};
+                Aggregate xs{{new Intersection{1.8589, shape.get()}}};
+                auto comps = comps::prepare(*xs[0], ray, xs);
+
+                auto reflectance = schlick(comps);
+
+                ASSERT_EQ(0.48873, std::round(reflectance * 100000) / 100000);
+            });
         });
     }
 }

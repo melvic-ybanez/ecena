@@ -31,6 +31,8 @@ namespace rt::materials {
         Color color_at(const Shape &object, const Point &point) const;
 
         bool is_reflective() const;
+
+        bool is_transparent() const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Material &mat);
@@ -40,7 +42,7 @@ namespace rt::materials::refractive_indices {
      constexpr inline real vacuum = 1;
      constexpr inline real air = 1.00029;
      constexpr inline real water = 1.333;
-     constexpr inline real glass = 1.52;
+     constexpr inline real glass = 1.5;
      constexpr inline real diamond = 2.417;
 }
 

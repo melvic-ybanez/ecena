@@ -30,6 +30,11 @@ namespace rt::comps {
     Comps prepare(const Intersection &hit, const Ray &ray, Aggregate &aggregate);
 
     Comps prepare(const Intersection &hit, const Ray &ray);
+
+    /**
+     * Computes the reflectance, which is the fraction of the light that is reflected
+     */
+    real schlick(const Comps &comps);
 }
 
 namespace rt {

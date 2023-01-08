@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 12/31/22.
 //
 
+#include <cmath>
 #include "../include/comps.h"
 
 namespace rt::comps {
@@ -22,9 +23,9 @@ namespace rt::comps {
             comps.inside = false;
         }
 
-        auto normal_epsilon_prod = comps.normal_vec * math::epsilon;
-        comps.over_point = comps.point + normal_epsilon_prod;
-        comps.under_point = comps.point - normal_epsilon_prod;
+        auto normal_x_epsilon = comps.normal_vec * math::epsilon;
+        comps.over_point = comps.point + normal_x_epsilon;
+        comps.under_point = comps.point - normal_x_epsilon;
 
         comps.reflect_vec = ray.direction.reflect(comps.normal_vec);
 
@@ -61,5 +62,21 @@ namespace rt::comps {
                 break;
             }
         }
+    }
+
+    real schlick(const Comps &comps) {
+        auto cos = comps.eye_vec.dot(comps.normal_vec);
+
+        // total internal reflection
+        if (comps.n1 > comps.n2) {
+            auto n = comps.n1 / comps.n2;
+            auto sin2_t = n * n * (1 - cos * cos);
+            if (sin2_t > 1) return 1;
+
+            cos = std::sqrt(1 - sin2_t);
+        }
+
+        auto r = std::pow((comps.n1 - comps.n2) / (comps.n1 + comps.n2), 2);
+        return r + (1 - r) * std::pow((1 - cos), 5);
     }
 }

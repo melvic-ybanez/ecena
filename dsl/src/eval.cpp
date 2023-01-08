@@ -6,7 +6,7 @@
 #include "../include/errors.h"
 
 #define SKIP_DOC_FIELDS(field) if (field.key() == "name" || field.key() == "description") continue
-#define ELSE_THROW_INVALID_FIELD_ERROR(field, line) else throw errors::invalid_field(field.key().value, line)
+#define ELSE_THROW_INVALID_FIELD_ERROR(field) else throw errors::invalid_field(field.key().value, field.line)
 
 namespace rt::dsl::eval {
     static Point to_point(const Expr &expr, int line);
@@ -103,7 +103,7 @@ namespace rt::dsl::eval {
                     shape->transformation = shape->transformation * t;
                 }
             }
-            ELSE_THROW_INVALID_FIELD_ERROR(field, line);
+            ELSE_THROW_INVALID_FIELD_ERROR(field);
         }
 
         return shape;
@@ -118,7 +118,7 @@ namespace rt::dsl::eval {
             if (field.key() == "color") material->color = to_color(*field.value_, field.line);
             else if (field.key() == "specular") material->specular = to_real(*field.value_, field.line);
             else if (field.key() == "diffuse") material->diffuse = to_real(*field.value_, field.line);
-            ELSE_THROW_INVALID_FIELD_ERROR(field, line);
+            ELSE_THROW_INVALID_FIELD_ERROR(field);
         }
 
         return material;
@@ -227,7 +227,7 @@ namespace rt::dsl::eval {
             SKIP_DOC_FIELDS(field);
             if (field.key() == "position") light.position = to_point(*field.value_, field.line);
             else if (field.key() == "intensity") light.intensity = to_color(*field.value_, field.line);
-            ELSE_THROW_INVALID_FIELD_ERROR(field, line);
+            ELSE_THROW_INVALID_FIELD_ERROR(field);
         }
 
         return light;

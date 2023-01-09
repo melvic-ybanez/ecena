@@ -2,7 +2,6 @@
 // Created by Melvic Ybanez on 12/27/22.
 //
 
-#include <iostream>
 #include "../include/eval.h"
 #include "../include/errors.h"
 

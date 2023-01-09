@@ -34,7 +34,7 @@ namespace rt::intersections {
     }
 
     Intersection *Aggregate::hit() {
-       sort();
+        sort();
         for (auto e: elems) {
             if (e->t >= 0) return e;
         }

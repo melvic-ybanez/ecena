@@ -11,7 +11,7 @@
 namespace rt::math {
     template<typename T>
     T &transform(T &obj, Matrix<4, 4> transformation) {
-        obj.transformation = transformation;
+        obj.transformation = transformation * obj.transformation;
         return obj;
     }
 

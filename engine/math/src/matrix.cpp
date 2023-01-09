@@ -80,12 +80,12 @@ namespace rt::math::matrix {
         auto forward = Vec(to - from).normalize();
         auto left = forward.cross(up.normalize());
         auto true_up = left.cross(forward);
-        Matrix<4, 4> orientiation{
+        Matrix<4, 4> orientation{
                 {{{left.x(), left.y(), left.z(), 0},
                   {true_up.x(), true_up.y(), true_up.z(), 0},
                   {-forward.x(), -forward.y(), -forward.z(), 0},
                   {0, 0, 0, 1}}}
         };
-        return orientiation * translation(-from.x(), -from.y(), -from.z());
+        return orientation * translation(-from.x(), -from.y(), -from.z());
     }
 }

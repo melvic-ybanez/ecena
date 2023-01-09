@@ -32,7 +32,7 @@ namespace rt::math::matrix {
         bool operator==(const Matrix<R, C> &other) const;
 
         template<size_t R1, size_t C1>
-        bool operator!=(const Matrix<R1, C1> &other) const;
+        bool operator!=(const Matrix<R1, C1> &that) const;
 
         const Table<R, C> &elems() const;
 
@@ -41,7 +41,7 @@ namespace rt::math::matrix {
          * is the same as the latter's number of rows.
          */
         template<size_t C0>
-        Matrix<R, C0> operator*(const Matrix<C, C0> &other) const;
+        Matrix<R, C0> operator*(const Matrix<C, C0> &that) const;
 
         Matrix<R - 1, C - 1> submatrix(size_t row, size_t col) const;
 

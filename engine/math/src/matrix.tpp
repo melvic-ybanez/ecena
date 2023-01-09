@@ -28,8 +28,8 @@ namespace rt::math::matrix {
 
     template<size_t R, size_t C>
     template<size_t R1, size_t C1>
-    bool Matrix<R, C>::operator!=(const Matrix<R1, C1> &other) const {
-        return !(*this == other);
+    bool Matrix<R, C>::operator!=(const Matrix<R1, C1> &that) const {
+        return !(*this == that);
     }
 
     template<size_t R, size_t C>
@@ -39,13 +39,13 @@ namespace rt::math::matrix {
 
     template<size_t R, size_t C>
     template<size_t C0>
-    Matrix<R, C0> Matrix<R, C>::operator*(const Matrix<C, C0> &other) const {
+    Matrix<R, C0> Matrix<R, C>::operator*(const Matrix<C, C0> &that) const {
         Matrix<R, C0> product;
         for (auto r = 0; r < R; r++) {
             for (auto c = 0; c < C0; c++) {
                 real sum = 0;
                 for (auto j = 0; j < C; j++) {
-                    sum += elems()[r][j] * other.elems()[j][c];
+                    sum += elems()[r][j] * that.elems()[j][c];
                 }
                 product[r][c] = sum;
             }

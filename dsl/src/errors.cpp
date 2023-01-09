@@ -43,4 +43,8 @@ namespace rt::dsl::errors {
     Error invalid_kind(const std::string &kind, const std::string &object, int line) {
         return {"Invalid type '" + kind + "' for object '" + object + "'", line};
     }
+
+    Error required_type(const std::string &type, int line) {
+        return {"Required type: '" + type + "'", line};
+    }
 }

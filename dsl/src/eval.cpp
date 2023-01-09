@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 12/27/22.
 //
 
+#include <iostream>
 #include "../include/eval.h"
 #include "../include/errors.h"
 
@@ -61,7 +62,7 @@ namespace rt::dsl::eval {
                 auto arr = to_array(*field.value_, 3, line);
                 auto from = to_point(*arr->elems[0], line);
                 auto to = to_point(*arr->elems[1], line);
-                auto up = to_vec(*arr->elems[1], line);
+                auto up = to_vec(*arr->elems[2], line);
                 camera.transform = math::matrix::view_transform(from, to, up);
             }
         }
@@ -208,7 +209,8 @@ namespace rt::dsl::eval {
                 transforms.push_back(matrix::rotation_z(r));
             } else if (*func == "shearing") {
                 auto values = to_num_array(*t->elems[1], 6, line);
-                transforms.push_back(matrix::shearing(values[0], values[1], values[2], values[3], values[4], values[5]));
+                transforms.push_back(
+                        matrix::shearing(values[0], values[1], values[2], values[3], values[4], values[5]));
             }
         }
 

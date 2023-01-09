@@ -21,7 +21,7 @@ namespace rt {
     Color World::shade_hit(const Comps &comps, int remaining) const {
         if (!light.has_value()) return Color::black_;
         auto shadowed = is_shadowed_at(comps.over_point);
-        auto surface = lights::lighting(*comps.object, *comps.object->material, light.value(), comps.point, comps.eye_vec,
+        auto surface = lights::lighting(*comps.object, *comps.object->material, light.value(), comps.over_point, comps.eye_vec,
                                 comps.normal_vec, shadowed);
 
         auto reflected = reflected_color(comps, remaining);

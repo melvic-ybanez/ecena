@@ -2,62 +2,72 @@
 A 3D Scene Renderer currently being written in C++.
 
 The project has two main parts:
-1. __Domain-specific language__ - this is a Json-like language that you need to use to describe the scene you want Ecena to render. Note that Ecena doesn't offer a UI, so the only way to communicate with the renderer is by using the DSL.
-2. __Rendering engine__ - the Ray Tracer modules responsible for the drawing of the 3D world.
+1. __Domain-specific language__. This is a Json-like language that you need to use to describe the scene you want Ecena to render. Note that Ecena doesn't offer a UI, so the only way to communicate with the renderer is by using the DSL.
+2. __Rendering engine__. This is the one responsible for the drawing of the 3D world.
 
-For instance, to render the example scene from the _Making a Scene_ chapter of [The Ray Tracer Challenge](http://raytracerchallenge.com/) (with the addition of shadows), 
-you can input the following code:
+Here's a basic example of a rendered scene:
+
+![esenca_basic_with_antialias](https://user-images.githubusercontent.com/4519785/211681017-17db5e46-8f90-461e-b78b-5012f3c48fa3.png)
+
+To generate such a scene, you need to input the following description using the DSL:
 
 ```json
 {
     "camera": {
-        "h_size": 700,
-        "v_size": 350,
+        "h_size": 1000,
+        "v_size": 600,
         "field_of_view": 1.0471975512,
-        "transform": [[0, 1.5, -5], [0, 1, 0], [0, 1, 0]]
+        "transform": [[0, 1.5, -5], [0, 1, 0], [0, 1, 0]],
+        "anti-aliasing": true
     },
     "world": {
-        "light": { "position": [-10, 10, -10], "intensity": [1, 1, 1] },
+        "light": { "position": [-10, 12, -10], "intensity": [1, 1, 1] },
         "objects": [
             { 
-                "type": "sphere", 
-                "transform": [["scale", [10, 0.01, 10]]], 
-                "material": { "color": [1, 0.9, 0.9], "specular": 0 } 
+                "name": "floor",
+                "description": "All the other objects will lie on top of this one",
+                "type": "plane", 
+                "material": {
+                    "pattern": { "type": "checkers", "components": [[1, 1, 1], [0.5, 0.5, 0.5]]},
+                    "reflectivity": 0.2
+                }
             },
-            { 
-                "type": "sphere", 
-                "transform": [
-                    ["scale", [10, 0.01, 10]], 
-                    ["rotate_x",  1.57079632679], 
-                    ["rotate_y", -0.78539816339], 
-                    ["translate", [0, 0, 5]]
-                ], 
-                "material": { "color": [1, 0.9, 0.9], "specular": 0 }
-            },
-            { 
-                "type": "sphere", 
-                "transform": [
-                    ["scale", [10, 0.01, 10]], 
-                    ["rotate_x",  1.57079632679], 
-                    ["rotate_y", 0.78539816339], 
-                    ["translate", [0, 0, 5]]
-                ], 
-                "material": { "color": [1, 0.9, 0.9], "specular": 0 }
-            },
-            { 
-                "type": "sphere", 
+            {
+                "type": "sphere",
+                "name": "middle_sphere",
                 "transform": [["translate", [-0.5, 1, 0.5]]],
-                "material": { "color": [0.1, 1, 0.5], "diffuse": 0.7, "specular": 0.3 }
+                "material": { 
+                    "color": [0.1, 1, 0.5],
+                    "diffuse": 0.7,
+                    "specular": 0.3,
+                    "pattern": {
+                        "type": "checkers",
+                        "components": [[0.08235294117, 0.72156862745, 0], [0.1, 1, 0.5]],
+                        "transform": [["scale", [0.25, 0.25, 0.25]], ["rotate_y", -0.78539816339]]
+                    },
+                    "reflectivity": 0.5
+                } 
             },
-            { 
-                "type": "sphere", 
-                "transform": [["scale", [0.5, 0.5, 0.5]], ["translate", [1.5, 0.5, -0.5]]],
-                "material": { "color": [0.5, 1, 0.1], "diffuse": 0.7, "specular": 0.3 }
-            },
-            { 
-                "type": "sphere", 
+            {
+                "type": "sphere",
+                "name": "left_sphere",
                 "transform": [["scale", [0.33, 0.33, 0.33]], ["translate", [-1.5, 0.33, -0.75]]],
-                "material": { "color": [1, 0.8, 0.1], "diffuse": 0.7, "specular": 0.3 }
+                "material": {
+                    "diffuse": 0.7,
+                    "specular": 0.3,
+                    "pattern": {
+                        "type": "ring",
+                        "components": [[1, 0.8, 0.1], [1, 1, 1]],
+                        "transform": [["scale", [0.33, 0.33, 0.33]], ["rotate_x", -0.72156862745]]
+                    },
+                    "reflectivity": 0.5
+                }
+            },
+            {
+                "type": "sphere",
+                "name": "right_sphere",
+                "transform": [["scale", [0.9, 0.9, 0.9]], ["translate", [2, 0.9, 2]]],
+                "material": { "color": [1, 0.5, 0.5], "diffuse": 0.7, "specular": 0.3, "reflectivity": 0.5}
             }
         ]
     }
@@ -70,12 +80,6 @@ You can either enter that code directly into the stardard input, or save it to a
 $ ecena < spheres.json
 ```
 
-You should get the following result: 
-
-![shadowed_spheres](https://user-images.githubusercontent.com/4519785/210240177-7d0a4f94-cf7b-45dd-b1a9-f0b411f110ad.png)
-
-**Note**: The DSL hasn't caught up to the engine yet. There are some features implemented in the engine
-that currently do not have corresponding DSL syntax, but they will be added soon.
 
 ---
 

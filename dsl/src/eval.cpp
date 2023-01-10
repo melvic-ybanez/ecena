@@ -28,14 +28,19 @@ namespace rt::dsl::eval {
 
     static const String *to_str(const Expr &expr, int line);
 
+    static const Boolean *to_bool(const Expr &expr, int line);
+
     static real to_real(const Expr &expr, int line);
 
     static Matrix<4, 4> to_transform(const Expr &expr, int line);
 
-    static void throw_invalid_field_error(const Field &field);
+    static void throw_unknown_field_error(const Field &field);
 
     template<typename>
     static void make_pattern(std::unique_ptr<Pattern> &pattern, const std::vector<Color> &components);
+
+    template<typename T, ExprType>
+    static const T *to_expr(const Expr &expr, int line);
 
     Data to_data(const Object &object) {
         Data data;
@@ -43,7 +48,7 @@ namespace rt::dsl::eval {
         for (auto &field: object.fields) {
             if (field.key() == "camera") data.camera = to_camera(*field.value_, field.line);
             else if (field.key() == "world") data.world = to_world(*field.value_, field.line);
-            else throw_invalid_field_error(field);
+            else throw_unknown_field_error(field);
         }
 
         return data;
@@ -55,15 +60,16 @@ namespace rt::dsl::eval {
 
         for (auto &field: obj->fields) {
             if (field.key() == "h_size") camera.h_size = to_real(*field.value_, field.line);
-            if (field.key() == "v_size") camera.v_size = to_real(*field.value_, field.line);
-            if (field.key() == "field_of_view") camera.field_of_view = to_real(*field.value_, field.line);
-            if (field.key() == "transform") {
+            else if (field.key() == "v_size") camera.v_size = to_real(*field.value_, field.line);
+            else if (field.key() == "field_of_view") camera.field_of_view = to_real(*field.value_, field.line);
+            else if (field.key() == "transform") {
                 auto arr = to_array(*field.value_, 3, line);
                 auto from = to_point(*arr->elems[0], line);
                 auto to = to_point(*arr->elems[1], line);
                 auto up = to_vec(*arr->elems[2], line);
                 camera.transform = math::matrix::view_transform(from, to, up);
-            }
+            } else if (field.key() == "anti-aliasing") camera.antialias = to_bool(*field.value_, field.line)->value;
+            else throw_unknown_field_error(field);
         }
 
         return camera;
@@ -117,7 +123,7 @@ namespace rt::dsl::eval {
                 shape->material = to_material(*field.value_, line);
             } else if (field.key() == "transform") {
                 shape->transformation = to_transform(*field.value_, line);
-            } else throw_invalid_field_error(field);
+            } else throw_unknown_field_error(field);
         }
 
         return shape;
@@ -134,7 +140,7 @@ namespace rt::dsl::eval {
             else if (field.key() == "diffuse") material->diffuse = to_real(*field.value_, field.line);
             else if (field.key() == "pattern") material->pattern = to_pattern(*field.value_, field.line);
             else if (field.key() == "reflectivity") material->reflectivity = to_real(*field.value_, field.line);
-            else throw_invalid_field_error(field);
+            else throw_unknown_field_error(field);
         }
 
         return material;
@@ -173,7 +179,7 @@ namespace rt::dsl::eval {
             SKIP_DOC_FIELDS;
             if (field.key() == "type" || field.key() == "components") continue;
             if (field.key() == "transform") pattern->transformation = to_transform(*field.value_, field.line);
-            else throw_invalid_field_error(field);
+            else throw_unknown_field_error(field);
         }
 
         return pattern;
@@ -271,10 +277,19 @@ namespace rt::dsl::eval {
         return elem_values;
     }
 
+    template<typename T, ExprType E>
+    const T *to_expr(const Expr &expr, int line) {
+        if (expr.type() != E)
+            throw errors::type_mismatch(E, expr.type(), line);
+        return dynamic_cast<const T *>(&expr);
+    }
+
     const Number *to_num(const Expr &expr, int line) {
-        if (expr.type() != ExprType::number)
-            throw errors::type_mismatch(ExprType::number, expr.type(), line);
-        return dynamic_cast<const Number *>(&expr);
+        return to_expr<Number, ExprType::number>(expr, line);
+    }
+
+    const Boolean *to_bool(const Expr &expr, int line) {
+        return to_expr<Boolean, ExprType::boolean>(expr, line);
     }
 
     real to_real(const Expr &expr, int line) {
@@ -282,9 +297,7 @@ namespace rt::dsl::eval {
     }
 
     const String *to_str(const Expr &expr, int line) {
-        if (expr.type() != ExprType::string)
-            throw errors::type_mismatch(ExprType::string, expr.type(), line);
-        return dynamic_cast<const String *>(&expr);
+        return to_expr<String, ExprType::string>(expr, line);
     }
 
     std::vector<double> to_num_array(const Expr &expr, size_t size, int line) {
@@ -299,13 +312,13 @@ namespace rt::dsl::eval {
             SKIP_DOC_FIELDS;
             if (field.key() == "position") light.position = to_point(*field.value_, field.line);
             else if (field.key() == "intensity") light.intensity = to_color(*field.value_, field.line);
-            else throw_invalid_field_error(field);
+            else throw_unknown_field_error(field);
         }
 
         return light;
     }
 
-    void throw_invalid_field_error(const Field &field) {
-        throw errors::invalid_field(field.key().value, field.line);
+    void throw_unknown_field_error(const Field &field) {
+        throw errors::unknown_field(field.key().value, field.line);
     }
 }

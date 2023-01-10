@@ -36,8 +36,8 @@ namespace rt::dsl::errors {
         return {"Wrong number of arguments. Expected: " + std::to_string(expected) + ". Got: " + std::to_string(got), line};
     }
 
-    Error invalid_field(const std::string &field_name, int line) {
-        return {"Invalid property: " + field_name, line };
+    Error unknown_field(const std::string &field_name, int line) {
+        return {"Unknown field: " + field_name, line };
     }
 
     Error invalid_kind(const std::string &kind, const std::string &object, int line) {

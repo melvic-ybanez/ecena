@@ -12,6 +12,7 @@ namespace rt::dsl {
     enum class TokenType {
         number,
         string,
+        boolean,
         left_brace,
         right_brace,
         left_bracket,
@@ -22,7 +23,7 @@ namespace rt::dsl {
         eof
     };
 
-    using TokenValue = std::optional<std::variant<std::string, double>>;
+    using TokenValue = std::optional<std::variant<std::string, double, bool>>;
 
     struct Token {
         TokenType type;

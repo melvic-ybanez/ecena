@@ -17,6 +17,7 @@ namespace rt::dsl {
             case ExprType::number: return "Number";
             case ExprType::string: return "String";
             case ExprType::array: return "Array";
+            case ExprType::boolean: return "Boolean";
         }
     }
 
@@ -52,6 +53,16 @@ namespace rt::dsl {
 
     ExprType Number::type() const {
         return ExprType::number;
+    }
+
+    Boolean::Boolean(bool value) : value{value} {}
+
+    ExprType Boolean::type() const {
+        return ExprType::boolean;
+    }
+
+    std::ostream &Boolean::display(std::ostream &out) const {
+        return out << value;
     }
 
     Field::Field(std::unique_ptr<String> key, std::unique_ptr<Expr> value, int line) :

@@ -13,15 +13,12 @@ namespace rt::dsl {
     class Field;
 
     enum class ExprType {
-        object,
-        number,
-        string,
-        array
+        object, number, string, array, boolean
     };
 
     std::string type_to_str(ExprType type);
 
-    class Expr  {
+    class Expr {
     public:
         Expr() = default;
 
@@ -80,6 +77,17 @@ namespace rt::dsl {
         std::vector<std::unique_ptr<Expr>> elems;
 
         Array(std::vector<std::unique_ptr<Expr>> elems);
+
+        ExprType type() const override;
+
+        std::ostream &display(std::ostream &out) const override;
+    };
+
+    class Boolean : public Expr {
+    public:
+        bool value;
+
+        Boolean(bool value);
 
         ExprType type() const override;
 

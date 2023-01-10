@@ -48,6 +48,8 @@ namespace rt::dsl {
 
         void scan_digit();
 
+        void scan_identifier();
+
         std::string lexeme() const;
     };
 }

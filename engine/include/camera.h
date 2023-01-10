@@ -18,6 +18,7 @@ namespace rt {
         double v_size;
         real field_of_view;     // how much the camera can see
         Matrix<4, 4> transform;
+        bool antialias;
 
         Camera();
 

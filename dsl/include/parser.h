@@ -24,6 +24,10 @@ namespace rt::dsl {
 
         std::unique_ptr<Array> parse_array();
 
+        std::unique_ptr<Boolean> parse_boolean();
+
+        std::unique_ptr<Number> parse_number();
+
         std::optional<Token> match(TokenType type);
 
         bool check(TokenType type) const;

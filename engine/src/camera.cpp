@@ -9,7 +9,8 @@ namespace rt {
     Camera::Camera(double h_size, double v_size, real field_of_view)
             : h_size{h_size}, v_size{v_size},
               field_of_view{field_of_view},
-              transform{math::matrix::identity<4, 4>()} {}
+              transform{math::matrix::identity<4, 4>()},
+              antialias{false} {}
 
     Camera::Camera() : Camera(0, 0, 0) {}
 
@@ -61,17 +62,35 @@ namespace rt {
     }
 
     Canvas Camera::render(const World &world) const {
-        auto image = Canvas{static_cast<int>(h_size), static_cast<int>(v_size)};
+        Canvas canvas{static_cast<int>(h_size), static_cast<int>(v_size)};
+
+        if (antialias) {
+            // set to higher resolution first
+            auto high_res = Camera{h_size * 2, v_size * 2, field_of_view}.render(world);
+
+            // apply down-sampling to remove jagged edges
+            for (auto y = 0; y < canvas.height(); y++) {
+                auto source_y = y * 2;
+                for (auto x = 0; x < canvas.width(); x++) {
+                    auto source_x = x * 2;
+                    auto average = (high_res[source_y][source_x] + high_res[source_y + 1][source_x]
+                            + high_res[source_y][source_x + 1] + high_res[source_y + 1][source_x + 1]) * 0.25;
+                    canvas[source_y][source_x] = average;
+                }
+            }
+
+            return canvas;
+        }
 
         for (auto y = 0; y < v_size; y++) {
             for (auto x = 0; x < h_size; x++) {
                 auto ray = ray_for_pixel(x, y);
                 auto color = world.color_at(ray);
-                image[y][x] = color;
+                canvas[y][x] = color;
             }
         }
 
-        return image;
+        return canvas;
     }
 
     std::ostream &operator<<(std::ostream &out, const Camera &camera) {

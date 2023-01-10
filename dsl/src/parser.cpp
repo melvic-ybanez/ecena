@@ -5,7 +5,13 @@
 #include "../include/parser.h"
 #include "../include/errors.h"
 
+#define PARSE_EXPR(type, fn) \
+    if (auto result = do_or_sync<type>([&] { return fn(); }); result != nullptr) return result
+
 namespace rt::dsl {
+    template<typename T, typename V, TokenType>
+    static std::unique_ptr<T> parse_to_type(Parser &parser);
+
     Parser::Parser(const std::vector<Token> tokens) : tokens{tokens}, current{0} {}
 
     bool Parser::is_at_end() const {
@@ -48,24 +54,15 @@ namespace rt::dsl {
     }
 
     std::unique_ptr<Expr> Parser::parse_expr() {
-        if (auto result = do_or_sync<Object>([&] { return parse_object(); }); result != nullptr) return result;
-        if (auto result = do_or_sync<String>([&] { return parse_string(); }); result != nullptr) return result;
-        auto result = do_or_sync<Number>([&] {
-            std::unique_ptr<Number> result;
-            if (auto result_ = match(TokenType::number); result_.has_value()) {
-                result = std::make_unique<Number>(std::get<double>(result_.value().value.value()));
-            }
-            return result;
-        });
-        if (result != nullptr) return result;
+        PARSE_EXPR(Object, parse_object);
+        PARSE_EXPR(String, parse_string);
+        PARSE_EXPR(Boolean, parse_boolean);
+        PARSE_EXPR(Number, parse_number);
         return parse_array();
     }
 
     std::unique_ptr<String> Parser::parse_string() {
-        if (auto result = match(TokenType::string); result.has_value()) {
-            return std::make_unique<String>(std::get<std::string>(result.value().value.value()));
-        }
-        return nullptr;
+        return parse_to_type<String, std::string, TokenType::string>(*this);
     }
 
     std::unique_ptr<Object> Parser::parse_object() {
@@ -73,6 +70,22 @@ namespace rt::dsl {
         std::vector<Field> fields = parse_fields();
         consume(TokenType::right_brace, "}", "after all the fields");
         return std::make_unique<Object>(std::move(fields));
+    }
+
+    std::unique_ptr<Boolean> Parser::parse_boolean() {
+        return parse_to_type<Boolean, bool, TokenType::boolean>(*this);
+    }
+
+    std::unique_ptr<Number> Parser::parse_number() {
+        return parse_to_type<Number, double, TokenType::number>(*this);
+    }
+
+    template<typename T, typename V, TokenType TT>
+    std::unique_ptr<T> parse_to_type(Parser &parser) {
+        if (auto result = parser.match(TT); result.has_value()) {
+            return std::make_unique<T>(std::get<V>(result.value().value.value()));
+        }
+        return nullptr;
     }
 
     Field Parser::parse_field() {

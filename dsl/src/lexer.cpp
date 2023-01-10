@@ -61,14 +61,14 @@ namespace rt::dsl {
                 scan_string();
                 break;
             case '-':
-                scan_digit();
-                break;
             case '+':
                 scan_digit();
                 break;
             default:
                 if (std::isdigit(c)) {
                     scan_digit();
+                } else if (std::isalpha(c)) {
+                    scan_identifier();
                 } else {
                     throw errors::invalid_character(c, line);
                 }
@@ -118,12 +118,12 @@ namespace rt::dsl {
     }
 
     void Lexer::scan_digit() {
-        while (std::isdigit(peek())) advance();
+        while (std::isdigit(peek()) && !is_at_end()) advance();
         if (peek() == '.' && std::isdigit(peek_next())) {
             advance();
             while (std::isdigit(peek())) advance();
         }
-        auto value_str = source.substr(start, current);
+        auto value_str = source.substr(start, current - start);
         auto value = std::stod(value_str);
         add_token(TokenType::number, value);
     }
@@ -144,5 +144,13 @@ namespace rt::dsl {
     char Lexer::peek_next() const {
         if (current + 1 >= source.size()) return 0;
         return source[current + 1];
+    }
+
+    void Lexer::scan_identifier() {
+        while (std::isalpha(peek()) && !is_at_end()) advance();
+        auto value_str = source.substr(start, current - start);
+        if (value_str == "true" || value_str == "false") {
+            add_token(TokenType::boolean, value_str == "true");
+        }
     }
 }

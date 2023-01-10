@@ -65,17 +65,19 @@ namespace rt {
         Canvas canvas{static_cast<int>(h_size), static_cast<int>(v_size)};
 
         if (antialias) {
+            int scale = 2;
+
             // set to higher resolution first
-            auto high_res = Camera{h_size * 2, v_size * 2, field_of_view}.render(world);
+            auto high_res = Camera{h_size * scale, v_size * scale, field_of_view}.render(world);
 
             // apply down-sampling to remove jagged edges
             for (auto y = 0; y < canvas.height(); y++) {
-                auto source_y = y * 2;
+                auto source_y = y * scale;
                 for (auto x = 0; x < canvas.width(); x++) {
-                    auto source_x = x * 2;
+                    auto source_x = x * scale;
                     auto average = (high_res[source_y][source_x] + high_res[source_y + 1][source_x]
                             + high_res[source_y][source_x + 1] + high_res[source_y + 1][source_x + 1]) * 0.25;
-                    canvas[source_y][source_x] = average;
+                    canvas[y][x] = average;
                 }
             }
 

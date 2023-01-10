@@ -15,8 +15,9 @@ namespace rt::intersections {
     Aggregate::Aggregate(AggregateData elems) : elems{std::move(elems)} {}
 
     Aggregate::~Aggregate() {
-        for (auto elem: elems) {
+        for (auto &elem: elems) {
             delete elem;
+            elem = nullptr;
         }
         elems.clear();
     }

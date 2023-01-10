@@ -68,7 +68,11 @@ namespace rt {
             int scale = 2;
 
             // set to higher resolution first
-            auto high_res = Camera{h_size * scale, v_size * scale, field_of_view}.render(world);
+            auto high_res_cam = *this;
+            high_res_cam.h_size *= scale;
+            high_res_cam.v_size *= scale;
+            high_res_cam.antialias = false;
+            auto high_res = high_res_cam.render(world);
 
             // apply down-sampling to remove jagged edges
             for (auto y = 0; y < canvas.height(); y++) {

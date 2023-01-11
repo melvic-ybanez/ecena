@@ -9,7 +9,7 @@ Here's a basic example of a rendered scene:
 
 ![esenca_basic_with_antialias](https://user-images.githubusercontent.com/4519785/211681017-17db5e46-8f90-461e-b78b-5012f3c48fa3.png)
 
-To generate such a scene, you need to input the following description using the DSL:
+To generate that scene, you need to input the following description using the DSL:
 
 ```json
 {
@@ -74,12 +74,21 @@ To generate such a scene, you need to input the following description using the 
 }
 ```
 
-You can either enter that code directly into the stardard input, or save it to a file and feed it into the program. For instance, if you save it as `spheres.json`, you can run Ecena as follows:
+You can either enter that code directly into the stardard input, or save it to a file and feed it into the program. For instance, if you save it as `spheres.json`, and you have
+access to the Ecena execuatble, you can run Ecena as follows:
 
 ```
 $ ecena < spheres.json
 ```
 
+You can also just use the python examples from the _examples_ directory. Using python allows you to assign names to your numerical values, remove duplication via
+abstractions and various constructs, and use more readable form of expressions. However, you still need to convert the Python object into Json (e.g. by printing it to the standard output) before passing it to Ecena.
+The Python equivalent of the Json code above can be found at _examples/esena/sphers.py_. An easy way to input a Python script
+is to use the pipe operator:
+
+```
+$ python3 ./examples/esena/spheres.py | ecena
+```
 
 ---
 

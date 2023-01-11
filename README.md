@@ -81,10 +81,12 @@ access to the Ecena execuatble, you can run Ecena as follows:
 $ ecena < spheres.json
 ```
 
-You can also just use the python examples from the _examples_ directory. Using python allows you to assign names to your numerical values, remove duplication via
-abstractions and various constructs, and use more readable form of expressions. However, you still need to convert the Python object into Json (e.g. by printing it to the standard output) before passing it to Ecena.
-The Python equivalent of the Json code above can be found at _examples/esena/sphers.py_. An easy way to input a Python script
-is to use the pipe operator:
+Depending on how complicated the scene you want to render is, you might find it more convenient to use a more expressive language, like Python. Using Python will allow you to assign
+names to your numerical values, remove duplication via abstractions and various language constructs, and use more readable form of expressions. However, you still need to convert the Python object into Json (e.g. by printing it to the standard output) before passing it to Ecena.
+
+The Python equivalent of the Json code above can be found at _examples/esena/spheres.py_. 
+
+An easy way to input a Python script is to use the pipe operator:
 
 ```
 $ python3 ./examples/esena/spheres.py | ecena

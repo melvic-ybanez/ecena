@@ -79,5 +79,7 @@ fabric.properties
 cmake-build-debug/*
 cmake-build-release/*
 
+__pycache__
+
 .DS_Store
 output.ppm

@@ -83,13 +83,15 @@ $ ecena < spheres.json
 Depending on how complicated the scene you want to render is, you might find it more convenient to use a more expressive language, like Python. Using Python will allow you to assign
 names to your numerical values, remove duplication via abstractions and various language constructs, and use more readable forms of expressions.
 
-We'll use Python to render the whole scene above. In fact, this repo already contains the example code at _examples/esena/spheres.py_. 
+We'll use Python to render the whole scene above. In fact, this repo already contains the example code at _examples/esena.py_. 
 
 An easy way to input a Python script is to use the pipe operator:
 
 ```
-$ python3 ./examples/esena/spheres.py | ecena
+$ python3 ./examples/esena.py | ecena
 ```
+
+No, the name of the file isn't a typo. It's the same name as the project Ecena is based on.
 ---
 
 Primary resource for the Ray Tracer: [The Ray Tracer Challenge](http://raytracerchallenge.com/). This book

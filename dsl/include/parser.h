@@ -28,6 +28,8 @@ namespace rt::dsl {
 
         std::unique_ptr<Number> parse_number();
 
+        std::unique_ptr<Null> parse_null();
+
         std::optional<Token> match(TokenType type);
 
         bool check(TokenType type) const;

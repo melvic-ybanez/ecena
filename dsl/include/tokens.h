@@ -20,7 +20,8 @@ namespace rt::dsl {
         comma,
         colon,
         dot,
-        eof
+        eof,
+        null
     };
 
     using TokenValue = std::optional<std::variant<std::string, double, bool>>;

@@ -54,11 +54,12 @@ namespace rt::dsl {
     }
 
     std::unique_ptr<Expr> Parser::parse_expr() {
-        PARSE_EXPR(Object, parse_object);
         PARSE_EXPR(String, parse_string);
         PARSE_EXPR(Boolean, parse_boolean);
         PARSE_EXPR(Number, parse_number);
-        return parse_array();
+        PARSE_EXPR(Array, parse_array);
+        PARSE_EXPR(Null, parse_null);
+        return parse_object();
     }
 
     std::unique_ptr<String> Parser::parse_string() {
@@ -66,7 +67,7 @@ namespace rt::dsl {
     }
 
     std::unique_ptr<Object> Parser::parse_object() {
-        consume(TokenType::left_brace, "{", "at the start of source");
+        consume(TokenType::left_brace, "{", "at the start of an object expression");
         std::vector<Field> fields = parse_fields();
         consume(TokenType::right_brace, "}", "after all the fields");
         return std::make_unique<Object>(std::move(fields));
@@ -78,6 +79,13 @@ namespace rt::dsl {
 
     std::unique_ptr<Number> Parser::parse_number() {
         return parse_to_type<Number, double, TokenType::number>(*this);
+    }
+
+    std::unique_ptr<Null> Parser::parse_null() {
+        if (auto result = match(TokenType::null); result.has_value()) {
+            return std::make_unique<Null>();
+        }
+        return nullptr;
     }
 
     template<typename T, typename V, TokenType TT>

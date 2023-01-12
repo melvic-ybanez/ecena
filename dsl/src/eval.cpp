@@ -147,6 +147,10 @@ namespace rt::dsl::eval {
     }
 
     std::unique_ptr<Pattern> to_pattern(const Expr &expr, int line) {
+        if (expr.type() == ExprType::null) {
+            return nullptr;
+        }
+
         auto obj = to_object(expr, line);
         std::unique_ptr<Pattern> pattern;
 

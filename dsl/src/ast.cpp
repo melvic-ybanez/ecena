@@ -18,6 +18,7 @@ namespace rt::dsl {
             case ExprType::string: return "String";
             case ExprType::array: return "Array";
             case ExprType::boolean: return "Boolean";
+            case ExprType::null: return "Null";
         }
     }
 
@@ -90,5 +91,13 @@ namespace rt::dsl {
 
     std::ostream &Array::display(std::ostream &out) const {
         return out << join_to_array(elems);
+    }
+
+    ExprType Null::type() const {
+        return ExprType::null;
+    }
+
+    std::ostream &Null::display(std::ostream &out) const {
+        return out << "null";
     }
 }

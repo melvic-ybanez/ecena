@@ -151,6 +151,8 @@ namespace rt::dsl {
         auto value_str = source.substr(start, current - start);
         if (value_str == "true" || value_str == "false") {
             add_token(TokenType::boolean, value_str == "true");
+        } else if (value_str == "null") {
+            add_token(TokenType::null);
         }
     }
 }

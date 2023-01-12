@@ -2,14 +2,14 @@
 A 3D Scene Renderer currently being written in C++.
 
 The project has two main parts:
-1. __Domain-specific language__. This is a Json-like language that you need to use to describe the scene you want Ecena to render. Note that Ecena doesn't offer a UI, so the only way to communicate with the renderer is by using the DSL.
+1. __Domain-specific language__. This is a Json-like language that you need to use to describe the scene you want Ecena to render. Note that Ecena doesn't offer a UI, so the only way to directly communicate with the renderer is by using the DSL (though nothing's stopping you from building your own UI).
 2. __Rendering engine__. This is the one responsible for the drawing of the 3D world.
 
 Here's a basic example of a rendered scene:
 
-![esenca_basic_with_antialias](https://user-images.githubusercontent.com/4519785/211681017-17db5e46-8f90-461e-b78b-5012f3c48fa3.png)
+![esena](https://user-images.githubusercontent.com/4519785/212139668-332f712d-5eb0-49f8-9fb7-30f6faf8dd8b.png)
 
-To generate that scene, you need to input the following description using the DSL:
+Let's generate a subset of that scene using the DSL. We won't include the 5 small spheres yet since that will involve a lot of code repetition. We'll rather use a different approach for them, as you'll see shortly. For now, we have these descriptions of the world and the camera:
 
 ```json
 {
@@ -74,24 +74,22 @@ To generate that scene, you need to input the following description using the DS
 }
 ```
 
-You can either enter that code directly into the stardard input, or save it to a file and feed it into the program. For instance, if you save it as `spheres.json`, and you have
-access to the Ecena execuatble, you can run Ecena as follows:
+You can either enter that code directly into the stardard input, or save it to a file and feed it into the program. For instance, if you save it as `spheres.json`, and you have access to the Ecena executable, you can run Ecena as follows:
 
 ```
 $ ecena < spheres.json
 ```
 
 Depending on how complicated the scene you want to render is, you might find it more convenient to use a more expressive language, like Python. Using Python will allow you to assign
-names to your numerical values, remove duplication via abstractions and various language constructs, and use more readable form of expressions. However, you still need to convert the Python object into Json (e.g. by printing it to the standard output) before passing it to Ecena.
+names to your numerical values, remove duplication via abstractions and various language constructs, and use more readable forms of expressions.
 
-The Python equivalent of the Json code above can be found at _examples/esena/spheres.py_. 
+We'll use Python to render the whole scene above. In fact, this repo already contains the example code at _examples/esena/spheres.py_. 
 
 An easy way to input a Python script is to use the pipe operator:
 
 ```
 $ python3 ./examples/esena/spheres.py | ecena
 ```
-
 ---
 
 Primary resource for the Ray Tracer: [The Ray Tracer Challenge](http://raytracerchallenge.com/). This book

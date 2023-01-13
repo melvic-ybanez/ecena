@@ -109,7 +109,8 @@ namespace rt::dsl::eval {
             if (field.key() == "type") {
                 auto type = to_str(*field.value_, field.line);
                 if (*type == "sphere") shape = std::make_unique<shapes::Sphere>();
-                else if (*type == "plane") shape = std::make_unique<shapes::Plane>();
+                if (*type == "plane") shape = std::make_unique<shapes::Plane>();
+                if (*type == "cube") shape = std::make_unique<shapes::Cube>();
 
                 has_type = true;
             }

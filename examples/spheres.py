@@ -1,7 +1,7 @@
 import json
 import math
 
-data = {
+data = json.dumps({
     "camera": {
         "h_size": 1000,
         "v_size": 600,
@@ -60,4 +60,6 @@ data = {
             }
         ]
     }
-}
+})
+
+print(data)

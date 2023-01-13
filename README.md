@@ -1,15 +1,15 @@
 # Ecena
-A 3D Scene Renderer currently being written in C++.
+
+![esena_with_cube](https://user-images.githubusercontent.com/4519785/212399208-c22e3be3-de54-4f7e-82ac-e6a737b9ef05.png)
+
+
+Ecena is a 3D Scene rendering program currently being written in C++.
 
 The project has two main parts:
 1. __Domain-specific language__. This is a Json-like language that you need to use to describe the scene you want Ecena to render. Note that Ecena doesn't offer a UI, so the only way to directly communicate with the renderer is by using the DSL (though nothing's stopping you from building your own UI).
 2. __Rendering engine__. This is the one responsible for the drawing of the 3D world.
 
-Here's a basic example of a rendered scene:
-
-![esena](https://user-images.githubusercontent.com/4519785/212139668-332f712d-5eb0-49f8-9fb7-30f6faf8dd8b.png)
-
-Let's generate a subset of that scene using the DSL. We won't include the 5 small spheres yet since that will involve a lot of code repetition. We'll rather use a different approach for them, as you'll see shortly. For now, we have these descriptions of the world and the camera:
+Here's a basic example of a scene written directly in Ecena's DSL:
 
 ```json
 {
@@ -80,18 +80,18 @@ You can either enter that code directly into the stardard input, or save it to a
 $ ecena < spheres.json
 ```
 
-Depending on how complicated the scene you want to render is, you might find it more convenient to use a more expressive language, like Python. Using Python will allow you to assign
-names to your numerical values, remove duplication via abstractions and various language constructs, and use more readable forms of expressions.
+This will generate a scene that is a subset of the one in the image above, containing only the three big spheres and the plane (and with the right sphere transformed differently). The file will be in PPM format, which you can open using any viewing tool that supports PPMs. 
 
-We'll use Python to render the whole scene above. In fact, this repo already contains the example code at _examples/esena.py_. 
+The whole example scene above corresponds to a code much more complicated that it would be more convenient to write it in a more expressive language, like Python. In fact, that's what I did. Here's the [Python script](https://github.com/melvic-ybanez/ecena/blob/main/examples/esena.py) that does that.
 
-An easy way to input a Python script is to use the pipe operator:
+You can pass it to Ecena using the pipe operator:
 
 ```
 $ python3 ./examples/esena.py | ecena
 ```
 
-No, the name of the file isn't a typo. It's the same name as the project Ecena is based on.
+Note that the name of the file isn't a typo. It's the same name as the project Ecena is based on.
+
 ---
 
 Primary resource for the Ray Tracer: [The Ray Tracer Challenge](http://raytracerchallenge.com/). This book

@@ -67,7 +67,12 @@ Here's a basic example of a scene written directly in Ecena's DSL:
                 "type": "sphere",
                 "name": "right_sphere",
                 "transform": [["scale", [0.9, 0.9, 0.9]], ["translate", [2, 0.9, 2]]],
-                "material": { "color": [1, 0.5, 0.5], "diffuse": 0.7, "specular": 0.3, "reflectivity": 0.5}
+                "material": { 
+                    "color": [1, 0.5, 0.5], 
+                    "diffuse": 0.7, 
+                    "specular": 0.3, 
+                    "reflectivity": 0.5
+                }
             }
         ]
     }
@@ -90,7 +95,7 @@ You can pass it to Ecena using the pipe operator:
 $ python3 ./examples/esena.py | ecena
 ```
 
-Note that the name of the file isn't a typo. It's the same name as the project Ecena is based on.
+Note that the name of the file isn't a typo. It's the same name as an old project of mine Ecena is based on.
 
 ---
 

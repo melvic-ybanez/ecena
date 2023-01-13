@@ -15,7 +15,6 @@ namespace rt::tests {
 
     void assert_true(const std::string &message, bool cond, const char *function_name, int line_no) {
         indent_set();
-        std::cout << "- ";
 
         if (cond) {
             std::cout << "[Successful] " << message;
@@ -38,7 +37,7 @@ namespace rt::tests {
 
     void set(const std::string &message, const std::function<void()> &f) {
         indent_set();
-        std::cout << "- " << message << std::endl;
+        std::cout << message << std::endl;
 
         set_level++;
         f();
@@ -47,7 +46,7 @@ namespace rt::tests {
 
     void indent_set() {
         for (int i = 0; i < set_level; i++) {
-            std::cout << "  ";
+            std::cout << "|  ";
         }
     }
 }

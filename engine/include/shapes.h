@@ -13,7 +13,7 @@
 
 namespace rt::shapes {
     enum class Type {
-        shape, sphere, plane, test
+        shape, sphere, plane, test, cube
     };
 
     std::ostream &operator<<(std::ostream &out, const Type &type);
@@ -64,6 +64,18 @@ namespace rt::shapes {
         Aggregate local_intersect(const Ray &ray) override;
 
         Vec local_normal_at(const Point &local_point) override;
+    };
+
+    class Cube : public Shape {
+    public:
+        Type type() const override;
+
+        Aggregate local_intersect(const Ray &ray) override;
+
+        Vec local_normal_at(const Point &local_point) override;
+
+    private:
+        std::array<real, 2> check_axis(real origin, real direction) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

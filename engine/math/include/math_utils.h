@@ -5,6 +5,7 @@
 #ifndef ECENA_MATH_UTILS_H
 #define ECENA_MATH_UTILS_H
 
+#include <limits>
 #include <ostream>
 
 namespace rt::math {
@@ -13,6 +14,8 @@ namespace rt::math {
     constexpr inline double epsilon = 0.0001;
 
     constexpr inline double pi = 3.14159265358979323846;
+
+    constexpr inline real infinity = std::numeric_limits<real>::max();
 
     bool compare_reals(real a, real b);
 

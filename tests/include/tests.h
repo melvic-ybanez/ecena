@@ -61,6 +61,10 @@ namespace rt::tests {
     namespace patterns_ {
         void test();
     }
+
+    namespace cubes {
+        void test();
+    }
 }
 
 #endif //ECENA_TESTS_H

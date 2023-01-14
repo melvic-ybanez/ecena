@@ -35,6 +35,8 @@ namespace rt::materials {
         bool is_transparent() const;
     };
 
+    Material glass();
+
     std::ostream &operator<<(std::ostream &out, const Material &mat);
 }
 

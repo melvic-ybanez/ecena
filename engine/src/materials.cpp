@@ -39,4 +39,16 @@ namespace rt::materials {
     bool Material::is_transparent() const {
         return transparency > 0;
     }
+
+    Material glass() {
+        Material material;
+        material.diffuse = 0.1;
+        material.specular = 1.0;
+        material.shininess = 300.0;
+        material.transparency = 1.0;
+        material.reflectivity = 1.0;
+        material.refractive_index = refractive_indices::glass;
+
+        return material;
+    }
 }

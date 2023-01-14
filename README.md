@@ -20,14 +20,14 @@ Here's a basic example of a scene written directly in Ecena's DSL:
         "anti-aliasing": true
     },
     "world": {
-        "light": { "position": [-10, 12, -10], "intensity": [1, 1, 1] },
+        "light": { "position": [-10, 12, -10], "intensity": "white" },
         "objects": [
             { 
                 "name": "floor",
                 "description": "All the other objects will lie on top of this one",
                 "type": "plane", 
                 "material": {
-                    "pattern": { "type": "checkers", "components": [[1, 1, 1], [0.5, 0.5, 0.5]]},
+                    "pattern": { "type": "checkers", "components": ["white", [0.5, 0.5, 0.5]]},
                     "reflectivity": 0.2
                 }
             },

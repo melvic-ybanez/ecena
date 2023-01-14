@@ -7,6 +7,7 @@
 
 #define SKIP_DOC_FIELDS_OF(field) if (field.key() == "name" || field.key() == "description") continue
 #define SKIP_DOC_FIELDS SKIP_DOC_FIELDS_OF(field)
+#define IGNORE_ERRORS(fn) try { fn; } catch (...) {}
 
 namespace rt::dsl::eval {
     static Point to_point(const Expr &expr, int line);
@@ -132,9 +133,9 @@ namespace rt::dsl::eval {
             auto &key = field.key();
             if (key == "type" || key == "minimum" || key == "maximum" || key == "closed") continue;
             if (key == "material") {
-                shape->material = to_material(*field.value_, line);
+                shape->material = to_material(*field.value_, field.line);
             } else if (key == "transform") {
-                shape->transformation = to_transform(*field.value_, line);
+                shape->transformation = to_transform(*field.value_, field.line);
             } else throw_unknown_field_error(field);
         }
 
@@ -142,6 +143,11 @@ namespace rt::dsl::eval {
     }
 
     std::unique_ptr<Material> to_material(const Expr &expr, int line) {
+        IGNORE_ERRORS(
+                auto mat_str = to_str(expr, line);
+                if (*mat_str == "glass") return std::unique_ptr<Material>{new Material{materials::glass()}};
+        )
+
         auto obj = to_object(expr, line);
         auto material = std::make_unique<Material>();
 
@@ -258,6 +264,12 @@ namespace rt::dsl::eval {
     }
 
     Color to_color(const Expr &expr, int line) {
+        IGNORE_ERRORS(
+                auto color_str = to_str(expr, line);
+                if (*color_str == "white") return Color::white_;
+                if (*color_str == "black") return Color::black_;
+        )
+
         auto point = to_point(expr, line);
         return Color{point.x(), point.y(), point.z()};
     }

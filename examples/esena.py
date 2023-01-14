@@ -99,4 +99,44 @@ for i in range(0, 5):
 
     objects.append(small_sphere)
 
+
+def cylinders():
+    colors = [[40, 103, 160], [72, 120, 170], [99, 141, 187], [121, 158, 196], [157, 179, 208]]
+    offset_scale = 0.8
+    acc = [
+        {
+            "type": "cylinder",
+            "minimum": -0.1,
+            "maximum": 0.1,
+            "material": {
+                "color": [7.0 / 255, 87.0 / 255, 152.0 / 255]
+            },
+            "transform": [["scale", [offset_scale, 1, offset_scale]], ["translate", [2, 0.1, 0.5]]]
+        }
+    ]
+    for i in range(0, 5):
+        last = acc[-1]
+        scale_factor = offset_scale - ((i + 1) * 0.2)
+        if scale_factor < 0.2:
+            scale_factor = offset_scale / math.pow(2, i)
+        r, g, b = colors[i]
+
+        new_mat = copy.deepcopy(last['material'])
+        new_mat['color'] = [r / 255.0, g / 255.0, b / 255.0]
+
+        new_cyl = {
+            'type': 'cylinder',
+            'minimum': last['minimum'] - 0.1,
+            'maximum': last['maximum'] + 0.1,
+            'material': new_mat,
+            'transform': [['scale', [scale_factor, 1, scale_factor]], ['translate', [2, last['maximum'] + 0.1, 0.5]]]
+        }
+
+        acc.append(new_cyl)
+
+    return acc
+
+
+objects += cylinders()
+
 print(json.dumps(data))

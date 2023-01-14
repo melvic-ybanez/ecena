@@ -111,6 +111,16 @@ namespace rt::dsl::eval {
                 if (*type == "sphere") shape = std::make_unique<shapes::Sphere>();
                 if (*type == "plane") shape = std::make_unique<shapes::Plane>();
                 if (*type == "cube") shape = std::make_unique<shapes::Cube>();
+                if (*type == "cylinder") {
+                    auto cylinder = new shapes::Cylinder;
+                    for (auto &cyl_field: obj->fields) {
+                        auto &key = cyl_field.key();
+                        if (key == "minimum") cylinder->minimum = to_real(*cyl_field.value_, cyl_field.line);
+                        if (key == "maximum") cylinder->maximum = to_real(*cyl_field.value_, cyl_field.line);
+                        if (key == "closed") cylinder->closed = to_bool(*cyl_field.value_, cyl_field.line);
+                    }
+                    shape = std::unique_ptr<shapes::Cylinder>(cylinder);
+                }
 
                 has_type = true;
             }
@@ -119,10 +129,11 @@ namespace rt::dsl::eval {
 
         for (auto &field: obj->fields) {
             SKIP_DOC_FIELDS;
-            if (field.key() == "type") continue;
-            if (field.key() == "material") {
+            auto &key = field.key();
+            if (key == "type" || key == "minimum" || key == "maximum" || key == "closed") continue;
+            if (key == "material") {
                 shape->material = to_material(*field.value_, line);
-            } else if (field.key() == "transform") {
+            } else if (key == "transform") {
                 shape->transformation = to_transform(*field.value_, line);
             } else throw_unknown_field_error(field);
         }

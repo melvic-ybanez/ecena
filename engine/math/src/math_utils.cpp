@@ -27,6 +27,10 @@ namespace rt::math {
         return result;
     }
 
+    bool close_to_zero(real value) {
+        return math::compare_reals(value, math::epsilon);
+    }
+
     std::ostream &operator<<(std::ostream &out, const Dimensions &dimensions) {
         return out << "{ width: " << dimensions.width << ", height: " << dimensions.height << " }";
     }

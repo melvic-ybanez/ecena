@@ -13,7 +13,7 @@
 
 namespace rt::shapes {
     enum class Type {
-        shape, sphere, plane, test, cube
+        shape, sphere, plane, test, cube, cylinder
     };
 
     std::ostream &operator<<(std::ostream &out, const Type &type);
@@ -76,6 +76,33 @@ namespace rt::shapes {
 
     private:
         std::array<real, 2> check_axis(real origin, real direction) const;
+    };
+
+    class Cylinder : public Shape {
+    public:
+        constexpr static int radius_ = 1;
+
+        real minimum;
+        real maximum;
+        bool closed;
+
+        Cylinder();
+
+        Cylinder(real minimum, real maximum, bool closed = false);
+
+        Type type() const override;
+
+        Aggregate local_intersect(const Ray &ray) override;
+
+        Vec local_normal_at(const Point &local_point) override;
+
+    private:
+        /**
+         * Checks if the intersection at `t` is within the radius from the y-axis.
+         */
+        bool check_cap(const Ray &ray, real t) const;
+
+        Aggregate &intersect_caps(const Ray &ray, Aggregate &xs);
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

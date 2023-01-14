@@ -34,6 +34,8 @@ namespace rt::math {
     };
 
     std::ostream &operator<<(std::ostream &out, const Dimensions &dimensions);
+
+    bool close_to_zero(real value);
 }
 
 namespace rt {

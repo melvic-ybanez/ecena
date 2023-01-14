@@ -55,6 +55,8 @@ namespace rt::intersections {
 
         Intersection *hit();
 
+        void add(Intersection *intersection);
+
         void combine_with(Aggregate &that);
 
         void sort();

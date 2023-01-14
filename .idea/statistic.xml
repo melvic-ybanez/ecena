@@ -6,6 +6,7 @@
       <list>
         <option value="$PROJECT_DIR$/cmake-build-debug" />
         <option value="$PROJECT_DIR$/cmake-build-release" />
+        <option value="$PROJECT_DIR$/venv" />
       </list>
     </option>
   </component>

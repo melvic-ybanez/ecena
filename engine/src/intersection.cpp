@@ -62,4 +62,8 @@ namespace rt::intersections {
                   [](Intersection *t1, Intersection *t2) { return *t1 < *t2; });
         is_sorted = true;
     }
+
+    void Aggregate::add(Intersection *intersection) {
+        elems.push_back(intersection);
+    }
 }

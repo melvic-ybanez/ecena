@@ -60,6 +60,6 @@ data = json.dumps({
             }
         ]
     }
-})
+}, indent=2)
 
 print(data)

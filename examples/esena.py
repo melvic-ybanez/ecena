@@ -11,7 +11,7 @@ left_sphere = {
         "specular": 0.3,
         "pattern": {
             "type": "ring",
-            "components": [[1, 0.8, 0.1], [1, 1, 1]],
+            "components": [[1, 0.8, 0.1], 'white'],
             "transform": [["scale", [0.33, 0.33, 0.33]], ["rotate_x", -math.pi / 4]]
         },
         "reflectivity": 0.5
@@ -24,7 +24,7 @@ objects = [
         "description": "All the other objects will lie on top of this one",
         "type": "plane",
         "material": {
-            "pattern": {"type": "checkers", "components": [[1, 1, 1], [0.5, 0.5, 0.5]]},
+            "pattern": {"type": "checkers", "components": ['white', [0.5, 0.5, 0.5]]},
             "reflectivity": 0.2
         }
     },
@@ -76,7 +76,7 @@ camera = {
 }
 
 world = {
-    "light": {"position": [-10, 12, -10], "intensity": [1, 1, 1]},
+    "light": {"position": [-10, 12, -10], "intensity": "white"},
     "objects": objects
 }
 
@@ -137,6 +137,37 @@ def cylinders():
     return acc
 
 
-objects += cylinders()
+def glasses():
+    upper_base = {
+        "type": "cylinder",
+        "closed": True,
+        "minimum": -0.025,
+        "maximum": 0.025,
+        "transform": [['scale', [0.3, 1.0, 0.3]], ['translate', [0.7, 0.575, -1.5]]],
+        'material': 'glass'
+    }
+    body = {
+        'type': 'cylinder',
+        'closed': True,
+        'minimum': -0.275,
+        'maximum': 0.275,
+        'transform': [['scale', [0.05, 1.0, 0.05]], ['translate', [0.7, 0.275, -1.5]]],
+        'material': 'glass'
+    }
+    sphere = {
+        'type': 'sphere',
+        'transform': [['scale', [0.25, 0.25, 0.25]], ['translate', [0.7, 0.85, -1.5]]],
+        'material': 'glass'
+    }
+    small_sphere = {
+        'type': 'sphere',
+        'transform': [['scale', [0.15, 0.15, 0.15]], ['translate', [0.7, 1.25, -1.5]]],
+        'material': 'glass'
+    }
 
-print(json.dumps(data))
+    return [upper_base, body, sphere, small_sphere]
+
+
+objects += cylinders() + glasses()
+
+print(json.dumps(data, indent=2))

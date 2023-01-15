@@ -35,6 +35,8 @@ namespace rt::dsl::eval {
 
     static Matrix<4, 4> to_transform(const Expr &expr, int line);
 
+    static void init_cylinder_like(shapes::CylinderLike *cylinder_like, const Object *obj);
+
     static void throw_unknown_field_error(const Field &field);
 
     template<typename>
@@ -114,13 +116,13 @@ namespace rt::dsl::eval {
                 if (*type == "cube") shape = std::make_unique<shapes::Cube>();
                 if (*type == "cylinder") {
                     auto cylinder = new shapes::Cylinder;
-                    for (auto &cyl_field: obj->fields) {
-                        auto &key = cyl_field.key();
-                        if (key == "minimum") cylinder->minimum = to_real(*cyl_field.value_, cyl_field.line);
-                        if (key == "maximum") cylinder->maximum = to_real(*cyl_field.value_, cyl_field.line);
-                        if (key == "closed") cylinder->closed = to_bool(*cyl_field.value_, cyl_field.line);
-                    }
+                    init_cylinder_like(cylinder, obj);
                     shape = std::unique_ptr<shapes::Cylinder>(cylinder);
+                }
+                if (*type == "cone") {
+                    auto cone = new shapes::Cone;
+                    init_cylinder_like(cone, obj);
+                    shape = std::unique_ptr<shapes::Cone>(cone);
                 }
 
                 has_type = true;
@@ -140,6 +142,15 @@ namespace rt::dsl::eval {
         }
 
         return shape;
+    }
+
+    void init_cylinder_like(shapes::CylinderLike *cylinder_like, const Object *obj) {
+        for (auto &field: obj->fields) {
+            auto &key = field.key();
+            if (key == "minimum") cylinder_like->minimum = to_real(*field.value_, field.line);
+            if (key == "maximum") cylinder_like->maximum = to_real(*field.value_, field.line);
+            if (key == "closed") cylinder_like->closed = to_bool(*field.value_, field.line);
+        }
     }
 
     std::unique_ptr<Material> to_material(const Expr &expr, int line) {

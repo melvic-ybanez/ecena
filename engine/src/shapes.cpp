@@ -177,6 +177,18 @@ namespace rt::shapes {
         return xs;
     }
 
+    Vec CylinderLike::normal_at(const Point &point, real y) {
+        auto distance_from_y_squared = std::pow(point.x(), 2) + std::pow(point.z(), 2);
+        if (distance_from_y_squared < 1 && point.y() >= maximum - math::epsilon) {
+            return {0, 1, 0};
+        }
+        if (distance_from_y_squared < 1 && point.y() <= minimum + math::epsilon) {
+            return {0, -1, 0};
+        }
+
+        return {point.x(), y, point.z()};
+    }
+
     Cylinder::Cylinder(real minimum, real maximum, bool closed) : CylinderLike(minimum, maximum, closed) {}
 
     Type Cylinder::type() const {
@@ -200,15 +212,7 @@ namespace rt::shapes {
     }
 
     Vec Cylinder::local_normal_at(const Point &local_point) {
-        auto distance_from_y_squared = std::pow(local_point.x(), 2) + std::pow(local_point.z(), 2);
-        if (distance_from_y_squared < 1 && local_point.y() >= maximum - math::epsilon) {
-            return {0, 1, 0};
-        }
-        if (distance_from_y_squared < 1 && local_point.y() <= minimum + math::epsilon) {
-            return {0, -1, 0};
-        }
-
-        return {local_point.x(), 0, local_point.z()};
+        return CylinderLike::normal_at(local_point, 0);
     }
 
     Cone::Cone(real minimum, real maximum, bool closed) : CylinderLike(minimum, maximum, closed) {}
@@ -223,9 +227,9 @@ namespace rt::shapes {
         auto b = 2 * o.x() * d.x() - 2 * o.y() * d.y() + 2 * o.z() * d.z();
         auto c = math::pow2(o.x()) - math::pow2(o.y()) + math::pow2(o.z());
 
-        Aggregate xs;
+        if (math::close_to_zero(a)) {
+            if (math::close_to_zero(b)) return {};
 
-        if (math::close_to_zero(a) && !math::close_to_zero(b)) {
             auto t = -c / (2.0 * b);
             return {{new Intersection{t, this}}};
         }
@@ -236,7 +240,7 @@ namespace rt::shapes {
     Vec Cone::local_normal_at(const Point &local_point) {
         auto y = std::sqrt(math::pow2(local_point.x()) + math::pow2(local_point.z()));
         if (local_point.y() > 0) y = -y;
-        return {local_point.x(), y, local_point.z()};
+        return CylinderLike::normal_at(local_point, y);
     }
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {

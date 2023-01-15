@@ -168,6 +168,35 @@ def glasses():
     return [upper_base, body, sphere, small_sphere]
 
 
-objects += cylinders() + glasses()
+def cones():
+    base_color = [1.0, 168.0 / 255.0, 18.0 / 255.0]
+    cone = {
+        'type': 'cone',
+        'minimum': -1.0,
+        'maximum': 0,
+        'closed': True,
+        'material': {
+            'pattern': {
+                'type': 'stripe',
+                'components': ['white', base_color],
+                'transform': [['scale', [0.15, 0.15, 0.15]], ['rotate_z', math.pi / 2.0]]
+            }
+        },
+        'transform': [['scale', [0.5, 1.5, 0.5]], ['translate', [-3.5, 1.6, 4.5]]]
+    }
+    base = {
+        'type': 'cylinder',
+        'closed': True,
+        'minimum': -0.1,
+        'maximum': 0.1,
+        'material': {
+            'color': base_color
+        },
+        'transform': [['scale', [0.6, 1.0, 0.6]], ['translate', [-3.5, 0.1, 4.5]]]
+    }
+    return [base, cone]
+
+
+objects += cylinders() + glasses() + cones()
 
 print(json.dumps(data, indent=2))

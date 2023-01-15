@@ -157,10 +157,10 @@ namespace rt::shapes {
         return std::move(intersect_caps(ray, xs));
     }
 
-    bool CylinderLike::check_cap(const Ray &ray, real t) const {
+    bool CylinderLike::check_cap(const Ray &ray, real t, real limit) const {
         auto x = ray.origin.x() + t * ray.direction.x();
         auto z = ray.origin.z() + t * ray.direction.z();
-        return (x * x + z * z) <= radius_;
+        return (x * x + z * z) <= std::abs(limit);
     }
 
     Aggregate &CylinderLike::intersect_caps(const Ray &ray, Aggregate &xs) {
@@ -168,11 +168,11 @@ namespace rt::shapes {
 
         // intersection with the lower end cap (y = min)
         auto t = (minimum - ray.origin.y()) / ray.direction.y();
-        if (check_cap(ray, t)) xs.add(new Intersection{t, this});
+        if (check_cap(ray, t, min_limit())) xs.add(new Intersection{t, this});
 
         // intersection with the upper end cap (y = max)
         t = (maximum - ray.origin.y()) / ray.direction.y();
-        if (check_cap(ray, t)) xs.add(new Intersection{t, this});
+        if (check_cap(ray, t, max_limit())) xs.add(new Intersection{t, this});
 
         return xs;
     }
@@ -215,6 +215,14 @@ namespace rt::shapes {
         return CylinderLike::normal_at(local_point, 0);
     }
 
+    real Cylinder::min_limit() const {
+        return 1;
+    }
+
+    real Cylinder::max_limit() const {
+        return 1;
+    }
+
     Cone::Cone(real minimum, real maximum, bool closed) : CylinderLike(minimum, maximum, closed) {}
 
     Type Cone::type() const {
@@ -241,6 +249,14 @@ namespace rt::shapes {
         auto y = std::sqrt(math::pow2(local_point.x()) + math::pow2(local_point.z()));
         if (local_point.y() > 0) y = -y;
         return CylinderLike::normal_at(local_point, y);
+    }
+
+    real Cone::min_limit() const {
+        return minimum;
+    }
+
+    real Cone::max_limit() const {
+        return maximum;
     }
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {

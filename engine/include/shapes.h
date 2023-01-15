@@ -80,8 +80,6 @@ namespace rt::shapes {
 
     class CylinderLike: public Shape {
     public:
-        constexpr static int radius_ = 1;
-
         real minimum;
         real maximum;
         bool closed;
@@ -108,9 +106,13 @@ namespace rt::shapes {
         /**
          * Checks if the intersection at `t` is within the radius from the y-axis.
          */
-        bool check_cap(const Ray &ray, real t) const;
+        bool check_cap(const Ray &ray, real t, real limit) const;
 
         Aggregate &intersect_caps(const Ray &ray, Aggregate &xs);
+
+        virtual real min_limit() const = 0;
+
+        virtual real max_limit() const = 0;
     };
 
     class Cylinder : public CylinderLike {
@@ -124,6 +126,11 @@ namespace rt::shapes {
         Aggregate local_intersect(const Ray &ray) override;
 
         Vec local_normal_at(const Point &local_point) override;
+
+    protected:
+        real min_limit() const override;
+
+        real max_limit() const override;
     };
 
     class Cone : public CylinderLike {
@@ -137,6 +144,11 @@ namespace rt::shapes {
         Aggregate local_intersect(const Ray &ray) override;
 
         Vec local_normal_at(const Point &local_point) override;
+
+    protected:
+        real min_limit() const override;
+
+        real max_limit() const override;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

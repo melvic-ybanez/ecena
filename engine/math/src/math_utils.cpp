@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 12/8/22.
 //
 
+#include <cmath>
 #include "../include/math_utils.h"
 #include <cstdlib>
 #include <cmath>
@@ -28,10 +29,14 @@ namespace rt::math {
     }
 
     bool close_to_zero(real value) {
-        return math::compare_reals(value, math::epsilon);
+        return  math::compare_reals(value, 0);
     }
 
     std::ostream &operator<<(std::ostream &out, const Dimensions &dimensions) {
         return out << "{ width: " << dimensions.width << ", height: " << dimensions.height << " }";
+    }
+
+    real pow2(real value) {
+        return std::pow(value, 2);
     }
 }

@@ -27,6 +27,7 @@ int main() {
     patterns_::test();
     cubes::test();
     cylinders::test();
+    cones::test();
 
     std::cout << "Ran " << test_count << " tests. Successful: " << success_count << ". Failed: "
               << test_count - success_count << ".";

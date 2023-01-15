@@ -29,6 +29,11 @@ namespace rt::tests {
         std::cout << std::endl;
     }
 
+    void assert_equals_reals(const std::string &message, real v1, real v2, const char *function_name, int line_no) {
+        return assert_equals<real, real>(message, v1, v2, function_name, line_no,
+                                         [](real v1, real v2) { return math::compare_reals(v1, v2); });
+    }
+
     void scenario(const std::string &message, const std::function<void()> &f) {
         scenario_msg = message;
         f();

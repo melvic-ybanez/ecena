@@ -13,7 +13,7 @@
 
 namespace rt::shapes {
     enum class Type {
-        shape, sphere, plane, test, cube, cylinder
+        shape, sphere, plane, test, cube, cylinder, cone
     };
 
     std::ostream &operator<<(std::ostream &out, const Type &type);
@@ -78,7 +78,7 @@ namespace rt::shapes {
         std::array<real, 2> check_axis(real origin, real direction) const;
     };
 
-    class Cylinder : public Shape {
+    class CylinderLike: public Shape {
     public:
         constexpr static int radius_ = 1;
 
@@ -86,7 +86,23 @@ namespace rt::shapes {
         real maximum;
         bool closed;
 
-        Cylinder();
+        CylinderLike();
+
+        CylinderLike(real minimum, real maximum, bool closed = false);
+
+    protected:
+        Aggregate intersect(const Ray &ray, real a, real b, real c);
+        /**
+         * Checks if the intersection at `t` is within the radius from the y-axis.
+         */
+        bool check_cap(const Ray &ray, real t) const;
+
+        Aggregate &intersect_caps(const Ray &ray, Aggregate &xs);
+    };
+
+    class Cylinder : public CylinderLike {
+    public:
+        Cylinder() = default;
 
         Cylinder(real minimum, real maximum, bool closed = false);
 
@@ -95,14 +111,19 @@ namespace rt::shapes {
         Aggregate local_intersect(const Ray &ray) override;
 
         Vec local_normal_at(const Point &local_point) override;
+    };
 
-    private:
-        /**
-         * Checks if the intersection at `t` is within the radius from the y-axis.
-         */
-        bool check_cap(const Ray &ray, real t) const;
+    class Cone : public CylinderLike {
+    public:
+        Cone() = default;
 
-        Aggregate &intersect_caps(const Ray &ray, Aggregate &xs);
+        Cone(real minimum, real maximum, bool closed = false);
+
+        Type type() const override;
+
+        Aggregate local_intersect(const Ray &ray) override;
+
+        Vec local_normal_at(const Point &local_point) override;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

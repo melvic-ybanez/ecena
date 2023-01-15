@@ -69,6 +69,10 @@ namespace rt::tests {
     namespace cylinders {
         void test();
     }
+
+    namespace cones {
+        void test();
+    }
 }
 
 #endif //ECENA_TESTS_H

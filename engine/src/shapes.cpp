@@ -125,26 +125,13 @@ namespace rt::shapes {
         return {0, 0, local_point.z()};
     }
 
-    Cylinder::Cylinder() : Cylinder(-math::infinity, math::infinity) {}
+    CylinderLike::CylinderLike() : CylinderLike(-math::infinity, math::infinity) {}
 
-    Cylinder::Cylinder(real minimum, real maximum, bool closed) : minimum{minimum}, maximum{maximum}, closed{closed} {}
+    CylinderLike::CylinderLike(real minimum, real maximum, bool closed) : minimum{minimum}, maximum{maximum},
+                                                                          closed{closed} {}
 
-    Type Cylinder::type() const {
-        return Type::cylinder;
-    }
-
-    Aggregate Cylinder::local_intersect(const Ray &ray) {
+    Aggregate CylinderLike::intersect(const Ray &ray, real a, real b, real c) {
         auto [origin, direction] = ray;
-        auto a = std::pow(direction.x(), 2) + std::pow(direction.z(), 2);
-
-        // ray is parallel to the y-axis
-        if (math::close_to_zero(a)) {
-            Aggregate aggregate;
-            return std::move(intersect_caps(ray, aggregate));
-        }
-
-        auto b = 2 * origin.x() * direction.x() + 2 * ray.origin.z() * ray.direction.z();
-        auto c = std::pow(origin.x(), 2) + std::pow(origin.z(), 2) - 1;
 
         auto discriminant = b * b - 4 * a * c;
 
@@ -170,6 +157,48 @@ namespace rt::shapes {
         return std::move(intersect_caps(ray, xs));
     }
 
+    bool CylinderLike::check_cap(const Ray &ray, real t) const {
+        auto x = ray.origin.x() + t * ray.direction.x();
+        auto z = ray.origin.z() + t * ray.direction.z();
+        return (x * x + z * z) <= radius_;
+    }
+
+    Aggregate &CylinderLike::intersect_caps(const Ray &ray, Aggregate &xs) {
+        if (!closed || math::close_to_zero(ray.direction.y())) return xs;
+
+        // intersection with the lower end cap (y = min)
+        auto t = (minimum - ray.origin.y()) / ray.direction.y();
+        if (check_cap(ray, t)) xs.add(new Intersection{t, this});
+
+        // intersection with the upper end cap (y = max)
+        t = (maximum - ray.origin.y()) / ray.direction.y();
+        if (check_cap(ray, t)) xs.add(new Intersection{t, this});
+
+        return xs;
+    }
+
+    Cylinder::Cylinder(real minimum, real maximum, bool closed) : CylinderLike(minimum, maximum, closed) {}
+
+    Type Cylinder::type() const {
+        return Type::cylinder;
+    }
+
+    Aggregate Cylinder::local_intersect(const Ray &ray) {
+        auto [origin, direction] = ray;
+        auto a = math::pow2(direction.x()) + math::pow2(direction.z());
+
+        // ray is parallel to the y-axis
+        if (math::close_to_zero(a)) {
+            Aggregate aggregate;
+            return std::move(intersect_caps(ray, aggregate));
+        }
+
+        auto b = 2 * origin.x() * direction.x() + 2 * ray.origin.z() * ray.direction.z();
+        auto c = math::pow2(origin.x()) + math::pow2(origin.z()) - 1;
+
+        return CylinderLike::intersect(ray, a, b, c);
+    }
+
     Vec Cylinder::local_normal_at(const Point &local_point) {
         auto distance_from_y_squared = std::pow(local_point.x(), 2) + std::pow(local_point.z(), 2);
         if (distance_from_y_squared < 1 && local_point.y() >= maximum - math::epsilon) {
@@ -182,24 +211,32 @@ namespace rt::shapes {
         return {local_point.x(), 0, local_point.z()};
     }
 
-    bool Cylinder::check_cap(const Ray &ray, real t) const {
-        auto x = ray.origin.x() + t * ray.direction.x();
-        auto z = ray.origin.z() + t * ray.direction.z();
-        return (x * x + z * z) <= radius_;
+    Cone::Cone(real minimum, real maximum, bool closed) : CylinderLike(minimum, maximum, closed) {}
+
+    Type Cone::type() const {
+        return Type::cone;
     }
 
-    Aggregate &Cylinder::intersect_caps(const Ray &ray, Aggregate &xs) {
-        if (!closed || math::close_to_zero(ray.direction.y())) return xs;
+    Aggregate Cone::local_intersect(const Ray &local_ray) {
+        auto [o, d] = local_ray;
+        auto a = math::pow2(d.x()) - math::pow2(d.y()) + math::pow2(d.z());
+        auto b = 2 * o.x() * d.x() - 2 * o.y() * d.y() + 2 * o.z() * d.z();
+        auto c = math::pow2(o.x()) - math::pow2(o.y()) + math::pow2(o.z());
 
-        // intersection with the lower end cap (y = min)
-        auto t = (minimum - ray.origin.y()) / ray.direction.y();
-        if (check_cap(ray, t)) xs.add(new Intersection{t, this});
+        Aggregate xs;
 
-        // intersection with the upper end cap (y = max)
-        t = (maximum - ray.origin.y()) / ray.direction.y();
-        if (check_cap(ray, t)) xs.add(new Intersection{t, this});
+        if (math::close_to_zero(a) && !math::close_to_zero(b)) {
+            auto t = -c / (2.0 * b);
+            return {{new Intersection{t, this}}};
+        }
 
-        return xs;
+        return CylinderLike::intersect(local_ray, a, b, c);
+    }
+
+    Vec Cone::local_normal_at(const Point &local_point) {
+        auto y = std::sqrt(math::pow2(local_point.x()) + math::pow2(local_point.z()));
+        if (local_point.y() > 0) y = -y;
+        return {local_point.x(), y, local_point.z()};
     }
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {

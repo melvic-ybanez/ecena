@@ -1,7 +1,6 @@
 # Ecena
 
-![ecena_until_glasses](https://user-images.githubusercontent.com/4519785/212498332-26834285-8e29-46c4-9328-caf4f6e71627.png)
-
+![esena_until_cones](https://user-images.githubusercontent.com/4519785/212568934-3b4ece06-41d9-4f03-b7c7-81686c4e0c65.png)
 
 Ecena is a 3D Scene rendering program currently being written in C++.
 

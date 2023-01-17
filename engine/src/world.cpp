@@ -36,10 +36,10 @@ namespace rt {
         return surface + reflected + refracted;
     }
 
-    Color World::color_at(const Ray &ray, int remaining) const {
+    Color World::color_at(const Ray &ray, int remaining, const Color &bg_color) const {
         auto xs = intersect(ray);
         auto hit = xs.hit();
-        if (hit == nullptr) return Color::black_;
+        if (hit == nullptr) return bg_color;
         auto comps = comps::prepare(*hit, ray, xs);
         return shade_hit(comps, remaining);
     }

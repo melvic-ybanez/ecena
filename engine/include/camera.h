@@ -19,6 +19,7 @@ namespace rt {
         real field_of_view;     // how much the camera can see
         Matrix<4, 4> transform;
         bool antialias;
+        std::variant<Color, std::pair<Color, Color>> bg_colors;
 
         Camera();
 

@@ -14,6 +14,8 @@
 namespace rt {
     class World {
     public:
+        constexpr static int default_depth_ = 5;
+
         std::vector<std::unique_ptr<Shape>> objects;
         std::optional<PointLight> light;
 
@@ -21,7 +23,7 @@ namespace rt {
 
         Color shade_hit(const Comps &comps, int remaining = default_depth_) const;
 
-        Color color_at(const Ray &ray, int remaining = default_depth_) const;
+        Color color_at(const Ray &ray, int remaining = default_depth_, const Color &bg_color = Color::black_) const;
 
         bool is_shadowed_at(const Point &point) const;
 
@@ -30,9 +32,6 @@ namespace rt {
         Color reflected_color(const Comps &comps, int remaining = default_depth_) const;
 
         Color refracted_color(const Comps &comps, int remaining = default_depth_) const;
-
-    private:
-        constexpr static int default_depth_ = 5;
     };
 
     std::ostream &operator<<(std::ostream &out, const World &world);

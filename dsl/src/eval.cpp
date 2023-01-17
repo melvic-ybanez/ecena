@@ -62,16 +62,27 @@ namespace rt::dsl::eval {
         Camera camera;
 
         for (auto &field: obj->fields) {
-            if (field.key() == "h_size") camera.h_size = to_real(*field.value_, field.line);
-            else if (field.key() == "v_size") camera.v_size = to_real(*field.value_, field.line);
-            else if (field.key() == "field_of_view") camera.field_of_view = to_real(*field.value_, field.line);
-            else if (field.key() == "transform") {
-                auto arr = to_array(*field.value_, 3, line);
-                auto from = to_point(*arr->elems[0], line);
-                auto to = to_point(*arr->elems[1], line);
-                auto up = to_vec(*arr->elems[2], line);
+            auto &key = field.key();
+            auto &value = *field.value_;
+
+            if (key == "h_size") camera.h_size = to_real(value, field.line);
+            else if (key == "v_size") camera.v_size = to_real(value, field.line);
+            else if (key == "field_of_view") camera.field_of_view = to_real(value, field.line);
+            else if (key == "transform") {
+                auto arr = to_array(value, 3, field.line);
+                auto from = to_point(*arr->elems[0], field.line);
+                auto to = to_point(*arr->elems[1], field.line);
+                auto up = to_vec(*arr->elems[2], field.line);
                 camera.transform = math::matrix::view_transform(from, to, up);
-            } else if (field.key() == "anti-aliasing") camera.antialias = to_bool(*field.value_, field.line)->value;
+            } else if (key == "anti-aliasing") camera.antialias = to_bool(value, field.line)->value;
+            else if (key == "background") {
+                try {
+                    camera.bg_colors = to_color(value, field.line);
+                } catch (const errors::Error &error) {
+                    auto colors = to_array_of<Color>(value, 2, field.line, to_color);
+                    camera.bg_colors = std::make_pair(colors[0], colors[1]);
+                }
+            }
             else throw_unknown_field_error(field);
         }
 
@@ -84,7 +95,8 @@ namespace rt::dsl::eval {
 
         for (auto &field: obj->fields) {
             if (field.key() == "objects") world.objects = to_shapes(*field.value_, field.line);
-            if (field.key() == "light") world.light = to_point_light(*field.value_, field.line);
+            else if (field.key() == "light") world.light = to_point_light(*field.value_, field.line);
+            else throw_unknown_field_error(field);
         }
 
         return world;

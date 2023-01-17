@@ -10,7 +10,7 @@ namespace rt {
             : h_size{h_size}, v_size{v_size},
               field_of_view{field_of_view},
               transform{math::matrix::identity<4, 4>()},
-              antialias{false} {}
+              antialias{false}, bg_colors{Color::black_} {}
 
     Camera::Camera() : Camera(0, 0, 0) {}
 
@@ -91,7 +91,18 @@ namespace rt {
         for (auto y = 0; y < v_size; y++) {
             for (auto x = 0; x < h_size; x++) {
                 auto ray = ray_for_pixel(x, y);
-                auto color = world.color_at(ray);
+
+                auto bg_color = Color::black_;
+                if (bg_colors.index() == 0) bg_color = std::get<Color>(bg_colors);
+                if (bg_colors.index() == 1) {
+                    auto colors = std::get<std::pair<Color, Color>>(bg_colors);
+
+                    // performs linear interpolation
+                    real t = ((v_size - y) / v_size + 1.0) * 0.5;
+                    bg_color = colors.first * (1.0 - t) + colors.second * t;
+                }
+
+                auto color = world.color_at(ray, World::default_depth_, bg_color);
                 canvas[y][x] = color;
             }
         }

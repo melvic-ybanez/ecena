@@ -77,6 +77,6 @@ namespace rt::comps {
         }
 
         auto r = std::pow((comps.n1 - comps.n2) / (comps.n1 + comps.n2), 2);
-        return r + (1 - r) * std::pow((1 - cos), 5);
+        return r + (1 - r) * std::pow(1 - cos, 5);
     }
 }

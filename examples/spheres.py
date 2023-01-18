@@ -1,3 +1,4 @@
+import copy
 import json
 import math
 
@@ -16,7 +17,7 @@ def cones():
                 'transform': [['scale', [0.15, 0.15, 0.15]], ['rotate_z', math.pi / 2.0]]
             }
         },
-        'transform': [['scale', [0.25, 0.75, 0.25]], ['translate', [0, 1.76, 0]], ['rotate_z', -math.pi / 4],
+        'transform': [['scale', [0.5 / 3, 0.5, 0.5 / 3]], ['translate', [0, 1.66, 0]], ['rotate_z', -math.pi / 4],
                       ["translate", [-0.5, 1, 0.5]]]
     }
     base = {
@@ -27,10 +28,48 @@ def cones():
         'material': {
             'color': base_color
         },
-        'transform': [['scale', [0.3, 1.0, 0.3]], ['translate', [0, 1, 0]], ['rotate_z', -math.pi / 4],
+        'transform': [['scale', [0.2, 1.0, 0.2]], ['translate', [0, 1.1, 0]], ['rotate_z', -math.pi / 4],
                       ["translate", [-0.5, 1.0, 0.5]]]
     }
     return [base, cone]
+
+
+def cylinders():
+    colors = [[40, 103, 160], [72, 120, 170], [99, 141, 187], [121, 158, 196], [157, 179, 208]]
+    offset_scale = 0.8 / 3
+    acc = [
+        {
+            "type": "cylinder",
+            "minimum": -0.1,
+            "maximum": 0.1,
+            "material": {
+                "color": [7.0 / 255, 87.0 / 255, 152.0 / 255]
+            },
+            "transform": [["scale", [offset_scale, 1, offset_scale]], ["translate", [-0.5, 2.1, 0.5]]]
+        }
+    ]
+    for i in range(0, 5):
+        last = acc[-1]
+        factor = 0.2 / 3
+        scale_factor = offset_scale - ((i + 1) * factor)
+        if scale_factor < factor:
+            scale_factor = offset_scale / math.pow(2, i)
+        r, g, b = colors[i]
+
+        new_mat = copy.deepcopy(last['material'])
+        new_mat['color'] = [r / 255.0, g / 255.0, b / 255.0]
+
+        new_cyl = {
+            'type': 'cylinder',
+            'minimum': last['minimum'] - 0.1 / 3,
+            'maximum': last['maximum'] + 0.1 / 3,
+            'material': new_mat,
+            'transform': [['scale', [scale_factor, 1, scale_factor]], ['translate', [-0.5, last['maximum'] + 2.1, 0.5]]]
+        }
+
+        acc.append(new_cyl)
+
+    return acc
 
 
 spheres = [
@@ -57,11 +96,7 @@ spheres = [
         "material": {
             "diffuse": 0.7,
             "specular": 0.3,
-            "pattern": {
-                "type": "ring",
-                "components": [[1, 0.8, 0.1], [1, 1, 1]],
-                "transform": [["scale", [0.33, 0.33, 0.33]], ["rotate_x", -math.pi / 4]]
-            },
+            'color': [0.5, 0.6, 1],
             "reflectivity": 0.5
         }
     },
@@ -73,18 +108,19 @@ spheres = [
     }
 ]
 
+
 data = json.dumps({
     "camera": {
         "h_size": 1000,
-        "v_size": 600,
+        "v_size": 563,
         "field_of_view": math.pi / 3,
         "transform": [[0, 1.5, -5], [0, 1, 0], [0, 1, 0]],
         "anti-aliasing": True,
         "background": ['white', [0.5, 0.7, 1.0]]
     },
     "world": {
-        "light": {"position": [-4, 7, -10], "intensity": [1, 1, 1]},
-        "objects": spheres + cones()
+        "light": {"position": [-5, 9, -10], "intensity": [1, 1, 1]},
+        "objects": spheres + cylinders()  + cones()
     }
 }, indent=2)
 

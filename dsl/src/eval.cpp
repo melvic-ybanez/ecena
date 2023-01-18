@@ -82,8 +82,7 @@ namespace rt::dsl::eval {
                     auto colors = to_array_of<Color>(value, 2, field.line, to_color);
                     camera.bg_colors = std::make_pair(colors[0], colors[1]);
                 }
-            }
-            else throw_unknown_field_error(field);
+            } else throw_unknown_field_error(field);
         }
 
         return camera;
@@ -176,11 +175,18 @@ namespace rt::dsl::eval {
 
         for (auto &field: obj->fields) {
             SKIP_DOC_FIELDS;
-            if (field.key() == "color") material->color = to_color(*field.value_, field.line);
-            else if (field.key() == "specular") material->specular = to_real(*field.value_, field.line);
-            else if (field.key() == "diffuse") material->diffuse = to_real(*field.value_, field.line);
-            else if (field.key() == "pattern") material->pattern = to_pattern(*field.value_, field.line);
-            else if (field.key() == "reflectivity") material->reflectivity = to_real(*field.value_, field.line);
+            auto &key = field.key();
+            auto &value = *field.value_;
+
+            if (key == "color") material->color = to_color(value, field.line);
+            else if (key == "specular") material->specular = to_real(value, field.line);
+            else if (key == "diffuse") material->diffuse = to_real(value, field.line);
+            else if (key == "pattern") material->pattern = to_pattern(value, field.line);
+            else if (key == "reflectivity") material->reflectivity = to_real(value, field.line);
+            else if (key == "ambient") material->ambient = to_real(value, field.line);
+            else if (key == "shininess") material->shininess = to_real(value, field.line);
+            else if (key == "transparency") material->transparency = to_real(value, field.line);
+            else if (key == "refractive_index") material->refractive_index = to_real(value, field.line);
             else throw_unknown_field_error(field);
         }
 

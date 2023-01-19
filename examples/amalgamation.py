@@ -92,7 +92,7 @@ spheres = [
     {
         "type": "sphere",
         "name": "left_sphere",
-        "transform": [["scale", [0.33, 0.33, 0.33]], ["translate", [-1.5, 0.33, -0.75]]],
+        "transform": [["scale", [0.35, 0.35, 0.35]], ["translate", [-1.7, 0.35, -0.75]]],
         "material": {
             "diffuse": 0.7,
             "specular": 0.3,
@@ -103,11 +103,73 @@ spheres = [
     {
         "type": "sphere",
         "name": "right_sphere",
-        "transform": [["scale", [0.9, 0.9, 0.9]], ["translate", [2, 0.9, 2]]],
+        "transform": [["scale", [0.9, 0.9, 0.9]], ["translate", [2.1, 0.9, 2]]],
         "material": {"color": [1, 0.5, 0.5], "diffuse": 0.7, "specular": 0.3, "reflectivity": 0.5}
+    },
+    {
+        'type': 'sphere',
+        'name': 'right_sphere_moon',
+        'transform': [["scale", [0.3, 0.3, 0.3]], ["translate", [2.1, 2.1, 2]]],
+        'material': {
+            'color': [0.8, 0.8, 0.8],
+            'reflectivity': 0.5
+        }
+    },
+    {
+        "type": "cube",
+        "name": "right_cube",
+        "transform": [["scale", [0.13, 0.17, 0.13]], ['translate', [0, 1.17, 0]], ['rotate_z', math.pi / 4],
+                      ['rotate_y', -math.pi / 4], ['rotate_x', -math.pi / 4], ["translate", [-0.5, 1, 0.5]]],
+        "material": {
+            "diffuse": 0.7,
+            "specular": 0.3,
+            'color': [1, 1, 143.0 / 255],
+            'reflectivity': 0.23
+        }
+    },
+    {
+        'type': 'sphere',
+        'name': 'colossal',
+        'transform': [['scale', [4, 4, 4]], ['translate', [4, -3, -2]]],
+        'material': {
+            'color': [225 / 255.0, 193.0 / 255, 110.0 / 255],
+            'reflectivity': 0.3
+        }
+    },
+    {
+        'type': 'sphere',
+        'name': 'far_away_sphere',
+        'transform': [['translate', [-15, 5, 25]]],
+        'material': {
+            "diffuse": 0.7,
+            "specular": 0.3,
+            "pattern": {
+                "type": "ring",
+                "components": [[1, 0.8, 0.1], 'white'],
+                "transform": [["scale", [0.33, 0.33, 0.33]]]
+            },
+            "reflectivity": 0.5
+        }
+    },
+    {
+        'type': 'sphere',
+        'transform': [['scale', [0.25, 0.25, 0.25]], ['translate', [0.7, 0.85, -1.5]]],
+        'material': 'glass'
+    },
+    {
+        'type': 'plane',
+        'material': {
+            'pattern': {
+                'type': 'gradient',
+                'components': ['white', [0.5, 0.7, 1.0]],
+                'transform': [['scale', [410, 1, 1]]],
+            },
+            'specular': 0,
+            'transparency': 1,
+        },
+        'transform': [['rotate_x', -math.pi / 2], ['rotate_z', math.pi / 2], ['translate', [0, 115, 500]]]
     }
 ]
-
 
 data = json.dumps({
     "camera": {
@@ -116,11 +178,10 @@ data = json.dumps({
         "field_of_view": math.pi / 3,
         "transform": [[0, 1.5, -5], [0, 1, 0], [0, 1, 0]],
         "anti-aliasing": True,
-        "background": ['white', [0.5, 0.7, 1.0]]
     },
     "world": {
-        "light": {"position": [-5, 9, -10], "intensity": [1, 1, 1]},
-        "objects": spheres + cylinders()  + cones()
+        "light": {"position": [-2, 13, -7], "intensity": [1, 1, 1]},
+        "objects": spheres + cylinders() + cones()
     }
 }, indent=2)
 

@@ -116,18 +116,6 @@ spheres = [
         }
     },
     {
-        "type": "cube",
-        "name": "right_cube",
-        "transform": [["scale", [0.13, 0.17, 0.13]], ['translate', [0, 1.17, 0]], ['rotate_z', math.pi / 4],
-                      ['rotate_y', -math.pi / 4], ['rotate_x', -math.pi / 4], ["translate", [-0.5, 1, 0.5]]],
-        "material": {
-            "diffuse": 0.7,
-            "specular": 0.3,
-            'color': [1, 1, 143.0 / 255],
-            'reflectivity': 0.23
-        }
-    },
-    {
         'type': 'sphere',
         'name': 'colossal',
         'transform': [['scale', [4, 4, 4]], ['translate', [4, -3, -2]]],
@@ -155,21 +143,34 @@ spheres = [
         'type': 'sphere',
         'transform': [['scale', [0.25, 0.25, 0.25]], ['translate', [0.7, 0.85, -1.5]]],
         'material': 'glass'
-    },
-    {
-        'type': 'plane',
-        'material': {
-            'pattern': {
-                'type': 'gradient',
-                'components': ['white', [0.5, 0.7, 1.0]],
-                'transform': [['scale', [410, 1, 1]]],
-            },
-            'specular': 0,
-            'transparency': 1,
-        },
-        'transform': [['rotate_x', -math.pi / 2], ['rotate_z', math.pi / 2], ['translate', [0, 115, 500]]]
     }
 ]
+
+background = {
+    'type': 'plane',
+    'material': {
+        'pattern': {
+            'type': 'gradient',
+            'components': ['white', [0.5, 0.7, 1.0]],
+            'transform': [['scale', [410, 1, 1]]],
+        },
+        'specular': 0,
+        'transparency': 1,
+    },
+    'transform': [['rotate_x', -math.pi / 2], ['rotate_z', math.pi / 2], ['translate', [0, 115, 500]]]
+}
+
+cube = {
+    "type": "cube",
+    "transform": [["scale", [0.13, 0.17, 0.13]], ['translate', [0, 1.17, 0]], ['rotate_z', math.pi / 4],
+                  ['rotate_y', -math.pi / 4], ['rotate_x', -math.pi / 4], ["translate", [-0.5, 1, 0.5]]],
+    "material": {
+        "diffuse": 0.7,
+        "specular": 0.3,
+        'color': [1, 1, 143.0 / 255],
+        'reflectivity': 0.23
+    }
+}
 
 data = json.dumps({
     "camera": {
@@ -181,7 +182,7 @@ data = json.dumps({
     },
     "world": {
         "light": {"position": [-2, 13, -7], "intensity": [1, 1, 1]},
-        "objects": spheres + cylinders() + cones()
+        "objects": spheres + cylinders() + cones() + [background] + [cube]
     }
 }, indent=2)
 

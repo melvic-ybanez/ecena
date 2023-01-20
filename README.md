@@ -16,13 +16,13 @@ While you can certainly write simple scenes directly in JSON, for more complicat
 The Python script for the image above, [Amalgamation](https://github.com/melvic-ybanez/ecena/blob/main/examples/amalgamation.py), can be found [here](https://github.com/melvic-ybanez/ecena/blob/main/examples/amalgamation.py). To pass its output to Ecena, you just use the pipe operator:
 
 ```
-python3 ./examples/amalgamation.py | <path-to-ecena>/ecena
+$ python3 ./examples/amalgamation.py | <path-to-ecena>/ecena
 ```
 
 Of course you can also just print the output directly to see the generated JSON:
 
 ```
-python3 ./examples/amalgamation.py
+$ python3 ./examples/amalgamation.py
 ```
 
 Here's another example, called [Esena](https://github.com/melvic-ybanez/ecena/blob/main/examples/amalgamation.py), with the corresponding script [here](https://github.com/melvic-ybanez/ecena/blob/main/examples/esena.py):

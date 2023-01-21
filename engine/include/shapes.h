@@ -13,7 +13,7 @@
 
 namespace rt::shapes {
     enum class Type {
-        shape, sphere, plane, test, cube, cylinder, cone
+        shape, sphere, plane, test, cube, cylinder, cone, group
     };
 
     std::ostream &operator<<(std::ostream &out, const Type &type);
@@ -23,6 +23,8 @@ namespace rt::shapes {
         Matrix<4, 4> transformation;
 
         std::unique_ptr<Material> material;
+
+        Shape *parent;
 
         Shape();
 
@@ -36,11 +38,17 @@ namespace rt::shapes {
 
         Shape &operator=(Shape &&shape) noexcept = delete;
 
-        Aggregate intersect(const Ray &ray);
-
         virtual Type type() const;
 
-        Vec normal_at(const Point &point);
+        Aggregate intersect(const Ray &ray);
+
+        Vec normal_at(const Point &world_point);
+
+        Point world_to_object(const Point &point) const;
+
+        Vec normal_to_world(const Vec &local_normal) const;
+
+        bool has_parent() const;
 
     protected:
         virtual Aggregate local_intersect(const Ray &local_ray) = 0;
@@ -149,6 +157,25 @@ namespace rt::shapes {
         real min_limit() const override;
 
         real max_limit() const override;
+    };
+
+    class Group : public Shape {
+    public:
+        std::vector<std::unique_ptr<Shape>> children;
+
+        Type type() const override;
+
+        Aggregate local_intersect(const Ray &ray) override;
+
+        Vec local_normal_at(const Point &local_point) override;
+
+        bool empty() const;
+
+        void add_child(Shape *shape);
+
+        void add_children(std::initializer_list<Shape *> shapes);
+
+        bool contains(const Shape *shape) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

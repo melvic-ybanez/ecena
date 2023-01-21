@@ -7,7 +7,8 @@
 #include "../include/shapes.h"
 
 namespace rt::shapes {
-    Shape::Shape() : transformation{math::matrix::identity<4, 4>()}, material(std::make_unique<Material>()) {}
+    Shape::Shape() : transformation{math::matrix::identity<4, 4>()}, material(std::make_unique<Material>()),
+                     parent{nullptr} {}
 
     std::ostream &operator<<(std::ostream &out, const Type &type) {
         switch (type) {
@@ -27,12 +28,24 @@ namespace rt::shapes {
         return local_intersect(local_ray);
     }
 
-    Vec Shape::normal_at(const Point &point) {
-        auto inverse = transformation.inverse();
-        auto local_point = inverse * point;
+    Vec Shape::normal_at(const Point &world_point) {
+        auto local_point = world_to_object(world_point);
         auto local_normal = local_normal_at(local_point);
-        auto world_normal = inverse.transpose() * local_normal;
-        return Vec{world_normal}.normalize();
+        return normal_to_world(local_normal);
+    }
+
+    bool Shape::has_parent() const {
+        return parent != nullptr;
+    }
+
+    Point Shape::world_to_object(const Point &point) const {
+        return transformation.inverse() * (has_parent() ? parent->world_to_object(point) : point);
+    }
+
+    Vec Shape::normal_to_world(const Vec &local_normal) const {
+        auto world_normal = Vec{transformation.inverse().transpose() * local_normal}.normalize();
+        if (has_parent()) return parent->normal_to_world(world_normal);
+        return world_normal;
     }
 
     Aggregate Sphere::local_intersect(const Ray &local_ray) {
@@ -257,6 +270,43 @@ namespace rt::shapes {
 
     real Cone::max_limit() const {
         return maximum;
+    }
+
+    Type Group::type() const {
+        return Type::group;
+    }
+
+    bool Group::empty() const {
+        return children.empty();
+    }
+
+    void Group::add_child(Shape *shape) {
+        children.push_back(std::unique_ptr<Shape>(shape));
+        shape->parent = this;
+    }
+
+    void Group::add_children(std::initializer_list<Shape *> shapes) {
+        for (auto shape: shapes) {
+            add_child(shape);
+        }
+    }
+
+    bool Group::contains(const Shape *shape) const {
+        return std::find_if(children.begin(), children.end(), [&shape](auto &s) { return s.get() == shape; }) !=
+               children.end();
+    }
+
+    Aggregate Group::local_intersect(const Ray &ray) {
+        Aggregate xs;
+        for (auto &child: children) {
+            auto xs_ = child->intersect(ray);
+            xs.combine_with(xs_);
+        }
+        return xs;
+    }
+
+    Vec Group::local_normal_at(const Point &local_point) {
+        throw std::runtime_error("Groups don't support this operation");
     }
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {

@@ -5,6 +5,7 @@ import math
 
 def cones():
     base_color = [1.0, 168.0 / 255.0, 18.0 / 255.0]
+    rotate_and_translate = [['rotate_z', -math.pi / 4], ["translate", [-0.5, 1, 0.5]]]
     cone = {
         'type': 'cone',
         'minimum': -1.0,
@@ -17,8 +18,7 @@ def cones():
                 'transform': [['scale', [0.15, 0.15, 0.15]], ['rotate_z', math.pi / 2.0]]
             }
         },
-        'transform': [['scale', [0.5 / 3, 0.5, 0.5 / 3]], ['translate', [0, 1.66, 0]], ['rotate_z', -math.pi / 4],
-                      ["translate", [-0.5, 1, 0.5]]]
+        'transform': [['scale', [0.5 / 3, 0.5, 0.5 / 3]], ['translate', [0, 1.7, 0]]] + rotate_and_translate
     }
     base = {
         'type': 'cylinder',
@@ -28,8 +28,7 @@ def cones():
         'material': {
             'color': base_color
         },
-        'transform': [['scale', [0.2, 1.0, 0.2]], ['translate', [0, 1.1, 0]], ['rotate_z', -math.pi / 4],
-                      ["translate", [-0.5, 1.0, 0.5]]]
+        'transform': [['scale', [0.2, 1.0, 0.2]], ['translate', [0, 1.1, 0]]] + rotate_and_translate
     }
     return [base, cone]
 
@@ -182,7 +181,7 @@ data = json.dumps({
     },
     "world": {
         "light": {"position": [-2, 13, -7], "intensity": [1, 1, 1]},
-        "objects": spheres + cylinders() + cones() + [background] + [cube]
+        "objects": spheres + cylinders() + cones() + [background, cube]
     }
 }, indent=2)
 

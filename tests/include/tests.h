@@ -73,6 +73,10 @@ namespace rt::tests {
     namespace cones {
         void test();
     }
+
+    namespace groups {
+        void test();
+    }
 }
 
 #endif //ECENA_TESTS_H

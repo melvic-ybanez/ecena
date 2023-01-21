@@ -10,18 +10,7 @@
 
 namespace rt::dsl {
     enum class TokenType {
-        number,
-        string,
-        boolean,
-        left_brace,
-        right_brace,
-        left_bracket,
-        right_bracket,
-        comma,
-        colon,
-        dot,
-        eof,
-        null
+        number, string, boolean, left_brace, right_brace, left_bracket, right_bracket, comma, colon, dot, eof, null
     };
 
     using TokenValue = std::optional<std::variant<std::string, double, bool>>;

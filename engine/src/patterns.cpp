@@ -10,7 +10,7 @@ namespace rt::patterns {
     Pattern::Pattern() : transformation{matrix::identity<4, 4>()} {}
 
     Color Pattern::at(const Shape &shape, const Point &world_point) const {
-        auto object_point = shape.transformation.inverse() * world_point;
+        auto object_point = shape.world_to_object(world_point);
         auto pattern_point = transformation.inverse() * object_point;
 
         return at(pattern_point);

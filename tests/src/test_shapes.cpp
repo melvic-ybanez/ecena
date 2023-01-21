@@ -18,12 +18,15 @@ namespace rt::tests::shapes_ {
 
     static void normals();
 
+    static void space_conversions();
+
     void test() {
         set("Shapes", [] {
             transformations();
             materials();
             intersections();
             normals();
+            space_conversions();
         });
     }
 
@@ -64,20 +67,24 @@ namespace rt::tests::shapes_ {
     void intersections() {
         set("Intersection", [] {
             scenario("A scaled shape with a ray", [] {
-                Ray ray{{0, 0, -5}, {0, 0, 1}};
+                Ray ray{{0, 0, -5},
+                        {0, 0, 1}};
                 TestShape shape;
                 math::scale(shape, 2, 2, 2);
                 auto xs = shape.intersect(ray);
-                Ray expected{{0, 0, -2.5}, {0, 0, 0.5}};
+                Ray expected{{0, 0, -2.5},
+                             {0, 0, 0.5}};
 
                 ASSERT_EQ(expected, shape.saved_ray);
             });
             scenario("A translated shape with a ray", [] {
-                Ray ray{{0, 0, -5}, {0, 0, 1}};
+                Ray ray{{0, 0, -5},
+                        {0, 0, 1}};
                 TestShape shape;
                 math::translate(shape, 5, 0, 0);
                 auto xs = shape.intersect(ray);
-                Ray expected{{-5, 0, -5}, {0, 0, 1}};
+                Ray expected{{-5, 0, -5},
+                             {0,  0, 1}};
 
                 ASSERT_EQ(expected, shape.saved_ray);
             });
@@ -100,6 +107,42 @@ namespace rt::tests::shapes_ {
                 Vec expected{0, 0.97014, -0.24254};
                 ASSERT_EQ(expected, normal);
             });
+        });
+    }
+
+    void space_conversions() {
+        scenario("Converting a point from world to object space", [] {
+            shapes::Group g1;
+            math::rotate_y(g1, math::pi / 2);
+
+            auto g2 = new shapes::Group;
+            math::scale(*g2, 2, 2, 2);
+
+            g1.add_child(g2);
+
+            auto sphere = new shapes::Sphere;
+            math::translate(*sphere, 5, 0, 0);
+
+            g2->add_child(sphere);
+
+            auto point = sphere->world_to_object(Point{-2, 0, -10});
+            ASSERT_EQ(Point(0, 0, -1), point);
+        });
+        scenario("Converting a normal from object to world space", [] {
+            shapes::Group g1;
+            math::rotate_y(g1, math::pi / 2);
+
+            auto g2 = new shapes::Group;
+            math::scale(*g2, 1, 2, 3);
+            g1.add_child(g2);
+
+            auto sphere = new shapes::Sphere;
+            math::translate(*sphere, 5, 0, 0);
+            g2->add_child(sphere);
+
+            auto c = std::sqrt(3) / 3;
+            auto n = sphere->normal_to_world(Vec{c, c, c});
+            ASSERT_EQ(Vec(0.2857, 0.4286, -0.8571), n);
         });
     }
 }

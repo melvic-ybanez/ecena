@@ -32,4 +32,4 @@ Here's another example, called [Esena](https://github.com/melvic-ybanez/ecena/bl
 ---
 
 Primary resource for the Ray Tracer: [The Ray Tracer Challenge](http://raytracerchallenge.com/). This book
-also serves as a source for test data.
+also serves as a source for test data and scenarios.

@@ -96,21 +96,26 @@ namespace rt::shapes {
     }
 
     Aggregate Cube::local_intersect(const Ray &ray) {
-        auto [x_t_min, x_t_max] = check_axis(ray.origin.x(), ray.direction.x());
-        auto [y_t_min, y_t_max] = check_axis(ray.origin.y(), ray.direction.y());
-        auto [z_t_min, z_t_max] = check_axis(ray.origin.z(), ray.direction.z());
+        return Cube::intersect(ray, this);
+    }
+
+    Aggregate Cube::intersect(const Ray &ray, Shape *cube_like) {
+        auto [min, max] = cube_like->bounds();
+        auto [x_t_min, x_t_max] = Cube::check_axis(ray.origin.x(), ray.direction.x(), min.x(), max.x());
+        auto [y_t_min, y_t_max] = Cube::check_axis(ray.origin.y(), ray.direction.y(), min.y(), max.y());
+        auto [z_t_min, z_t_max] = Cube::check_axis(ray.origin.z(), ray.direction.z(), min.z(), max.z());
 
         auto t_min = std::max({x_t_min, y_t_min, z_t_min});
         auto t_max = std::min({x_t_max, y_t_max, z_t_max});
 
         if (t_min > t_max) return {};
 
-        return {{new Intersection{t_min, this}, new Intersection{t_max, this}}};
+        return {{new Intersection{t_min, cube_like}, new Intersection{t_max, cube_like}}};
     }
 
-    std::array<real, 2> Cube::check_axis(real origin, real direction) const {
-        auto t_min_numerator = (-1 - origin);
-        auto t_max_numerator = (1 - origin);
+    std::array<real, 2> Cube::check_axis(real origin, real direction, real min, real max) {
+        auto t_min_numerator = min - origin;
+        auto t_max_numerator = max - origin;
 
         auto t_min = t_min_numerator * math::infinity;
         auto t_max = t_max_numerator * math::infinity;
@@ -140,7 +145,7 @@ namespace rt::shapes {
 
     CylinderLike::CylinderLike() : CylinderLike(-math::infinity, math::infinity) {}
 
-    CylinderLike::CylinderLike(real minimum, real maximum, bool closed) : minimum{minimum}, maximum{maximum},
+    CylinderLike::CylinderLike(real minimum, real maximum, bool closed) : min{minimum}, max{maximum},
                                                                           closed{closed} {}
 
     Aggregate CylinderLike::intersect(const Ray &ray, real a, real b, real c) {
@@ -158,12 +163,12 @@ namespace rt::shapes {
         Aggregate xs{};
 
         auto y0 = origin.y() + t0 * direction.y();
-        if (minimum < y0 && y0 < maximum) {
+        if (min < y0 && y0 < max) {
             xs.add(new Intersection{t0, this});
         }
 
         auto y1 = origin.y() + t1 * direction.y();
-        if (minimum < y1 && y1 < maximum) {
+        if (min < y1 && y1 < max) {
             xs.add(new Intersection{t1, this});
         }
 
@@ -180,11 +185,11 @@ namespace rt::shapes {
         if (!closed || math::close_to_zero(ray.direction.y())) return xs;
 
         // intersection with the lower end cap (y = min)
-        auto t = (minimum - ray.origin.y()) / ray.direction.y();
+        auto t = (min - ray.origin.y()) / ray.direction.y();
         if (check_cap(ray, t, min_limit())) xs.add(new Intersection{t, this});
 
         // intersection with the upper end cap (y = max)
-        t = (maximum - ray.origin.y()) / ray.direction.y();
+        t = (max - ray.origin.y()) / ray.direction.y();
         if (check_cap(ray, t, max_limit())) xs.add(new Intersection{t, this});
 
         return xs;
@@ -192,10 +197,10 @@ namespace rt::shapes {
 
     Vec CylinderLike::normal_at(const Point &point, real y) {
         auto distance_from_y_squared = std::pow(point.x(), 2) + std::pow(point.z(), 2);
-        if (distance_from_y_squared < 1 && point.y() >= maximum - math::epsilon) {
+        if (distance_from_y_squared < 1 && point.y() >= max - math::epsilon) {
             return {0, 1, 0};
         }
-        if (distance_from_y_squared < 1 && point.y() <= minimum + math::epsilon) {
+        if (distance_from_y_squared < 1 && point.y() <= min + math::epsilon) {
             return {0, -1, 0};
         }
 
@@ -265,11 +270,11 @@ namespace rt::shapes {
     }
 
     real Cone::min_limit() const {
-        return minimum;
+        return min;
     }
 
     real Cone::max_limit() const {
-        return maximum;
+        return max;
     }
 
     Type Group::type() const {
@@ -297,6 +302,10 @@ namespace rt::shapes {
     }
 
     Aggregate Group::local_intersect(const Ray &ray) {
+        // If the ray does not intersect with the bounding box,
+        // do not bother checking the children for intersections.
+        if (Cube::intersect(ray, this).empty()) return {};
+
         Aggregate xs;
         for (auto &child: children) {
             auto xs_ = child->intersect(ray);
@@ -311,5 +320,47 @@ namespace rt::shapes {
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {
         return out << "{ type: " << shape.type() << ", material: " << *shape.material << " }";
+    }
+
+    Bounds Cube::bounds() const {
+        return Bounds::cube();
+    }
+
+    Bounds Sphere::bounds() const {
+        return Bounds::cube();
+    }
+
+    Bounds Plane::bounds() const {
+        return {{-math::infinity, 0, math::infinity}};
+    }
+
+    Bounds Cone::bounds() const {
+        auto a = std::abs(min);
+        auto b = std::abs(max);
+        auto limit = std::max(a, b);
+        return {{-limit, min, -limit},
+                {limit,  max, limit}};
+    }
+
+    Bounds Cylinder::bounds() const {
+        return {{-1, min, -1},
+                {1,  max, 1}};
+    }
+
+    Bounds Group::bounds() const {
+        static std::optional<Bounds> cached;
+
+        if (cached.has_value()) return cached.value();
+
+        Bounds bounds;
+        for (auto &child: children) {
+            bounds = bounds + child->parent_space_bounds();
+        }
+        cached = bounds;
+        return bounds;
+    }
+
+    Bounds Shape::parent_space_bounds() const {
+        return bounds().transform(transformation);
     }
 }

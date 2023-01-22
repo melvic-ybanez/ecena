@@ -36,6 +36,10 @@ namespace rt::tests {
         return {local_point.x(), local_point.y(), local_point.z()};
     }
 
+    Bounds TestShape::bounds() const {
+        return Bounds::cube();
+    }
+
     Color TestPattern::at(const Point &point) const {
         return point;
     }

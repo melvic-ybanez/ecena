@@ -190,7 +190,9 @@ namespace rt::shapes {
 
         void add_child(Shape *shape);
 
-        void add_children(std::initializer_list<Shape *> shapes);
+        void add_child(std::unique_ptr<Shape> shape);
+
+        void add_children(std::vector<Shape *> shapes);
 
         bool contains(const Shape *shape) const;
 

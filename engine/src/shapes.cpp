@@ -286,11 +286,15 @@ namespace rt::shapes {
     }
 
     void Group::add_child(Shape *shape) {
-        children.push_back(std::unique_ptr<Shape>(shape));
-        shape->parent = this;
+        add_child(std::unique_ptr<Shape>(shape));
     }
 
-    void Group::add_children(std::initializer_list<Shape *> shapes) {
+    void Group::add_child(std::unique_ptr<Shape> shape) {
+        shape->parent = this;
+        children.push_back(std::move(shape));
+    }
+
+    void Group::add_children(std::vector<Shape *> shapes) {
         for (auto shape: shapes) {
             add_child(shape);
         }

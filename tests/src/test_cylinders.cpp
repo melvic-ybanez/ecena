@@ -24,8 +24,8 @@ namespace rt::tests::cylinders {
     void init() {
         set("The default minimum and maximum for a cylinder", [] {
             shapes::Cylinder cylinder;
-            ASSERT_EQ_MSG("Minimum bound", -math::infinity, cylinder.minimum);
-            ASSERT_EQ_MSG("Maximum bound", math::infinity, cylinder.maximum);
+            ASSERT_EQ_MSG("Minimum bound", -math::infinity, cylinder.min);
+            ASSERT_EQ_MSG("Maximum bound", math::infinity, cylinder.max);
             ASSERT_FALSE_MSG("Closed", cylinder.closed);
         });
     }

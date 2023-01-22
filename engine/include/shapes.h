@@ -10,6 +10,7 @@
 #include "ray.h"
 #include "intersection.h"
 #include "materials.h"
+#include "bounds.h"
 
 namespace rt::shapes {
     enum class Type {
@@ -38,6 +39,8 @@ namespace rt::shapes {
 
         Shape &operator=(Shape &&shape) noexcept = delete;
 
+        virtual Bounds bounds() const = 0;
+
         virtual Type type() const;
 
         Aggregate intersect(const Ray &ray);
@@ -49,6 +52,8 @@ namespace rt::shapes {
         Vec normal_to_world(const Vec &local_normal) const;
 
         bool has_parent() const;
+
+        Bounds parent_space_bounds() const;
 
     protected:
         virtual Aggregate local_intersect(const Ray &local_ray) = 0;
@@ -63,6 +68,8 @@ namespace rt::shapes {
         Aggregate local_intersect(const Ray &ray) override;
 
         Vec local_normal_at(const Point &local_point) override;
+
+        Bounds bounds() const override;
     };
 
     class Plane : public Shape {
@@ -72,24 +79,30 @@ namespace rt::shapes {
         Aggregate local_intersect(const Ray &ray) override;
 
         Vec local_normal_at(const Point &local_point) override;
+
+        Bounds bounds() const override;
     };
 
     class Cube : public Shape {
     public:
+        static Aggregate intersect(const Ray &ray, Shape *cube_like);
+
         Type type() const override;
 
         Aggregate local_intersect(const Ray &ray) override;
 
         Vec local_normal_at(const Point &local_point) override;
 
+        Bounds bounds() const override;
+
     private:
-        std::array<real, 2> check_axis(real origin, real direction) const;
+        static std::array<real, 2> check_axis(real origin, real direction, real min, real max);
     };
 
     class CylinderLike: public Shape {
     public:
-        real minimum;
-        real maximum;
+        real min;
+        real max;
         bool closed;
 
         CylinderLike();
@@ -135,6 +148,8 @@ namespace rt::shapes {
 
         Vec local_normal_at(const Point &local_point) override;
 
+        Bounds bounds() const override;
+
     protected:
         real min_limit() const override;
 
@@ -152,6 +167,8 @@ namespace rt::shapes {
         Aggregate local_intersect(const Ray &ray) override;
 
         Vec local_normal_at(const Point &local_point) override;
+
+        Bounds bounds() const override;
 
     protected:
         real min_limit() const override;
@@ -176,6 +193,8 @@ namespace rt::shapes {
         void add_children(std::initializer_list<Shape *> shapes);
 
         bool contains(const Shape *shape) const;
+
+        Bounds bounds() const override;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

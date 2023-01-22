@@ -19,6 +19,8 @@ namespace rt::tests {
         Aggregate local_intersect(const Ray &local_ray) override;
 
         Vec local_normal_at(const Point &local_point) override;
+
+        Bounds bounds() const override;
     };
 
     class TestPattern : public Pattern {

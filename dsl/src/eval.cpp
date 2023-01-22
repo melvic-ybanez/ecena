@@ -158,8 +158,8 @@ namespace rt::dsl::eval {
     void init_cylinder_like(shapes::CylinderLike *cylinder_like, const Object *obj) {
         for (auto &field: obj->fields) {
             auto &key = field.key();
-            if (key == "minimum") cylinder_like->minimum = to_real(*field.value_, field.line);
-            if (key == "maximum") cylinder_like->maximum = to_real(*field.value_, field.line);
+            if (key == "minimum" || key == "min") cylinder_like->min = to_real(*field.value_, field.line);
+            if (key == "maximum" || key == "max") cylinder_like->max = to_real(*field.value_, field.line);
             if (key == "closed") cylinder_like->closed = to_bool(*field.value_, field.line);
         }
     }

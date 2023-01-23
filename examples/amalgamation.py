@@ -3,6 +3,34 @@ import json
 import math
 
 
+def middle_group():
+    group = {
+        'type': 'group',
+        'children': [
+            {
+                "type": "sphere",
+                "name": "middle_sphere",
+                "transform": [['rotate_z', -math.pi / 4], ["translate", [-0.5, 1, 0.5]]],
+                "material": {
+                    "color": [0.1, 1, 0.5],
+                    "diffuse": 0.7,
+                    "specular": 0.3,
+                    "pattern": {
+                        "type": "checkers",
+                        "components": [[21.0 / 255, 184.0 / 255, 0], [0.1, 1, 0.5]],
+                        "transform": [["scale", [0.25, 0.25, 0.25]], ["rotate_y", -math.pi / 4]]
+                    },
+                    "reflectivity": 0.5
+                }
+            },
+            cube,
+            cylinders()
+        ]
+    }
+    group['children'] += cones()
+    return group
+
+
 def cones():
     base_color = [1.0, 168.0 / 255.0, 18.0 / 255.0]
     rotate_and_translate = [['rotate_z', -math.pi / 4], ["translate", [-0.5, 1, 0.5]]]
@@ -68,26 +96,39 @@ def cylinders():
 
         acc.append(new_cyl)
 
-    return acc
+    return {'type': 'group', 'children': acc}
 
 
-spheres = [
-    {
-        "type": "sphere",
-        "name": "middle_sphere",
-        "transform": [['rotate_z', -math.pi / 4], ["translate", [-0.5, 1, 0.5]]],
-        "material": {
-            "color": [0.1, 1, 0.5],
-            "diffuse": 0.7,
-            "specular": 0.3,
-            "pattern": {
-                "type": "checkers",
-                "components": [[21.0 / 255, 184.0 / 255, 0], [0.1, 1, 0.5]],
-                "transform": [["scale", [0.25, 0.25, 0.25]], ["rotate_y", -math.pi / 4]]
+def right_group():
+    return {
+        'type': 'group',
+        'children': [
+            {
+                "type": "sphere",
+                "name": "right_sphere",
+                "transform": [['scale', [0.9, 0.9, 0.9]], ["translate", [2.1, 0.9, 2]]],
+                "material": {"color": [1, 0.5, 0.5], "diffuse": 0.7, "specular": 0.3, "reflectivity": 0.5}
             },
-            "reflectivity": 0.5
-        }
-    },
+            {
+                'type': 'sphere',
+                'name': 'right_sphere_moon',
+                'transform': [["scale", [0.3, 0.3, 0.3]], ["translate", [2.1, 2.1, 2]]],
+                'material': {
+                    'color': [0.8, 0.8, 0.8],
+                    'reflectivity': 0.5
+                }
+            },
+            {
+                'type': 'sphere',
+                'name': 'glass_sphere',
+                'transform': [['scale', [0.25, 0.25, 0.25]], ['translate', [0.7, 0.85, -1.5]]],
+                'material': 'glass'
+            }
+        ]
+    }
+
+
+rest_of_spheres = [
     {
         "type": "sphere",
         "name": "left_sphere",
@@ -97,21 +138,6 @@ spheres = [
             "specular": 0.3,
             'color': [0.5, 0.6, 1],
             "reflectivity": 0.5
-        }
-    },
-    {
-        "type": "sphere",
-        "name": "right_sphere",
-        "transform": [["scale", [0.9, 0.9, 0.9]], ["translate", [2.1, 0.9, 2]]],
-        "material": {"color": [1, 0.5, 0.5], "diffuse": 0.7, "specular": 0.3, "reflectivity": 0.5}
-    },
-    {
-        'type': 'sphere',
-        'name': 'right_sphere_moon',
-        'transform': [["scale", [0.3, 0.3, 0.3]], ["translate", [2.1, 2.1, 2]]],
-        'material': {
-            'color': [0.8, 0.8, 0.8],
-            'reflectivity': 0.5
         }
     },
     {
@@ -138,11 +164,6 @@ spheres = [
             "reflectivity": 0.5
         }
     },
-    {
-        'type': 'sphere',
-        'transform': [['scale', [0.25, 0.25, 0.25]], ['translate', [0.7, 0.85, -1.5]]],
-        'material': 'glass'
-    }
 ]
 
 background = {
@@ -171,6 +192,11 @@ cube = {
     }
 }
 
+sphere_group = {
+    'type': 'group',
+    'children': [middle_group(), right_group()]
+}
+
 data = json.dumps({
     "camera": {
         "h_size": 1000,
@@ -181,7 +207,7 @@ data = json.dumps({
     },
     "world": {
         "light": {"position": [-2, 13, -7], "intensity": [1, 1, 1]},
-        "objects": spheres + cylinders() + cones() + [background, cube]
+        "objects": [background, sphere_group] + rest_of_spheres
     }
 }, indent=2)
 

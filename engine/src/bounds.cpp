@@ -39,7 +39,7 @@ namespace rt {
 
         Bounds bounds;
         for (const auto &corner: corners) {
-            bounds = bounds + (transformation * Point{corner.x(), corner.y(), corner.z()});
+            bounds = bounds + (transformation * corner);
         }
         return bounds;
     }
@@ -64,5 +64,15 @@ namespace rt {
 
     std::ostream &operator<<(std::ostream &out, const Bounds &bounds) {
         return out << "{ min: " << bounds.min << ", max" << bounds.max << " }";
+    }
+
+    bool Bounds::contains(const Point &point) const {
+        return point.x() >= min.x() && point.x() <= max.x()
+               && point.y() >= min.y() && point.y() <= max.y()
+               && point.z() >= min.z() && point.z() <= max.z();
+    }
+
+    bool Bounds::contains(const Bounds &bounds) const {
+        return contains(bounds.min) && contains(bounds.max);
     }
 }

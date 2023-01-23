@@ -352,15 +352,13 @@ namespace rt::shapes {
     }
 
     Bounds Group::bounds() const {
-        static std::optional<Bounds> cached;
-
-        if (cached.has_value()) return cached.value();
+        if (maybe_bounds.has_value()) return maybe_bounds.value();
 
         Bounds bounds;
         for (auto &child: children) {
             bounds = bounds + child->parent_space_bounds();
         }
-        cached = bounds;
+        maybe_bounds = bounds;
         return bounds;
     }
 

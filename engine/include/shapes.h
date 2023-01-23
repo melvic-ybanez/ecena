@@ -197,6 +197,9 @@ namespace rt::shapes {
         bool contains(const Shape *shape) const;
 
         Bounds bounds() const override;
+
+    private:
+        mutable std::optional<Bounds> maybe_bounds;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

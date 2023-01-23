@@ -11,8 +11,8 @@
 namespace rt {
     class Bounds {
     public:
-        Point max;
         Point min;
+        Point max;
 
         static Bounds cube();
 
@@ -35,6 +35,10 @@ namespace rt {
         Bounds operator+(const Point &point) const;
 
         bool operator==(const Bounds &that) const;
+
+        bool contains(const Point &point) const;
+
+        bool contains(const Bounds &bounds) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Bounds &bounds);

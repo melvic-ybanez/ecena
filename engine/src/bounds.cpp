@@ -57,4 +57,12 @@ namespace rt {
         };
         return {new_min, new_max};
     }
+
+    bool Bounds::operator==(const Bounds &that) const {
+        return this->min == that.min && this->max == that.max;
+    }
+
+    std::ostream &operator<<(std::ostream &out, const Bounds &bounds) {
+        return out << "{ min: " << bounds.min << ", max" << bounds.max << " }";
+    }
 }

@@ -33,6 +33,8 @@ namespace rt {
         Bounds operator+(const Bounds &other) const;
 
         Bounds operator+(const Point &point) const;
+
+        bool operator==(const Bounds &that) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Bounds &bounds);

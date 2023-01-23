@@ -294,7 +294,7 @@ namespace rt::shapes {
         children.push_back(std::move(shape));
     }
 
-    void Group::add_children(std::vector<Shape *> shapes) {
+    void Group::add_children(const std::vector<Shape *>& shapes) {
         for (auto shape: shapes) {
             add_child(shape);
         }
@@ -335,7 +335,7 @@ namespace rt::shapes {
     }
 
     Bounds Plane::bounds() const {
-        return {{-math::infinity, 0, math::infinity}};
+        return {{-math::infinity, 0, -math::infinity}};
     }
 
     Bounds Cone::bounds() const {

@@ -77,6 +77,10 @@ namespace rt::tests {
     namespace groups {
         void test();
     }
+
+    namespace bounds {
+        void test();
+    }
 }
 
 #endif //ECENA_TESTS_H

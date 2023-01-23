@@ -192,7 +192,7 @@ namespace rt::shapes {
 
         void add_child(std::unique_ptr<Shape> shape);
 
-        void add_children(std::vector<Shape *> shapes);
+        void add_children(const std::vector<Shape *>& shapes);
 
         bool contains(const Shape *shape) const;
 

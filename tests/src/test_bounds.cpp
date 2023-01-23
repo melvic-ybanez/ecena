@@ -6,6 +6,7 @@
 #include "../include/asserts.h"
 #include "../../engine/include/bounds.h"
 #include "../../engine/include/shapes.h"
+#include "../include/test_utils.h"
 
 namespace rt::tests::bounds {
     static void init();
@@ -57,8 +58,39 @@ namespace rt::tests::bounds {
             });
             scenario("Plane", [] {
                 shapes::Plane plane;
-                auto box = plane.bounds();
-                ASSERT_EQ(Bounds(Point(-math::infinity, 0, -math::infinity), Point(math::infinity, 0, math::infinity)), box);
+                ASSERT_EQ(Bounds(Point(-math::infinity, 0, -math::infinity), Point(math::infinity, 0, math::infinity)),
+                          plane.bounds());
+            });
+            scenario("Cube", [] {
+                shapes::Cube cube;
+                auto box = cube.bounds();
+                ASSERT_EQ(Bounds(Point(-1, -1, -1), Point(1, 1, 1)), box);
+            });
+            scenario("Unbounded Cylinder", [] {
+                shapes::Cylinder cyl;
+                auto box = cyl.bounds();
+                ASSERT_EQ(Bounds(Point(-1, -math::infinity, -1), Point(1, math::infinity, 1)), box);
+            });
+            scenario("Bounded Cylinder", [] {
+                shapes::Cylinder cyl{-5, 3};
+                auto box = cyl.bounds();
+                ASSERT_EQ(Bounds(Point(-1, -5, -1), Point(1, 3, 1)), box);
+            });
+            scenario("Unbounded Cone", [] {
+                shapes::Cone cone;
+                auto box = cone.bounds();
+                ASSERT_EQ(Bounds(Point(-math::infinity, -math::infinity, -math::infinity),
+                                 Point(math::infinity, math::infinity, math::infinity)), box);
+            });
+            scenario("Bounded Cone", [] {
+                shapes::Cone cone{-5, 3};
+                auto box = cone.bounds();
+                ASSERT_EQ(Bounds(Point(-5, -5, -5), Point(5, 3, 5)), box);
+            });
+            scenario("Test shape", [] {
+                TestShape shape;
+                auto box = shape.bounds();
+                ASSERT_EQ(Bounds(Point(-1, -1, -1), Point(1, 1, 1)), box);
             });
         });
     }

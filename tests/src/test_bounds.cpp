@@ -20,6 +20,8 @@ namespace rt::tests::bounds {
 
     static void transformations();
 
+    static void intersections();
+
     void test() {
         set("Bounds", [] {
             init();
@@ -27,6 +29,7 @@ namespace rt::tests::bounds {
             of_shapes();
             contains();
             transformations();
+            intersections();
         });
     }
 
@@ -159,6 +162,35 @@ namespace rt::tests::bounds {
             Bounds box{Point{-1, -1, -1}, Point{1, 1, 1}};
             box = box.transform(math::matrix::rotation_y(math::pi / 4)).transform(matrix::rotation_x(math::pi / 4));
             ASSERT_EQ(Bounds(Point(-1.4142, -1.7071, -1.7071), Point(1.4142, 1.7071, 1.7071)), box);
+        });
+    }
+
+    void intersections() {
+        scenario("Intersections", [] {
+            scenario("Intersecting a ray with a bounding box at the origin", [] {
+                shapes::Cube cube;
+                const size_t size = 13;
+                std::array<Point, size> origins{
+                        {{5, 0.5, 0}, {-5, 0.5, 0}, {0.5, 5, 0}, {0.5, -5, 0},
+                         {0.5, 0, 5}, {0.5, 0, -5}, {0, 0.5, 0}, {-2, 0, 0},
+                         {0, -2, 0}, {0, 0, -2}, {2, 0, 2}, {0, 2, 2}, {2, 2, 0}}
+                };
+                std::array<Vec, size> directions{
+                        {{-1, 0, 0}, {1, 0, 0}, {0, -1, 0}, {0, 1, 0},
+                         {0, 0, -1}, {0, 0, 1}, {0, 0, 1}, {2, 4, 6},
+                         {6, 2, 4}, {4, 6, 2}, {0, 0, -1}, {0, -1, 0}, {-1, 0, 0}}
+                };
+                std::array<bool, size> truth_values{
+                        true, true, true, true, true, true, true, false, false, false, false, false, false
+                };
+
+                for (int i = 0; i < size; i++) {
+                    auto direction = directions[i].normalize();
+                    Ray ray{origins[i], direction};
+                    auto intersects = !shapes::Cube::intersect(ray, &cube).empty();
+                    ASSERT_EQ_MSG(std::to_string(i) + "- Intersects", truth_values[i], intersects);
+                }
+            });
         });
     }
 }

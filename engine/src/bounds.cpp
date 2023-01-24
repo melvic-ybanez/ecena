@@ -75,4 +75,37 @@ namespace rt {
     bool Bounds::contains(const Bounds &bounds) const {
         return contains(bounds.min) && contains(bounds.max);
     }
+
+    std::pair<Bounds, Bounds> Bounds::split() const {
+        auto dx = std::abs(min.x()) + std::abs(max.x());
+        auto dy = std::abs(min.y()) + std::abs(max.y());
+        auto dz = std::abs(min.z()) + std::abs(max.z());
+
+        auto greatest = std::max(dx, std::max(dy, dz));
+        auto x0 = min.x();
+        auto y0 = min.y();
+        auto z0 = min.z();
+        auto x1 = max.x();
+        auto y1 = max.y();
+        auto z1 = max.z();
+
+        if (greatest == dx) {
+            x0 += dx / 2.0;
+            x1 = x0;
+        } else if (greatest == dy) {
+            y0 += dy / 2.0;
+            y1 = y0;
+        } else if (greatest == dz) {
+            z0 += dz / 2.0;
+            z1 = z0;
+        }
+
+        Point mid_min{x0, y0, z0};
+        Point mid_max{x1, y1, z1};
+
+        Bounds left{min, mid_max};
+        Bounds right{mid_min, max};
+
+        return {left, right};
+    }
 }

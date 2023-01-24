@@ -39,6 +39,8 @@ namespace rt {
         bool contains(const Point &point) const;
 
         bool contains(const Bounds &bounds) const;
+
+        std::pair<Bounds, Bounds> split() const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Bounds &bounds);

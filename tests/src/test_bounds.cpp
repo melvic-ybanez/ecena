@@ -22,6 +22,8 @@ namespace rt::tests::bounds {
 
     static void intersections();
 
+    static void splits();
+
     void test() {
         set("Bounds", [] {
             init();
@@ -30,6 +32,7 @@ namespace rt::tests::bounds {
             contains();
             transformations();
             intersections();
+            splits();
         });
     }
 
@@ -191,6 +194,33 @@ namespace rt::tests::bounds {
                     ASSERT_EQ_MSG(std::to_string(i) + "- Intersects", truth_values[i], intersects);
                 }
             });
+        });
+    }
+
+    void splits() {
+        set("Splitting a perfect cube", [] {
+            Bounds box{Point{-1, -4, -5}, Point{9, 6, 5}};
+            auto [left, right] = box.split();
+            ASSERT_EQ_MSG("Left", Bounds(Point(-1, -4, -5), Point(4, 6, 5)), left);
+            ASSERT_EQ_MSG("Right", Bounds(Point(4, -4, -5), Point(9, 6, 5)), right);
+        });
+        set("Splitting a x-wide box", [] {
+            Bounds box{Point{-1, -2, -3}, Point{9, 5.5, 3}};
+            auto [left, right] = box.split();
+            ASSERT_EQ_MSG("Left", Bounds(Point(-1, -2, -3), Point(4, 5.5, 3)), left);
+            ASSERT_EQ_MSG("Right", Bounds(Point(4, -2, -3), Point(9, 5.5, 3)), right);
+        });
+        set("Splitting a y-wide box", [] {
+            Bounds box{Point{-1, -2, -3}, Point{5, 8, 3}};
+            auto [left, right] = box.split();
+            ASSERT_EQ_MSG("Left", Bounds(Point(-1, -2, -3), Point(5, 3, 3)), left);
+            ASSERT_EQ_MSG("Right", Bounds(Point(-1, 3, -3), Point(5, 8, 3)), right);
+        });
+        set("Splitting a z-wide box", [] {
+            Bounds box{Point{-1, -2, -3}, Point{5, 3, 7}};
+            auto [left, right] = box.split();
+            ASSERT_EQ_MSG("Left", Bounds(Point(-1, -2, -3), Point(5, 3, 2)), left);
+            ASSERT_EQ_MSG("Right", Bounds(Point(-1, -2, 2), Point(5, 3, 7)), right);
         });
     }
 }

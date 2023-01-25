@@ -59,6 +59,9 @@ namespace rt::shapes {
         virtual Aggregate local_intersect(const Ray &local_ray) = 0;
 
         virtual Vec local_normal_at(const Point &local_point) = 0;
+
+    private:
+        mutable std::optional<Bounds> cached_parent_space_bounds;
     };
 
     class Sphere : public Shape {
@@ -198,8 +201,10 @@ namespace rt::shapes {
 
         Bounds bounds() const override;
 
+        std::pair<std::unique_ptr<Group>, std::unique_ptr<Group>> partition();
+
     private:
-        mutable std::optional<Bounds> maybe_bounds;
+        mutable std::optional<Bounds> cached_bounds;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

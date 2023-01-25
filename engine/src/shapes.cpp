@@ -352,17 +352,44 @@ namespace rt::shapes {
     }
 
     Bounds Group::bounds() const {
-        if (maybe_bounds.has_value()) return maybe_bounds.value();
+        if (cached_bounds.has_value()) return cached_bounds.value();
 
         Bounds bounds;
         for (auto &child: children) {
             bounds = bounds + child->parent_space_bounds();
         }
-        maybe_bounds = bounds;
+        cached_bounds = bounds;
         return bounds;
     }
 
+    std::pair<std::unique_ptr<Group>, std::unique_ptr<Group>> Group::partition()  {
+        auto left_group = std::make_unique<Group>();
+        auto right_group = std::make_unique<Group>();
+
+        std::vector<std::unique_ptr<Shape>> new_children;
+
+        auto [left_bounds, right_bounds] = bounds().split();
+
+        for (auto &child: children) {
+            auto child_bounds = child->parent_space_bounds();
+
+            if (left_bounds.contains(child_bounds)) {
+                left_group->add_child(std::move(child));
+            } else if (right_bounds.contains(child_bounds)) {
+                right_group->add_child(std::move(child));
+            } else {
+                new_children.push_back(std::move(child));
+            }
+        }
+
+        children = std::move(new_children);
+
+        return {std::move(left_group), std::move(right_group)};
+    }
+
     Bounds Shape::parent_space_bounds() const {
-        return bounds().transform(transformation);
+        if (!cached_parent_space_bounds.has_value())
+            cached_parent_space_bounds = bounds().transform(transformation);
+        return cached_parent_space_bounds.value();
     }
 }

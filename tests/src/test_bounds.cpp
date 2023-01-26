@@ -24,8 +24,6 @@ namespace rt::tests::bounds {
 
     static void splits();
 
-    static void partitions();
-
     void test() {
         set("Bounds", [] {
             init();
@@ -35,7 +33,6 @@ namespace rt::tests::bounds {
             transformations();
             intersections();
             splits();
-            partitions();
         });
     }
 
@@ -224,29 +221,6 @@ namespace rt::tests::bounds {
             auto [left, right] = box.split();
             ASSERT_EQ_MSG("Left", Bounds(Point(-1, -2, -3), Point(5, 3, 2)), left);
             ASSERT_EQ_MSG("Right", Bounds(Point(-1, -2, 2), Point(5, 3, 7)), right);
-        });
-    }
-
-    void partitions() {
-        set("Partitioning a group's children", [] {
-            auto s1 = new shapes::Sphere;
-            math::translate(*s1, -2, 0, 0);
-            auto s2 = new shapes::Sphere;
-            math::translate(*s2, 2, 0, 0);
-            auto s3 = new shapes::Sphere;
-
-            shapes::Group group;
-            group.add_children({s1, s2, s3});
-            auto [left, right] = group.partition();
-
-            ASSERT_EQ_MSG("Remaining count", 1, group.children.size());
-            ASSERT_EQ_MSG("Remaining head", s3, group.children[0].get());
-
-            ASSERT_EQ_MSG("Left count", 1, left->children.size());
-            ASSERT_EQ_MSG("Left head", s1, left->children[0].get());
-
-            ASSERT_EQ_MSG("Right count", 1, right->children.size());
-            ASSERT_EQ_MSG("Right head", s2, right->children[0].get());
         });
     }
 }

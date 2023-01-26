@@ -14,7 +14,7 @@
 
 namespace rt::shapes {
     enum class Type {
-        shape, sphere, plane, test, cube, cylinder, cone, group
+        shape = 0, sphere, plane, test, cube, cylinder, cone, group
     };
 
     std::ostream &operator<<(std::ostream &out, const Type &type);
@@ -201,7 +201,19 @@ namespace rt::shapes {
 
         Bounds bounds() const override;
 
+        /**
+         * Groups the children according to which side (left or right) of the bounds they belong and
+         * return them. It keeps the ones that do not belong to either side (i.e. the shapes that
+         * partially belong to both sides).
+         */
         std::pair<std::unique_ptr<Group>, std::unique_ptr<Group>> partition();
+
+        /**
+         * Creates a subgroup with the given children. The created subgroup becomes a member of this group.
+         */
+        void make_subgroup(const std::vector<Shape *> &children);
+
+        size_t count() const;
 
     private:
         mutable std::optional<Bounds> cached_bounds;

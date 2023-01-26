@@ -17,12 +17,18 @@ namespace rt::tests::groups {
 
     static void normals();
 
+    static void partitions();
+
+    static void subgroups();
+
     void test() {
         set("Groups", [] {
             init();
             children();
             intersections();
             normals();
+            partitions();
+            subgroups();
         });
     }
 
@@ -113,6 +119,46 @@ namespace rt::tests::groups {
                 auto n = sphere->normal_at(Point{1.7321, 1.1547, -5.5774});
                 ASSERT_EQ(Vec(0.2857, 0.4286, -0.8571), n);
             });
+        });
+    }
+
+    void partitions() {
+        set("Partitioning a group's children", [] {
+            auto s1 = new shapes::Sphere;
+            math::translate(*s1, -2, 0, 0);
+            auto s2 = new shapes::Sphere;
+            math::translate(*s2, 2, 0, 0);
+            auto s3 = new shapes::Sphere;
+
+            shapes::Group group;
+            group.add_children({s1, s2, s3});
+            auto [left, right] = group.partition();
+
+            ASSERT_EQ_MSG("Remaining count", 1, group.children.size());
+            ASSERT_EQ_MSG("Remaining head", s3, group.children[0].get());
+
+            ASSERT_EQ_MSG("Left count", 1, left->children.size());
+            ASSERT_EQ_MSG("Left head", s1, left->children[0].get());
+
+            ASSERT_EQ_MSG("Right count", 1, right->children.size());
+            ASSERT_EQ_MSG("Right head", s2, right->children[0].get());
+        });
+    }
+
+    void subgroups() {
+        set("Creating a subgroup from a list of children", [] {
+            auto s1 = new shapes::Sphere;
+            auto s2 = new shapes::Sphere;
+
+            shapes::Group group;
+            std::vector<Shape *> subgroup_children{s1, s2};
+            group.make_subgroup(subgroup_children);
+
+            auto subgroup = dynamic_cast<shapes::Group *>(group.children[0].get());
+
+            ASSERT_EQ_MSG("Count", 1, group.count());
+            ASSERT_EQ_MSG("First subgroup child", s1, subgroup->children[0].get());
+            ASSERT_EQ_MSG("Second subgroup child", s2, subgroup->children[1].get());
         });
     }
 }

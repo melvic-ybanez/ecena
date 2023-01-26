@@ -7,21 +7,20 @@
 #include "../include/shapes.h"
 
 namespace rt::shapes {
-    Shape::Shape() : transformation{math::matrix::identity<4, 4>()}, material(std::make_unique<Material>()),
-                     parent{nullptr} {}
-
     std::ostream &operator<<(std::ostream &out, const Type &type) {
-        switch (type) {
-            case Type::sphere:
-                return out << "Sphere";
-            default:
-                return out << "Shape";
-        }
+        std::array<std::string, 8> type_strings{
+                "Shape", "Sphere", "Plane", "Test", "Cube", "Cylinder", "Cone", "Group"
+        };
+        auto index = static_cast<int>(type);
+        return out << type_strings[index];
     }
 
     Type Shape::type() const {
         return Type::shape;
     }
+
+    Shape::Shape() : transformation{math::matrix::identity<4, 4>()}, material(std::make_unique<Material>()),
+                     parent{nullptr} {}
 
     Aggregate Shape::intersect(const Ray &ray) {
         auto local_ray = ray.transform(transformation.inverse());
@@ -46,6 +45,12 @@ namespace rt::shapes {
         auto world_normal = Vec{transformation.inverse().transpose() * local_normal}.normalize();
         if (has_parent()) return parent->normal_to_world(world_normal);
         return world_normal;
+    }
+
+    Bounds Shape::parent_space_bounds() const {
+        if (!cached_parent_space_bounds.has_value())
+            cached_parent_space_bounds = bounds().transform(transformation);
+        return cached_parent_space_bounds.value();
     }
 
     Aggregate Sphere::local_intersect(const Ray &local_ray) {
@@ -387,9 +392,13 @@ namespace rt::shapes {
         return {std::move(left_group), std::move(right_group)};
     }
 
-    Bounds Shape::parent_space_bounds() const {
-        if (!cached_parent_space_bounds.has_value())
-            cached_parent_space_bounds = bounds().transform(transformation);
-        return cached_parent_space_bounds.value();
+    void Group::make_subgroup(const std::vector<Shape *> &children) {
+        std::unique_ptr<Group> subgroup = std::make_unique<Group>();
+        subgroup->add_children(children);
+        add_child(std::move(subgroup));
+    }
+
+    size_t Group::count() const {
+        return children.size();
     }
 }

@@ -43,6 +43,8 @@ namespace rt::shapes {
 
         virtual Type type() const;
 
+        virtual void divide(int threshold);
+
         Aggregate intersect(const Ray &ray);
 
         Vec normal_at(const Point &world_point);
@@ -206,12 +208,14 @@ namespace rt::shapes {
          * return them. It keeps the ones that do not belong to either side (i.e. the shapes that
          * partially belong to both sides).
          */
-        std::pair<std::unique_ptr<Group>, std::unique_ptr<Group>> partition();
+        std::pair<std::vector<std::unique_ptr<Shape>>, std::vector<std::unique_ptr<Shape>>> partition();
 
         /**
          * Creates a subgroup with the given children. The created subgroup becomes a member of this group.
          */
-        void make_subgroup(const std::vector<Shape *> &children);
+        void make_subgroup(std::vector<std::unique_ptr<Shape>> children);
+
+        void divide(int threshold) override;
 
         size_t count() const;
 

@@ -21,6 +21,8 @@ namespace rt::tests::groups {
 
     static void subgroups();
 
+    static void divide();
+
     void test() {
         set("Groups", [] {
             init();
@@ -29,6 +31,7 @@ namespace rt::tests::groups {
             normals();
             partitions();
             subgroups();
+            divide();
         });
     }
 
@@ -137,11 +140,11 @@ namespace rt::tests::groups {
             ASSERT_EQ_MSG("Remaining count", 1, group.children.size());
             ASSERT_EQ_MSG("Remaining head", s3, group.children[0].get());
 
-            ASSERT_EQ_MSG("Left count", 1, left->children.size());
-            ASSERT_EQ_MSG("Left head", s1, left->children[0].get());
+            ASSERT_EQ_MSG("Left count", 1, left.size());
+            ASSERT_EQ_MSG("Left head", s1, left[0].get());
 
-            ASSERT_EQ_MSG("Right count", 1, right->children.size());
-            ASSERT_EQ_MSG("Right head", s2, right->children[0].get());
+            ASSERT_EQ_MSG("Right count", 1, right.size());
+            ASSERT_EQ_MSG("Right head", s2, right[0].get());
         });
     }
 
@@ -151,14 +154,46 @@ namespace rt::tests::groups {
             auto s2 = new shapes::Sphere;
 
             shapes::Group group;
-            std::vector<Shape *> subgroup_children{s1, s2};
-            group.make_subgroup(subgroup_children);
+            std::vector<std::unique_ptr<Shape>> subgroup_children;
+            subgroup_children.push_back(std::unique_ptr<shapes::Sphere>(s1));
+            subgroup_children.push_back(std::unique_ptr<shapes::Sphere>(s2));
+            group.make_subgroup(std::move(subgroup_children));
 
             auto subgroup = dynamic_cast<shapes::Group *>(group.children[0].get());
 
             ASSERT_EQ_MSG("Count", 1, group.count());
             ASSERT_EQ_MSG("First subgroup child", s1, subgroup->children[0].get());
             ASSERT_EQ_MSG("Second subgroup child", s2, subgroup->children[1].get());
+        });
+    }
+
+    void divide() {
+        set("Subdividing a group partitions its children", [] {
+            auto s1 = new shapes::Sphere;
+            auto s2 = new shapes::Sphere;
+            auto s3 = new shapes::Sphere;
+
+            math::translate(*s1, -2, -2, 0);
+            math::translate(*s2, -2, 2, 0);
+            math::scale(*s3, 4, 4, 4);
+
+            shapes::Group group;
+            group.add_children({s1, s2, s3});
+
+            group.divide(1);
+
+            ASSERT_EQ_MSG("First child", s3, group.children[0].get());
+
+            auto subgroup = dynamic_cast<shapes::Group *>(group.children[1].get());
+            ASSERT_EQ_MSG("Subgroup count", 2, subgroup->count());
+
+            auto subgroup_1st_child = dynamic_cast<shapes::Group *>(subgroup->children[0].get());
+            ASSERT_EQ_MSG("First subgroup child count", 1, subgroup_1st_child->count());
+            ASSERT_EQ_MSG("First subgroup only child", s1, subgroup_1st_child->children[0].get());
+
+            auto subgroup_2nd_child = dynamic_cast<shapes::Group *>(subgroup->children[1].get());
+            ASSERT_EQ_MSG("Second subgroup child count", 1, subgroup_2nd_child->count());
+            ASSERT_EQ_MSG("Second subgroup only child", s2, subgroup_2nd_child->children[0].get());
         });
     }
 }

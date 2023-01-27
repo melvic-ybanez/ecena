@@ -53,6 +53,11 @@ namespace rt::shapes {
         return cached_parent_space_bounds.value();
     }
 
+    /**
+     * Do not divide a primitive shape.
+     */
+    void Shape::divide(int threshold) {}
+
     Aggregate Sphere::local_intersect(const Ray &local_ray) {
         // compute the discriminant
         auto sphere_to_ray = local_ray.origin - Point{0, 0, 0};
@@ -367,11 +372,11 @@ namespace rt::shapes {
         return bounds;
     }
 
-    std::pair<std::unique_ptr<Group>, std::unique_ptr<Group>> Group::partition()  {
-        auto left_group = std::make_unique<Group>();
-        auto right_group = std::make_unique<Group>();
+    std::pair<std::vector<std::unique_ptr<Shape>>, std::vector<std::unique_ptr<Shape>>> Group::partition()  {
+        std::vector<std::unique_ptr<Shape>> left{};
+        std::vector<std::unique_ptr<Shape>> right{};
 
-        std::vector<std::unique_ptr<Shape>> new_children;
+        std::vector<std::unique_ptr<Shape>> new_children{};
 
         auto [left_bounds, right_bounds] = bounds().split();
 
@@ -379,9 +384,9 @@ namespace rt::shapes {
             auto child_bounds = child->parent_space_bounds();
 
             if (left_bounds.contains(child_bounds)) {
-                left_group->add_child(std::move(child));
+                left.push_back(std::move(child));
             } else if (right_bounds.contains(child_bounds)) {
-                right_group->add_child(std::move(child));
+                right.push_back(std::move(child));
             } else {
                 new_children.push_back(std::move(child));
             }
@@ -389,13 +394,27 @@ namespace rt::shapes {
 
         children = std::move(new_children);
 
-        return {std::move(left_group), std::move(right_group)};
+        return {std::move(left), std::move(right)};
     }
 
-    void Group::make_subgroup(const std::vector<Shape *> &children) {
+    void Group::make_subgroup(std::vector<std::unique_ptr<Shape>> children) {
         std::unique_ptr<Group> subgroup = std::make_unique<Group>();
-        subgroup->add_children(children);
+        for (auto &child: children) {
+            subgroup->add_child(std::move(child));
+        }
         add_child(std::move(subgroup));
+    }
+
+    void Group::divide(int threshold) {
+        if (threshold <= count()) {
+            auto [left, right] = partition();
+            if (!left.empty()) make_subgroup(std::move(left));
+            if (!right.empty()) make_subgroup(std::move(right));
+        }
+
+        for (auto &child: children) {
+            child->divide(threshold);
+        }
     }
 
     size_t Group::count() const {

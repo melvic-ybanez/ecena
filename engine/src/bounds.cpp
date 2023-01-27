@@ -2,6 +2,7 @@
 // Created by Melvic Ybanez on 1/23/23.
 //
 
+#include <cmath>
 #include <utility>
 
 #include "../include/bounds.h"
@@ -77,9 +78,9 @@ namespace rt {
     }
 
     std::pair<Bounds, Bounds> Bounds::split() const {
-        auto dx = std::abs(min.x()) + std::abs(max.x());
-        auto dy = std::abs(min.y()) + std::abs(max.y());
-        auto dz = std::abs(min.z()) + std::abs(max.z());
+        auto dx = std::sqrt(math::pow2(max.x() - min.x()));
+        auto dy = std::sqrt(math::pow2(max.y() - min.y()));
+        auto dz = std::sqrt(math::pow2(max.z() - min.z()));
 
         auto greatest = std::max(dx, std::max(dy, dz));
         auto x0 = min.x();

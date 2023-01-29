@@ -231,7 +231,7 @@ namespace rt::dsl::eval {
                 type = to_str(*field.value_, field.line)->value;
                 type_line = field.line;
             } else if (field.key() == "components") {
-                components = to_array_of<Color>(*field.value_, {}, field.line, to_color);
+                components = to_array_of<Color>(*field.value_, std::nullopt, field.line, to_color);
             }
         }
 

@@ -20,7 +20,7 @@ add_executable(
         engine/include/shapes.h
         engine/include/intersection.h
         engine/src/shapes.cpp
-        engine/src/intersection.cpp engine/include/light.h engine/include/materials.h engine/src/materials.cpp engine/src/light.cpp dsl/include/tokens.h dsl/include/lexer.h dsl/src/lexer.cpp dsl/include/errors.h dsl/src/errors.cpp dsl/include/parser.h dsl/include/ast.h dsl/src/parser.cpp dsl/src/ast.cpp engine/include/renderer.h engine/src/renderer.cpp engine/include/data.h engine/src/data.cpp dsl/include/eval.h dsl/src/eval.cpp shared/include/utils.h engine/include/world.h engine/src/world.cpp engine/include/comps.h engine/src/comps.cpp engine/include/camera.h engine/src/camera.cpp engine/include/patterns.h engine/src/patterns.cpp engine/math/include/transform.h engine/include/bounds.h engine/src/bounds.cpp)
+        engine/src/intersection.cpp engine/include/light.h engine/include/materials.h engine/src/materials.cpp engine/src/light.cpp dsl/include/tokens.h dsl/include/lexer.h dsl/src/lexer.cpp dsl/include/errors.h dsl/src/errors.cpp dsl/include/parser.h dsl/include/ast.h dsl/src/parser.cpp dsl/src/ast.cpp engine/include/renderer.h engine/src/renderer.cpp engine/include/data.h engine/src/data.cpp dsl/include/eval.h dsl/src/eval.cpp shared/include/utils.h engine/include/world.h engine/src/world.cpp engine/include/comps.h engine/src/comps.cpp engine/include/camera.h engine/src/camera.cpp engine/include/patterns.h engine/src/patterns.cpp engine/math/include/transform.h engine/include/bounds.h engine/src/bounds.cpp dsl/include/interpreter.h dsl/src/interpreter.cpp)
 add_executable(
         ecena_tests
         tests/src/tests.cpp

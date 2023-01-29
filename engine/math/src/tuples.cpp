@@ -166,12 +166,4 @@ namespace rt::math {
                 c1.blue() * c2.blue()
         };
     }
-
-    void Color::write_to(std::ofstream &out) const {
-        auto r = static_cast<int>(255.999 * red());
-        auto g = static_cast<int>(255.999 * green());
-        auto b = static_cast<int>(255.999 * blue());
-
-        out << r << ' ' << g << ' ' << b << std::endl;
-    }
 }

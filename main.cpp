@@ -1,12 +1,8 @@
 #include <iostream>
 #include <fstream>
-#include <ctime>
 
-#include "dsl/include/lexer.h"
-#include "dsl/include/parser.h"
-#include "dsl/include/errors.h"
-#include "dsl/include/eval.h"
 #include "engine/include/renderer.h"
+#include "dsl/include/interpreter.h"
 
 int main() {
     std::ofstream out_img{"output.ppm"};
@@ -16,36 +12,12 @@ int main() {
         return 1;
     }
 
-    std::string source;
-    std::string line;
+    auto source = rt::dsl::read_source();
+    auto data = rt::dsl::interpret(source);
 
-    while (getline(std::cin, line)) {
-        source += line + "\n";
-    }
+    if (!data.has_value()) return 1;
 
-    std::unique_ptr<rt::dsl::Object> object;
-    rt::Data data;
-
-    rt::dsl::Lexer lexer{source};
-    try {
-        auto tokens = lexer.scan_all();
-        rt::dsl::Parser parser{tokens};
-        object = parser.parse_object();
-        data = rt::dsl::eval::to_data(*object);
-    } catch (rt::dsl::errors::Error &error) {
-        std::cout << error;
-        return 1;
-    }
-
-    std::cout << "Rendering...\n";
-
-    auto start_time = clock();
-
-    out_img << rt::render(data);
-
-    auto duration = static_cast<double>(clock() - start_time) / CLOCKS_PER_SEC;
-
-    std::cout << "Done. Running time: " << duration << " seconds";
+    rt::render_with_logging(data.value(), out_img);
 
     return 0;
 }

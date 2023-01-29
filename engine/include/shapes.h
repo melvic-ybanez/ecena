@@ -14,7 +14,7 @@
 
 namespace rt::shapes {
     enum class Type {
-        shape = 0, sphere, plane, test, cube, cylinder, cone, group
+        shape, sphere, plane, test, cube, cylinder, cone, group
     };
 
     std::ostream &operator<<(std::ostream &out, const Type &type);

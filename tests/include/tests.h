@@ -81,6 +81,10 @@ namespace rt::tests {
     namespace bounds {
         void test();
     }
+
+    namespace dsl_ {
+        void test();
+    }
 }
 
 #endif //ECENA_TESTS_H

@@ -12,14 +12,10 @@ namespace rt::dsl {
     }
 
     std::string type_to_str(ExprType type) {
-        switch(type) {
-            case ExprType::object: return "Object";
-            case ExprType::number: return "Number";
-            case ExprType::string: return "String";
-            case ExprType::array: return "Array";
-            case ExprType::boolean: return "Boolean";
-            case ExprType::null: return "Null";
-        }
+        std::array<std::string, 6> type_strings{
+            "Object", "Number", "String", "Array", "Boolean", "Null"
+        };
+        return type_strings[static_cast<int>(type)];
     }
 
     Object::Object(std::vector<Field> fields) : fields{std::move(fields)} {}

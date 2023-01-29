@@ -30,6 +30,7 @@ int main() {
     cones::test();
     groups::test();
     bounds::test();
+    dsl_::test();
 
     std::cout << "Ran " << test_count << " tests. Successful: " << success_count << ". Failed: "
               << test_count - success_count << ".";

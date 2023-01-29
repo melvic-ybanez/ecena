@@ -195,5 +195,35 @@ namespace rt::tests::groups {
             ASSERT_EQ_MSG("Second subgroup child count", 1, subgroup_2nd_child->count());
             ASSERT_EQ_MSG("Second subgroup only child", s2, subgroup_2nd_child->children[0].get());
         });
+        set("Subdividing a group with too few children", [] {
+            auto s1 = new shapes::Sphere;
+            auto s2 = new shapes::Sphere;
+            auto s3 = new shapes::Sphere;
+            auto s4 = new shapes::Sphere;
+
+            math::translate(*s1, -2, 0, 0);
+            math::translate(*s2, 2, 1, 0);
+            math::translate(*s3, 2, -1, 0);
+
+            auto subgroup = new shapes::Group;
+            subgroup->add_children({s1, s2, s3});
+            shapes::Group group;
+            group.add_children({subgroup, s4});
+
+            group.divide(3);
+
+            ASSERT_EQ_MSG("First child", subgroup, group[0]);
+            ASSERT_EQ_MSG("Second child", s4, group[1]);
+            ASSERT_EQ_MSG("Subgroup count", 2, subgroup->count());
+
+            auto subgroup_1st_child = dynamic_cast<const shapes::Group *>((*subgroup)[0]);
+            ASSERT_EQ_MSG("First subgroup child count", 1, subgroup_1st_child->count());
+            ASSERT_EQ_MSG("First subgroup only child", s1, (*subgroup_1st_child)[0]);
+
+            auto subgroup_2nd_child = dynamic_cast<const shapes::Group *>((*subgroup)[1]);
+            ASSERT_EQ_MSG("Second subgroup child count", 2, subgroup_2nd_child->count());
+            ASSERT_EQ_MSG("Second subgroup first child", s2, (*subgroup_2nd_child)[0]);
+            ASSERT_EQ_MSG("Second subgroup second child", s3, (*subgroup_2nd_child)[1]);
+        });
     }
 }

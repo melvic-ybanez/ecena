@@ -219,6 +219,8 @@ namespace rt::shapes {
 
         size_t count() const;
 
+        const Shape *operator[](size_t i) const;
+
     private:
         mutable std::optional<Bounds> cached_bounds;
     };

@@ -304,7 +304,7 @@ namespace rt::shapes {
         children.push_back(std::move(shape));
     }
 
-    void Group::add_children(const std::vector<Shape *>& shapes) {
+    void Group::add_children(const std::vector<Shape *> &shapes) {
         for (auto shape: shapes) {
             add_child(shape);
         }
@@ -330,6 +330,10 @@ namespace rt::shapes {
 
     Vec Group::local_normal_at(const Point &local_point) {
         throw std::runtime_error("Groups don't support this operation");
+    }
+
+    const Shape *Group::operator[](size_t i) const {
+        return children[i].get();
     }
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {
@@ -372,7 +376,7 @@ namespace rt::shapes {
         return bounds;
     }
 
-    std::pair<std::vector<std::unique_ptr<Shape>>, std::vector<std::unique_ptr<Shape>>> Group::partition()  {
+    std::pair<std::vector<std::unique_ptr<Shape>>, std::vector<std::unique_ptr<Shape>>> Group::partition() {
         std::vector<std::unique_ptr<Shape>> left{};
         std::vector<std::unique_ptr<Shape>> right{};
 

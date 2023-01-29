@@ -38,6 +38,10 @@ namespace rt::dsl {
         return value == str;
     }
 
+    bool String::operator!=(const std::string &str) const {
+        return !(*this == str);
+    }
+
     std::ostream &String::display(std::ostream &out) const {
         return out << "\"" << value << "\"";
     }

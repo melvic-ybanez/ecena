@@ -194,7 +194,8 @@ cube = {
 
 sphere_group = {
     'type': 'group',
-    'children': [middle_group(), right_group()]
+    'children': [middle_group(), right_group()],
+    'threshold': 2,
 }
 
 data = json.dumps({

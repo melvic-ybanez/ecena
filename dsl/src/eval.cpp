@@ -142,12 +142,14 @@ namespace rt::dsl::eval {
         for (auto &field: obj->fields) {
             SKIP_DOC_FIELDS;
             auto &key = field.key();
-            if (key == "type" || key == "minimum" || key == "maximum" || key == "closed" || key == "children") continue;
+            if (key == "type" || key == "minimum" || key == "maximum" || key == "closed" || key == "children" ||
+                key == "threshold")
+                continue;
             if (key == "material") {
                 shape->material = to_material(*field.value_, field.line);
             } else if (key == "transform") {
                 shape->transformation = to_transform(*field.value_, field.line);
-            } else throw_unknown_field_error(field);
+            } else if (!(key == "type")) throw_unknown_field_error(field);
         }
 
         return shape;
@@ -171,6 +173,13 @@ namespace rt::dsl::eval {
                 for (auto &child: children) {
                     group->add_child(std::move(child));
                 }
+            }
+        }
+        for (auto &field: obj->fields) {
+            if (field.key() == "children") continue;
+            if (field.key() == "threshold") {
+                auto threshold = to_real(*field.value_, field.line);
+                group->divide(static_cast<int>(threshold));
             }
         }
         return group;

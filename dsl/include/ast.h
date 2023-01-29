@@ -56,6 +56,8 @@ namespace rt::dsl {
 
         bool operator==(const std::string &str) const;
 
+        bool operator!=(const std::string &str) const;
+
         ExprType type() const override;
 
         std::ostream &display(std::ostream &out) const override;

@@ -1,6 +1,6 @@
 # Ecena
 
-![amalgamation_with_small_vlc_change](https://user-images.githubusercontent.com/4519785/213890116-fa29592a-00b7-4f63-bb01-f82f504bb802.png)
+![amalgamation_with_lighter_glass_sphere](https://user-images.githubusercontent.com/4519785/215346551-55bb8f2e-53ef-49b6-aa4f-ccb47e15c97c.png)
 
 
 Ecena is a 3D Scene rendering program currently being written in C++. It takes a JSON-like object as the description of a scene and spits out the corresponding 3D world. 

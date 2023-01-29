@@ -23,28 +23,30 @@ def camera():
 def world():
     return {
         "light": {"position": [-10, 12, -10], "intensity": "white"},
-        "objects": objects
+        "objects": objects()
     }
 
 
-left_sphere = {
-    "type": "sphere",
-    "name": "left_sphere",
-    "transform": [["scale", [0.33, 0.33, 0.33]], ["translate", [-1.5, 0.33, -0.75]]],
-    "material": {
-        "diffuse": 0.7,
-        "specular": 0.3,
-        "pattern": {
-            "type": "ring",
-            "components": [[1, 0.8, 0.1], 'white'],
-            "transform": [["scale", [0.33, 0.33, 0.33]], ["rotate_x", -math.pi / 4]]
-        },
-        "reflectivity": 0.5
+def left_sphere():
+    return {
+        "type": "sphere",
+        "name": "left_sphere",
+        "transform": [["scale", [0.33, 0.33, 0.33]], ["translate", [-1.5, 0.33, -0.75]]],
+        "material": {
+            "diffuse": 0.7,
+            "specular": 0.3,
+            "pattern": {
+                "type": "ring",
+                "components": [[1, 0.8, 0.1], 'white'],
+                "transform": [["scale", [0.33, 0.33, 0.33]], ["rotate_x", -math.pi / 4]]
+            },
+            "reflectivity": 0.5
+        }
     }
-}
 
-objects = [
-    {
+
+def floor():
+    return {
         "name": "floor",
         "description": "All the other objects will lie on top of this one",
         "type": "plane",
@@ -52,8 +54,11 @@ objects = [
             "pattern": {"type": "checkers", "components": ['white', [0.5, 0.5, 0.5]]},
             "reflectivity": 0.2
         }
-    },
-    {
+    }
+
+
+def middle_sphere():
+    return {
         "type": "sphere",
         "name": "middle_sphere",
         "transform": [["translate", [-0.5, 1, 0.5]]],
@@ -68,43 +73,57 @@ objects = [
             },
             "reflectivity": 0.5
         }
-    },
-    left_sphere,
-    {
-        "type": "cube",
-        "name": "right_cube",
-        "transform": [["scale", [0.7, 0.7, 0.7]], ["rotate_y", math.pi / 4], ["translate", [1.1, 0.7, 3]]],
-        "material": {
-            "diffuse": 0.7,
-            "specular": 0.3,
-            "pattern": {
-                "type": "checkers",
-                "components": [[1, 0.8, 0.1], [1, 1, 1]],
-                "transform": [["scale", [0.33, 0.33, 0.33]], ["rotate_x", -math.pi / 4]]
-            }
-        }
-    },
-    {
-        "type": "sphere",
-        "name": "right_sphere",
-        "transform": [["scale", [0.7, 0.7, 0.7]], ["translate", [1.1, 2.1, 3]]],
-        "material": {"color": [1, 0.5, 0.5], "diffuse": 0.7, "specular": 0.3, "reflectivity": 0.5}
     }
-]
 
-for i in range(0, 5):
-    component_scale = 0.5 + 0.1 * i
-    pattern = {"type": "gradient", "components": [[1, 0.8, 0.1], [220.0 / 255, 20.0 / 255, 60.0 / 255]]}
 
-    small_sphere = copy.deepcopy(left_sphere)
-    del small_sphere['name']
+def back():
+    return {
+        'type': 'group',
+        'children': [
+            {
+                "type": "cube",
+                "name": "right_cube",
+                "transform": [["scale", [0.7, 0.7, 0.7]], ["rotate_y", math.pi / 4], ["translate", [1.1, 0.7, 3]]],
+                "material": {
+                    "diffuse": 0.7,
+                    "specular": 0.3,
+                    "pattern": {
+                        "type": "checkers",
+                        "components": [[1, 0.8, 0.1], [1, 1, 1]],
+                        "transform": [["scale", [0.33, 0.33, 0.33]], ["rotate_x", -math.pi / 4]]
+                    }
+                }
+            },
+            {
+                "type": "sphere",
+                "name": "right_sphere",
+                "transform": [["scale", [0.7, 0.7, 0.7]], ["translate", [1.1, 2.1, 3]]],
+                "material": {"color": [1, 0.5, 0.5], "diffuse": 0.7, "specular": 0.3, "reflectivity": 0.5}
+            }
+        ]
+    }
 
-    small_sphere['transform'] += [["scale", [component_scale, component_scale, component_scale]],
-                                  ["translate", [i, 0, 0]]]
-    small_sphere['material']['color'] = [0.5, 0.6, 1]
-    small_sphere['material']['pattern'] = pattern if i % 2 == 0 else None
 
-    objects.append(small_sphere)
+def small_spheres():
+    children = []
+    for i in range(0, 5):
+        component_scale = 0.5 + 0.1 * i
+        pattern = {"type": "gradient", "components": [[1, 0.8, 0.1], [220.0 / 255, 20.0 / 255, 60.0 / 255]]}
+
+        small_sphere = copy.deepcopy(left_sphere())
+        del small_sphere['name']
+
+        small_sphere['transform'] += [["scale", [component_scale, component_scale, component_scale]],
+                                      ["translate", [i, 0, 0]]]
+        small_sphere['material']['color'] = [0.5, 0.6, 1]
+        small_sphere['material']['pattern'] = pattern if i % 2 == 0 else None
+
+        children.append(small_sphere)
+
+    return {
+        'type': 'group',
+        'children': children
+    }
 
 
 def cylinders():
@@ -141,7 +160,10 @@ def cylinders():
 
         acc.append(new_cyl)
 
-    return acc
+    return {
+        'type': 'group',
+        'children': acc
+    }
 
 
 def glasses():
@@ -172,7 +194,10 @@ def glasses():
         'material': glass_mat()
     }
 
-    return [upper_base, body, sphere, small_sphere]
+    return {
+        'type': 'group',
+        'children': [upper_base, body, sphere, small_sphere]
+    }
 
 
 def glass_mat():
@@ -213,9 +238,18 @@ def cones():
         },
         'transform': [['scale', [0.6, 1.0, 0.6]], ['translate', [-3.5, 0.1, 4.5]]]
     }
-    return [base, cone]
+    return {
+        'type': 'group',
+        'children': [base, cone]
+    }
 
 
-objects += cylinders() + glasses() + cones()
+def objects():
+    return [{
+        'type': 'group',
+        'children': [middle_sphere(), back(), left_sphere(), small_spheres(), cylinders(), glasses(), cones(), floor()],
+        # 'threshold': 2
+    }]
+
 
 print(json.dumps(data(), indent=2))

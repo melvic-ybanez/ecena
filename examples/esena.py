@@ -245,11 +245,14 @@ def cones():
 
 
 def objects():
-    return [{
-        'type': 'group',
-        'children': [middle_sphere(), back(), left_sphere(), small_spheres(), cylinders(), glasses(), cones(), floor()],
-        # 'threshold': 2
-    }]
+    return [
+        {
+            'type': 'group',
+            'children': [middle_sphere(), back(), left_sphere(), small_spheres(), cylinders(), glasses(), cones()],
+            'threshold': 2
+        },
+        floor()
+    ]
 
 
 print(json.dumps(data(), indent=2))

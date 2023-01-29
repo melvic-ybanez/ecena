@@ -42,8 +42,8 @@ namespace rt::materials {
 
     Material glass() {
         Material material;
-        material.color = Color::black_;
         material.diffuse = 0.1;
+        material.color = {0.1, 0.1, 0.1};
         material.specular = 1.0;
         material.shininess = 300.0;
         material.transparency = 1.0;

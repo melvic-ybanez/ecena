@@ -2,6 +2,31 @@ import copy
 import json
 import math
 
+
+def data():
+    return {
+        "camera": camera(),
+        "world": world()
+    }
+
+
+def camera():
+    return {
+        "h_size": 1000,
+        "v_size": 600,
+        "field_of_view": math.pi / 3,
+        "transform": [[0, 1.5, -5], [0, 1, 0], [0, 1, 0]],
+        "anti-aliasing": True
+    }
+
+
+def world():
+    return {
+        "light": {"position": [-10, 12, -10], "intensity": "white"},
+        "objects": objects
+    }
+
+
 left_sphere = {
     "type": "sphere",
     "name": "left_sphere",
@@ -67,24 +92,6 @@ objects = [
     }
 ]
 
-camera = {
-    "h_size": 1000,
-    "v_size": 600,
-    "field_of_view": math.pi / 3,
-    "transform": [[0, 1.5, -5], [0, 1, 0], [0, 1, 0]],
-    "anti-aliasing": True
-}
-
-world = {
-    "light": {"position": [-10, 12, -10], "intensity": "white"},
-    "objects": objects
-}
-
-data = {
-    "camera": camera,
-    "world": world
-}
-
 for i in range(0, 5):
     component_scale = 0.5 + 0.1 * i
     pattern = {"type": "gradient", "components": [[1, 0.8, 0.1], [220.0 / 255, 20.0 / 255, 60.0 / 255]]}
@@ -144,7 +151,7 @@ def glasses():
         "minimum": -0.025,
         "maximum": 0.025,
         "transform": [['scale', [0.3, 1.0, 0.3]], ['translate', [0.7, 0.575, -1.5]]],
-        'material': 'glass'
+        'material': glass_mat()
     }
     body = {
         'type': 'cylinder',
@@ -152,20 +159,32 @@ def glasses():
         'minimum': -0.275,
         'maximum': 0.275,
         'transform': [['scale', [0.05, 1.0, 0.05]], ['translate', [0.7, 0.275, -1.5]]],
-        'material': 'glass'
+        'material': glass_mat()
     }
     sphere = {
         'type': 'sphere',
         'transform': [['scale', [0.25, 0.25, 0.25]], ['translate', [0.7, 0.85, -1.5]]],
-        'material': 'glass'
+        'material': glass_mat()
     }
     small_sphere = {
         'type': 'sphere',
         'transform': [['scale', [0.15, 0.15, 0.15]], ['translate', [0.7, 1.25, -1.5]]],
-        'material': 'glass'
+        'material': glass_mat()
     }
 
     return [upper_base, body, sphere, small_sphere]
+
+
+def glass_mat():
+    return {
+        'color': 'white',
+        'diffuse': 0.01,
+        'specular': 1,
+        'shininess': 300,
+        'transparency': 1,
+        'reflectivity': 1,
+        'refractive_index': 1.5
+    }
 
 
 def cones():
@@ -199,4 +218,4 @@ def cones():
 
 objects += cylinders() + glasses() + cones()
 
-print(json.dumps(data, indent=2))
+print(json.dumps(data(), indent=2))

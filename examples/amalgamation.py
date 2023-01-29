@@ -122,7 +122,15 @@ def right_group():
                 'type': 'sphere',
                 'name': 'glass_sphere',
                 'transform': [['scale', [0.25, 0.25, 0.25]], ['translate', [0.7, 0.85, -1.5]]],
-                'material': 'glass'
+                'material': {
+                    'color': [0.2, 0.2, 0.2],
+                    'diffuse': 0.01,
+                    'specular': 1,
+                    'shininess': 300,
+                    'transparency': 1,
+                    'reflectivity': 1,
+                    'refractive_index': 1.5
+                }
             }
         ]
     }

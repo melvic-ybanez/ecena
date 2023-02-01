@@ -29,7 +29,7 @@ namespace rt::math {
     }
 
     bool close_to_zero(real value) {
-        return  math::compare_reals(value, 0);
+        return std::abs(value) < epsilon;
     }
 
     std::ostream &operator<<(std::ostream &out, const Dimensions &dimensions) {

@@ -104,7 +104,7 @@ namespace rt::shapes {
         static std::array<real, 2> check_axis(real origin, real direction, real min, real max);
     };
 
-    class CylinderLike: public Shape {
+    class CylinderLike : public Shape {
     public:
         real min;
         real max;
@@ -197,7 +197,7 @@ namespace rt::shapes {
 
         void add_child(std::unique_ptr<Shape> shape);
 
-        void add_children(const std::vector<Shape *>& shapes);
+        void add_children(const std::vector<Shape *> &shapes);
 
         bool contains(const Shape *shape) const;
 
@@ -223,6 +223,29 @@ namespace rt::shapes {
 
     private:
         mutable std::optional<Bounds> cached_bounds;
+    };
+
+    class Triangle : Shape {
+    public:
+        // The points of the triangle
+        Point p1;
+        Point p2;
+        Point p3;
+
+        // The edges
+        Vec e1;
+        Vec e2;
+
+        // Precomputed normal
+        Vec normal;
+
+        Triangle(Point p1, Point p2, Point p3);
+
+        Aggregate local_intersect(const Ray &ray) override;
+
+        Vec local_normal_at(const Point &local_point) override;
+
+        Bounds bounds() const override;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

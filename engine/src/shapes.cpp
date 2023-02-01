@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <utility>
 #include "../include/shapes.h"
 
 namespace rt::shapes {
@@ -423,5 +424,41 @@ namespace rt::shapes {
 
     size_t Group::count() const {
         return children.size();
+    }
+
+    Triangle::Triangle(Point p1, Point p2, Point p3) : p1{std::move(p1)}, p2{std::move(p2)}, p3{std::move(p3)} {
+        e1 = this->p2 - this->p1;
+        e2 = this->p3 - this->p1;
+        normal = e2.cross(e1).normalize();
+    }
+
+    Vec Triangle::local_normal_at(const Point &local_point) {
+        return normal;
+    }
+
+    /**
+     * This is an implementation of the Moller-Trumbore algorithm.
+     */
+    Aggregate Triangle::local_intersect(const Ray &ray) {
+        auto dir_cross_e2 = ray.direction.cross(e2);
+        auto determinant = e1.dot(dir_cross_e2);
+        if (math::close_to_zero(determinant)) return {};
+
+        auto f = 1.0 / determinant;
+        auto p1_to_origin = Vec(ray.origin - p1);
+        auto u = f * p1_to_origin.dot(dir_cross_e2);
+        if (u < 0 || u > 1) return {};
+
+        auto origin_cross_e1 = p1_to_origin.cross(e1);
+        auto v = f * ray.direction.dot(origin_cross_e1);
+        if (v < 0 || (u + v) > 1) return {};
+
+        auto t = f * e2.dot(origin_cross_e1);
+        return {{new Intersection{t, this}}};
+    }
+
+    Bounds Triangle::bounds() const {
+        // TODO: Implement this
+        return Bounds::cube();  // temporary
     }
 }

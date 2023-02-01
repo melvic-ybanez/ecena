@@ -82,6 +82,10 @@ namespace rt::tests {
         void test();
     }
 
+    namespace triangles {
+        void test();
+    }
+
     namespace dsl_ {
         void test();
     }

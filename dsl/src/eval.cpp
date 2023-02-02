@@ -36,9 +36,12 @@ namespace rt::dsl::eval {
 
     static Matrix<4, 4> to_transform(const Expr &expr, int line);
 
-    static shapes::CylinderLike *to_cylinder_like(shapes::CylinderLike *cylinder_like, const Object *obj);
+    static std::unique_ptr<shapes::CylinderLike>
+    to_cylinder_like(shapes::CylinderLike *cylinder_like, const Object *obj);
 
     static std::unique_ptr<shapes::Group> to_group(const Object *obj);
+
+    static std::unique_ptr<shapes::Triangle> to_triangle(const Object *obj);
 
     static void throw_unknown_field_error(const Field &field);
 
@@ -128,11 +131,10 @@ namespace rt::dsl::eval {
                 if (*type == "sphere") shape = std::make_unique<shapes::Sphere>();
                 if (*type == "plane") shape = std::make_unique<shapes::Plane>();
                 if (*type == "cube") shape = std::make_unique<shapes::Cube>();
-                if (*type == "cylinder")
-                    shape = std::unique_ptr<shapes::CylinderLike>(to_cylinder_like(new shapes::Cylinder, obj));
-                if (*type == "cone")
-                    shape = std::unique_ptr<shapes::CylinderLike>(to_cylinder_like(new shapes::Cone, obj));
+                if (*type == "cylinder") shape = to_cylinder_like(new shapes::Cylinder, obj);
+                if (*type == "cone") shape = to_cylinder_like(new shapes::Cone, obj);
                 if (*type == "group") shape = to_group(obj);
+                if (*type == "triangle") shape = to_triangle(obj);
 
                 has_type = true;
             }
@@ -143,7 +145,7 @@ namespace rt::dsl::eval {
             SKIP_DOC_FIELDS;
             auto &key = field.key();
             if (key == "type" || key == "minimum" || key == "maximum" || key == "closed" || key == "children" ||
-                key == "threshold")
+                key == "threshold" || key == "points" || key == "min" || key == "max")
                 continue;
             if (key == "material") {
                 shape->material = to_material(*field.value_, field.line);
@@ -155,14 +157,14 @@ namespace rt::dsl::eval {
         return shape;
     }
 
-    shapes::CylinderLike *to_cylinder_like(shapes::CylinderLike *cylinder_like, const Object *obj) {
+    std::unique_ptr<shapes::CylinderLike> to_cylinder_like(shapes::CylinderLike *cylinder_like, const Object *obj) {
         for (auto &field: obj->fields) {
             auto &key = field.key();
             if (key == "minimum" || key == "min") cylinder_like->min = to_real(*field.value_, field.line);
             if (key == "maximum" || key == "max") cylinder_like->max = to_real(*field.value_, field.line);
             if (key == "closed") cylinder_like->closed = to_bool(*field.value_, field.line);
         }
-        return cylinder_like;
+        return std::unique_ptr<shapes::CylinderLike>(cylinder_like);
     }
 
     std::unique_ptr<shapes::Group> to_group(const Object *obj) {
@@ -185,6 +187,16 @@ namespace rt::dsl::eval {
         return group;
     }
 
+    std::unique_ptr<shapes::Triangle> to_triangle(const Object *obj) {
+        for (auto &field: obj->fields) {
+            if (field.key() == "points") {
+                auto components = to_array_of<Point>(*field.value_, 3, field.line, to_point);
+                return std::make_unique<shapes::Triangle>(components[0], components[1], components[2]);
+            }
+        }
+        return nullptr;
+    }
+
     std::unique_ptr<Material> to_material(const Expr &expr, int line) {
         IGNORE_ERRORS(
                 auto mat_str = to_str(expr, line);
@@ -203,7 +215,7 @@ namespace rt::dsl::eval {
             else if (key == "specular") material->specular = to_real(value, field.line);
             else if (key == "diffuse") material->diffuse = to_real(value, field.line);
             else if (key == "pattern") material->pattern = to_pattern(value, field.line);
-            else if (key == "reflectivity") material->reflectivity = to_real(value, field.line);
+            else if (key == "reflectivity" || key == "reflective") material->reflectivity = to_real(value, field.line);
             else if (key == "ambient") material->ambient = to_real(value, field.line);
             else if (key == "shininess") material->shininess = to_real(value, field.line);
             else if (key == "transparency") material->transparency = to_real(value, field.line);

@@ -244,11 +244,60 @@ def cones():
     }
 
 
+def triangles():
+    def side():
+        return {
+            'type': 'triangle',
+            'points': [[0, math.sqrt(2), 0], [-1, 0, 0], [1, 0, 0]],
+            'material': glass_mat(),
+        }
+
+    side1 = side()
+    side1['transform'] = [['rotate_x', math.pi / 4]]
+
+    side2 = side()
+    side2['transform'] = [['rotate_y', math.pi / 4 * 2], ['rotate_z', -math.pi / 4], ['translate', [-1, 0, 1]]]
+
+    side3 = side()
+    side3['transform'] = [['rotate_x', -math.pi / 4], ['translate', [0, 0, 2]]]
+
+    side4 = side()
+    side4['transform'] = [['rotate_y', -math.pi / 4 * 2], ['rotate_z', math.pi / 4], ['translate', [1, 0, 1]]]
+
+    sphere = {
+        'type': 'sphere',
+        'material': {'color': [0.1, 0.1, 0.6], 'reflective': 0.5},
+        'transform': [['scale', [0.2, 0.2, 0.2]], ['translate', [-0.5, 0.2, 0.5]]]
+    }
+
+    cylinder = {
+        'type': 'cylinder',
+        'min': -0.2,
+        'max': 0.2,
+        'closed': True,
+        'material': {'color': [0.6, 0.1, 0.1], 'reflective': 0.5},
+        'transform': [['scale', [0.2, 1.0, 0.2]], ['translate', [0, 0.2, 1]]]
+    }
+
+    cube = {
+        'type': 'cube',
+        'material': {'color': [0.1, 0.6, 0.1], 'reflective': 0.5},
+        'transform': [['scale', [0.17, 0.17, 0.17]], ['translate', [0.3, 0.17, 0.5]]]
+    }
+
+    return {
+        'type': 'group',
+        'children': [side1, side2, side3, side4, sphere, cylinder, cube],
+        'transform': [['translate', [4.5, 0, 4]]]
+    }
+
+
 def objects():
     return [
         {
             'type': 'group',
-            'children': [middle_sphere(), back(), left_sphere(), small_spheres(), cylinders(), glasses(), cones()],
+            'children': [middle_sphere(), back(), left_sphere(), small_spheres(), cylinders(), glasses(), cones(),
+                         triangles()],
             'threshold': 2
         },
         floor()

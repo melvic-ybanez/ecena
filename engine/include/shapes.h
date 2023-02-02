@@ -14,7 +14,7 @@
 
 namespace rt::shapes {
     enum class Type {
-        shape, sphere, plane, test, cube, cylinder, cone, group
+        shape, sphere, plane, test, cube, cylinder, cone, group, triangle
     };
 
     std::ostream &operator<<(std::ostream &out, const Type &type);
@@ -225,7 +225,7 @@ namespace rt::shapes {
         mutable std::optional<Bounds> cached_bounds;
     };
 
-    class Triangle : Shape {
+    class Triangle : public Shape {
     public:
         // The points of the triangle
         Point p1;
@@ -246,6 +246,8 @@ namespace rt::shapes {
         Vec local_normal_at(const Point &local_point) override;
 
         Bounds bounds() const override;
+
+        Type type() const override;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

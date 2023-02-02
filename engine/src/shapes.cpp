@@ -9,8 +9,8 @@
 
 namespace rt::shapes {
     std::ostream &operator<<(std::ostream &out, const Type &type) {
-        std::array<std::string, 8> type_strings{
-                "Shape", "Sphere", "Plane", "Test", "Cube", "Cylinder", "Cone", "Group"
+        std::array<std::string, 9> type_strings{
+                "Shape", "Sphere", "Plane", "Test", "Cube", "Cylinder", "Cone", "Group", "Triangle"
         };
         auto index = static_cast<int>(type);
         return out << type_strings[index];
@@ -455,6 +455,10 @@ namespace rt::shapes {
 
         auto t = f * e2.dot(origin_cross_e1);
         return {{new Intersection{t, this}}};
+    }
+
+    Type Triangle::type() const {
+        return Type::triangle;
     }
 
     Bounds Triangle::bounds() const {

@@ -13,21 +13,21 @@ The project has two main parts:
 
 While you can certainly write simple scenes directly in JSON, for more complicated scenes, a more expressive language that can generate JSON data is recommended. This project ships with [examples](https://github.com/melvic-ybanez/ecena/tree/main/examples), written in Python, that you can test and examine. 
 
-The Python script for the image above, [Amalgamation](https://github.com/melvic-ybanez/ecena/blob/main/examples/amalgamation.py), can be found [here](https://github.com/melvic-ybanez/ecena/blob/main/examples/amalgamation.py). To pass its output to Ecena, you just use the pipe operator:
+The Python script for the image above can be found [here](https://github.com/melvic-ybanez/ecena/blob/main/examples/amalgamation.py). To pass its output to Ecena, you just use the pipe operator:
 
 ```
 $ python3 ./examples/amalgamation.py | <path-to-ecena>/ecena
 ```
 
-Of course you can also just print the output directly to see the generated JSON:
+Of course, you can also just print the output directly to see the generated JSON:
 
 ```
 $ python3 ./examples/amalgamation.py
 ```
 
-Here's another example, called [Esena](https://github.com/melvic-ybanez/ecena/blob/main/examples/amalgamation.py), with the corresponding script [here](https://github.com/melvic-ybanez/ecena/blob/main/examples/esena.py):
+Here's another example, called [Esena](https://github.com/melvic-ybanez/ecena/blob/main/examples/amalgamation.py) (named after another Ray Tracer project of mine, which outputs only a single image, a variant of the one below), with the corresponding script [here](https://github.com/melvic-ybanez/ecena/blob/main/examples/esena.py):
 
-![esena_until_cones](https://user-images.githubusercontent.com/4519785/212568934-3b4ece06-41d9-4f03-b7c7-81686c4e0c65.png)
+![esena_until_triangles](https://user-images.githubusercontent.com/4519785/216436883-2efa74e3-290d-41c5-966d-e7d54c516000.png)
 
 ---
 

@@ -25,19 +25,19 @@ namespace rt {
 
         Camera(double h_size, double v_size, real field_of_view);
 
-        real pixel_size() const;
+        [[nodiscard]] real pixel_size() const;
 
-        real half_width() const;
+        [[nodiscard]] real half_width() const;
 
-        real half_height() const;
+        [[nodiscard]] real half_height() const;
 
-        real aspect_ratio() const;
+        [[nodiscard]] real aspect_ratio() const;
 
-        real half_view() const;
+        [[nodiscard]] real half_view() const;
 
-        Ray ray_for_pixel(int x, int y) const;
+        [[nodiscard]] Ray ray_for_pixel(int x, int y) const;
 
-        Canvas render(const World &world) const;
+        [[nodiscard]] Canvas render(const World &world) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Camera &camera);

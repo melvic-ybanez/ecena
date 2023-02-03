@@ -151,7 +151,7 @@ namespace rt::dsl::eval {
                 shape->material = to_material(*field.value_, field.line);
             } else if (key == "transform") {
                 shape->transformation = to_transform(*field.value_, field.line);
-            } else if (!(key == "type")) throw_unknown_field_error(field);
+            } else throw_unknown_field_error(field);
         }
 
         return shape;
@@ -296,7 +296,7 @@ namespace rt::dsl::eval {
             } else if (*func == "rotate_z") {
                 auto r = to_real(*t->elems[1], line);
                 transforms.push_back(matrix::rotation_z(r));
-            } else if (*func == "shearing") {
+            } else if (*func == "shear") {
                 auto values = to_num_array(*t->elems[1], 6, line);
                 transforms.push_back(
                         matrix::shearing(values[0], values[1], values[2], values[3], values[4], values[5]));

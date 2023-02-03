@@ -6,7 +6,8 @@
 Ecena is a 3D Scene rendering program currently being written in C++. It takes a JSON-like object as the description of a scene and spits out the corresponding 3D world. 
 
 The project has two main parts:
-1. __Domain-specific language__. This is a Json-like language that you need to use to describe the scene you want Ecena to render. Note that Ecena doesn't offer a UI, so the only way to directly communicate with the renderer is by using the DSL (though nothing's stopping you from building your own UI).
+1. [Domain-specific language](https://github.com/melvic-ybanez/ecena/wiki/DSL). This is a Json-like language that you need to use to describe the scene you want Ecena to render. Note that Ecena doesn't offer a UI, so the only way to directly communicate with the renderer is by using the DSL (though nothing's stopping you from building your own UI).
+To learn more about the DSL, head to the [DSL wiki page](https://github.com/melvic-ybanez/ecena/wiki/DSL) 
 2. __Rendering engine__. This is the one responsible for the drawing of the 3D world.
 
 ## Examples

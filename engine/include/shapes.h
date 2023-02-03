@@ -114,16 +114,6 @@ namespace rt::shapes {
 
         CylinderLike(real minimum, real maximum, bool closed = false);
 
-        virtual ~CylinderLike() = default;
-
-        CylinderLike(const CylinderLike &from) = delete;
-
-        CylinderLike(CylinderLike &&from) = delete;
-
-        CylinderLike &operator=(const CylinderLike &from) = delete;
-
-        CylinderLike &operator=(CylinderLike &&from) = delete;
-
     protected:
         Aggregate intersect(const Ray &ray, real a, real b, real c);
 

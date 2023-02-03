@@ -461,8 +461,11 @@ namespace rt::shapes {
         return Type::triangle;
     }
 
+    /**
+     * Constructs a bounding box by finding the smallest and largest components.
+     */
     Bounds Triangle::bounds() const {
-        // TODO: Implement this
-        return Bounds::cube();  // temporary
+        Bounds box;
+        return box + p1 + p2 + p3;
     }
 }

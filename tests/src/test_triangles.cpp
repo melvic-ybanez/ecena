@@ -14,11 +14,14 @@ namespace rt::tests::triangles {
 
     static void intersections();
 
+    static void  bounds();
+
     void test() {
         set("Triangles", [] {
             init();
             normals();
             intersections();
+            bounds();
         });
     }
 
@@ -86,6 +89,17 @@ namespace rt::tests::triangles {
                 ASSERT_EQ_MSG("Count", 1, xs.count());
                 ASSERT_EQ_MSG("t", 2, xs[0]->t);
             });
+        });
+    }
+
+    void bounds() {
+        scenario("A triangle has a bounding box", [] {
+            Point p1{-3, 7, 2};
+            Point p2{6, 2, -4};
+            Point p3{2, -1, -1};
+            shapes::Triangle triangle{p1, p2, p3};
+            auto box = triangle.bounds();
+            ASSERT_EQ(Bounds(Point(-3, -1, -4), Point(6, 7, 2)), box);
         });
     }
 }

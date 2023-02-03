@@ -36,7 +36,7 @@ namespace rt::patterns {
 
         virtual Color at(const Point &point) const = 0;
 
-        Color at(const Shape &shape, const Point &world_point) const;
+        [[nodiscard]] Color at(const Shape &shape, const Point &world_point) const;
     };
 
     class TwoComponentPattern : public Pattern {
@@ -53,7 +53,7 @@ namespace rt::patterns {
 
         Stripe(Color first, Color second);
 
-        Color at(const Point &point) const override;
+        [[nodiscard]] Color at(const Point &point) const override;
     };
 
     class Gradient : public TwoComponentPattern {
@@ -62,7 +62,7 @@ namespace rt::patterns {
 
         Gradient(Color first, Color second);
 
-        Color at(const Point &point) const override;
+        [[nodiscard]] Color at(const Point &point) const override;
     };
 
     class Ring : public TwoComponentPattern {
@@ -71,7 +71,7 @@ namespace rt::patterns {
 
         Ring(Color first, Color second);
 
-        Color at(const Point &point) const override;
+        [[nodiscard]] Color at(const Point &point) const override;
     };
 
     class Checkers : public TwoComponentPattern {
@@ -80,7 +80,7 @@ namespace rt::patterns {
 
         Checkers(Color first, Color second);
 
-        Color at(const Point &point) const override;
+        [[nodiscard]] Color at(const Point &point) const override;
     };
 }
 

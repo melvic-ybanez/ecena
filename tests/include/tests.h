@@ -89,6 +89,10 @@ namespace rt::tests {
     namespace dsl_ {
         void test();
     }
+
+    namespace objs {
+        void test();
+    }
 }
 
 #endif //ECENA_TESTS_H

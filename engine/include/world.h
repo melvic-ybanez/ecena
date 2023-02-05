@@ -17,7 +17,7 @@ namespace rt {
         constexpr static int default_depth_ = 5;
 
         std::vector<std::unique_ptr<Shape>> objects;
-        std::optional<PointLight> light;
+        std::optional<PointLight> light;    // the source of light
 
         Aggregate intersect(const Ray &ray) const;
 

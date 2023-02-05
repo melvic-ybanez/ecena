@@ -7,7 +7,6 @@
 
 #include "../../engine/include/data.h"
 #include "ast.h"
-#include "../../engine/include/light.h"
 
 namespace rt::dsl::eval {
     Data to_data(const Object &object);

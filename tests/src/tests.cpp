@@ -32,6 +32,7 @@ int main() {
     bounds::test();
     triangles::test();
     dsl_::test();
+    objs::test();
 
     std::cout << "Ran " << test_count << " tests. Successful: " << success_count << ". Failed: "
               << test_count - success_count << ".";

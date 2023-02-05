@@ -106,8 +106,8 @@ namespace rt::shapes {
 
     class CylinderLike : public Shape {
     public:
-        real min;
-        real max;
+        real min;   // the lower value at which this shape is truncated
+        real max;   // the upper value at which this shape is truncated
         bool closed;
 
         CylinderLike();

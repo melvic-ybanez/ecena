@@ -11,41 +11,43 @@
 #include "../../shared/include/utils.h"
 
 namespace rt::obj {
-    static std::optional<Point> parse_vertex(const std::string &line);
-
-    static std::optional<std::unique_ptr<shapes::Triangle>> parse_face(const std::string &line);
-
     static std::optional<int> scan_int(const std::string &str);
 
     static std::optional<real> scan_real(const std::string &str);
 
     static std::vector<std::string> split(const std::string &str);
 
+    Obj::Obj() : group{std::make_unique<shapes::Group>()} {}
+
     Obj parse(std::istream &is) {
         return parse_verbose(is).first;
     }
 
-    Point Obj::operator[](size_t i) const {
+    const Point &Obj::vertex_at(size_t i) const {
         return vertices[i - 1];
     }
 
+    const shapes::Triangle &Obj::triangle_at(size_t i) const {
+        return dynamic_cast<const shapes::Triangle &>(*group->children[i - 1]);
+    }
+
     std::pair<Obj, int> parse_verbose(std::istream &is) {
-        Obj obj;
+        Parser parser;
         std::string line;
         int ignored_lines_count = 0;
 
         while (std::getline(is, line)) {
-            if (auto vertex = parse_vertex(line); vertex.has_value()) {
-                obj.vertices.push_back(vertex.value());
-            } else if (parse_face(line).has_value()) {
-                // TODO: Make use of the face
+            if (auto vertex = parser.parse_vertex(line); vertex.has_value()) {
+                parser.obj.vertices.push_back(vertex.value());
+            } else if (auto face = parser.parse_face(line); face.has_value()) {
+                parser.obj.group->add_child(std::move(face.value()));
             } else ignored_lines_count++;
         }
 
-        return {obj, ignored_lines_count};
+        return {std::move(parser.obj), ignored_lines_count};
     }
 
-    std::optional<Point> parse_vertex(const std::string &line) {
+    std::optional<Point> Parser::parse_vertex(const std::string &line) {
         if (!starts_with(line, "v ")) return std::nullopt;
         auto tokens = split(line.substr(2));
         if (tokens.size() != 3) return std::nullopt;
@@ -60,11 +62,23 @@ namespace rt::obj {
         return {{components[0], components[1], components[2]}};
     }
 
-    std::optional<std::unique_ptr<shapes::Triangle>> parse_face(const std::string &line) {
-        if (starts_with(line, "f "))
-            // TODO: Implement parsing here
-            return std::make_unique<shapes::Triangle>(Point{0, 0, 0}, Point{0, 0, 0}, Point{0, 0, 0});
-        return std::nullopt;
+    std::optional<std::unique_ptr<shapes::Triangle>> Parser::parse_face(const std::string &line) {
+        if (!starts_with(line, "f ")) return std::nullopt;
+        auto tokens = split(line.substr(2));
+
+        std::vector<Point> vertices;
+        for (const auto &token: tokens) {
+            auto vertex_index = scan_int(token);
+            if (!vertex_index.has_value()) return std::nullopt;
+            auto value = vertex_index.value();
+
+            // note that vertices in the OBJ data are 1-indexed
+            if (value > 0 && value < obj.vertices.size() + 1) {
+                vertices.push_back(obj.vertex_at(value));
+            } else return std::nullopt;
+        }
+
+        return std::make_unique<shapes::Triangle>(vertices[0], vertices[1], vertices[2]);
     }
 
     std::optional<real> scan_real(const std::string &str) {

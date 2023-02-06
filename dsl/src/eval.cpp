@@ -108,7 +108,7 @@ namespace rt::dsl::eval {
     }
 
     std::vector<std::unique_ptr<Shape>> to_shapes(const Expr &expr, int line) {
-        auto arr = to_array(expr, {}, line);
+        auto arr = to_array(expr, std::nullopt, line);
         std::vector<std::unique_ptr<Shape>> shapes;
 
         for (auto &elem: arr->elems) {
@@ -275,7 +275,7 @@ namespace rt::dsl::eval {
     }
 
     Matrix<4, 4> to_transform(const Expr &expr, int line) {
-        auto arr = to_array(expr, {}, line);
+        auto arr = to_array(expr, std::nullopt, line);
         std::vector<Matrix<4, 4>> transforms;
 
         for (auto &elem: arr->elems) {

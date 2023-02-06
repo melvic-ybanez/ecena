@@ -468,4 +468,8 @@ namespace rt::shapes {
         Bounds box;
         return box + p1 + p2 + p3;
     }
+
+    bool Triangle::operator==(const Triangle &that) const {
+        return this->p1 == that.p1 && this->p2 == that.p2 && this->p3 == that.p3;
+    }
 }

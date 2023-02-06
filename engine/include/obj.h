@@ -7,12 +7,36 @@
 
 #include <string>
 #include "../math/include/tuples.h"
+#include "shapes.h"
 
 namespace rt::obj {
-    struct Obj {
-        std::vector<Point> vertices;
+    class Obj {
+    public:
+        std::unique_ptr<shapes::Group> group;
 
-        Point operator[](size_t i) const;
+        Obj();
+
+        [[nodiscard]] const Point &vertex_at(size_t i) const;
+
+        [[nodiscard]] const shapes::Triangle &triangle_at(size_t i) const;
+
+    private:
+        friend std::pair<Obj, int> parse_verbose(std::istream &is);
+        friend class Parser;
+
+        std::vector<Point> vertices;
+    };
+
+    class Parser {
+    public:
+        std::optional<Point> parse_vertex(const std::string &line);
+
+        std::optional<std::unique_ptr<shapes::Triangle>> parse_face(const std::string &line);
+
+    private:
+        friend std::pair<Obj, int> parse_verbose(std::istream &is);
+
+        Obj obj;
     };
 
     Obj parse(std::istream &is);

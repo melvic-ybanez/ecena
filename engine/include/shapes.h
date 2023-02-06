@@ -238,6 +238,8 @@ namespace rt::shapes {
         Bounds bounds() const override;
 
         Type type() const override;
+
+        bool operator==(const Triangle &that) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

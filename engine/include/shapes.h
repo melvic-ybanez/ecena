@@ -45,6 +45,8 @@ namespace rt::shapes {
 
         virtual void divide(int threshold);
 
+        virtual std::ostream &display(std::ostream &out) const;
+
         Aggregate intersect(const Ray &ray);
 
         Vec normal_at(const Point &world_point);
@@ -240,6 +242,8 @@ namespace rt::shapes {
         Type type() const override;
 
         bool operator==(const Triangle &that) const;
+
+        std::ostream &display(std::ostream &out) const override;
     };
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape);

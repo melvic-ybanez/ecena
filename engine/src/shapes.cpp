@@ -338,7 +338,13 @@ namespace rt::shapes {
     }
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {
-        return out << "{ type: " << shape.type() << ", material: " << *shape.material << " }";
+        out << "{ ";
+        shape.display(out);
+        return out << " }";
+    }
+
+    std::ostream &Shape::display(std::ostream &out) const {
+        return out << "type: " << type() << ", material: " << *material;
     }
 
     Bounds Cube::bounds() const {
@@ -402,9 +408,9 @@ namespace rt::shapes {
         return {std::move(left), std::move(right)};
     }
 
-    void Group::make_subgroup(std::vector<std::unique_ptr<Shape>> children) {
+    void Group::make_subgroup(std::vector<std::unique_ptr<Shape>> from_children) {
         std::unique_ptr<Group> subgroup = std::make_unique<Group>();
-        for (auto &child: children) {
+        for (auto &child: from_children) {
             subgroup->add_child(std::move(child));
         }
         add_child(std::move(subgroup));
@@ -471,5 +477,11 @@ namespace rt::shapes {
 
     bool Triangle::operator==(const Triangle &that) const {
         return this->p1 == that.p1 && this->p2 == that.p2 && this->p3 == that.p3;
+    }
+
+    std::ostream &Triangle::display(std::ostream &out) const {
+        out << "p1: " << p1 << ", p2: " << p2 << ", p3: " << p3;
+        Shape::display(out);
+        return out;
     }
 }

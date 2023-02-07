@@ -11,10 +11,13 @@ namespace rt::tests::objs {
 
     void vertices();
 
+    void faces();
+
     void test() {
         set("Objs", [] {
             errors();
             vertices();
+            faces();
         });
     }
 
@@ -46,6 +49,9 @@ namespace rt::tests::objs {
             ASSERT_EQ_MSG("3rd", Point(1, 0, 0), obj.vertex_at(3));
             ASSERT_EQ_MSG("4th", Point(1, 1, 0), obj.vertex_at(4));
         });
+    }
+
+    void faces() {
         set("Parsing triangle faces", [] {
             std::stringstream obj_str{
                     "v -1 1 0\n"
@@ -64,6 +70,28 @@ namespace rt::tests::objs {
             shapes::Triangle t2_expected{obj.vertex_at(1), obj.vertex_at(3), obj.vertex_at(4)};
             ASSERT_EQ_MSG("T1", t1_expected, t1);
             ASSERT_EQ_MSG("T2", t2_expected, t2);
+        });
+        set("Triangulating polygons", [] {
+            std::stringstream obj_str{
+                "v -1 1 0\n"
+                "v -1 0 0\n"
+                "v 1 0 0\n"
+                "v 1 1 0\n"
+                "v 0 2 0\n"
+                "\n"
+                "f 1 2 3 4 5"
+            };
+            auto obj = obj::parse(obj_str);
+            auto &t1 = obj.triangle_at(1);
+            auto &t2 = obj.triangle_at(2);
+            auto &t3 = obj.triangle_at(3);
+
+            shapes::Triangle t1_expected{obj.vertex_at(1), obj.vertex_at(2), obj.vertex_at(3)};
+            shapes::Triangle t2_expected{obj.vertex_at(1), obj.vertex_at(3), obj.vertex_at(4)};
+            shapes::Triangle t3_expected{obj.vertex_at(1), obj.vertex_at(4), obj.vertex_at(5)};
+            ASSERT_EQ_MSG("T1", t1_expected, t1);
+            ASSERT_EQ_MSG("T2", t2_expected, t2);
+            ASSERT_EQ_MSG("T3", t3_expected, t3);
         });
     }
 }

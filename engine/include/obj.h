@@ -31,7 +31,7 @@ namespace rt::obj {
     public:
         std::optional<Point> parse_vertex(const std::string &line);
 
-        std::optional<std::unique_ptr<shapes::Triangle>> parse_face(const std::string &line);
+        std::vector<std::unique_ptr<shapes::Triangle>> parse_face(const std::string &line);
 
     private:
         friend std::pair<Obj, int> parse_verbose(std::istream &is);

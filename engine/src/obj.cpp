@@ -39,8 +39,10 @@ namespace rt::obj {
         while (std::getline(is, line)) {
             if (auto vertex = parser.parse_vertex(line); vertex.has_value()) {
                 parser.obj.vertices.push_back(vertex.value());
-            } else if (auto face = parser.parse_face(line); face.has_value()) {
-                parser.obj.group->add_child(std::move(face.value()));
+            } else if (auto face = parser.parse_face(line); !face.empty()) {
+                for (auto &child: face) {
+                    parser.obj.group->add_child(std::move(child));
+                }
             } else ignored_lines_count++;
         }
 
@@ -62,23 +64,31 @@ namespace rt::obj {
         return {{components[0], components[1], components[2]}};
     }
 
-    std::optional<std::unique_ptr<shapes::Triangle>> Parser::parse_face(const std::string &line) {
-        if (!starts_with(line, "f ")) return std::nullopt;
+    std::vector<std::unique_ptr<shapes::Triangle>> Parser::parse_face(const std::string &line) {
+        if (!starts_with(line, "f ")) return {};
         auto tokens = split(line.substr(2));
 
         std::vector<Point> vertices;
+        std::vector<std::unique_ptr<shapes::Triangle>> triangles;
+
         for (const auto &token: tokens) {
             auto vertex_index = scan_int(token);
-            if (!vertex_index.has_value()) return std::nullopt;
+            if (!vertex_index.has_value()) return {};
             auto value = vertex_index.value();
 
             // note that vertices in the OBJ data are 1-indexed
             if (value > 0 && value < obj.vertices.size() + 1) {
                 vertices.push_back(obj.vertex_at(value));
-            } else return std::nullopt;
+            } else return {};
         }
 
-        return std::make_unique<shapes::Triangle>(vertices[0], vertices[1], vertices[2]);
+        // perform fan triangulation
+        for (int i = 1; i < vertices.size() - 1; i++) {
+            auto tri = std::make_unique<shapes::Triangle>(vertices[0], vertices[i], vertices[i + 1]);
+            triangles.push_back(std::move(tri));
+        }
+
+        return triangles;
     }
 
     std::optional<real> scan_real(const std::string &str) {

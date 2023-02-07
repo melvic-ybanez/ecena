@@ -7,11 +7,11 @@
 #include "../../engine/include/obj.h"
 
 namespace rt::tests::objs {
-    void errors();
+    static void errors();
 
-    void vertices();
+    static void vertices();
 
-    void faces();
+    static void faces();
 
     void test() {
         set("Objs", [] {

@@ -6,8 +6,6 @@
 #include <istream>
 
 #include "../include/obj.h"
-#include "../math/include/tuples.h"
-#include "../include/shapes.h"
 #include "../../shared/include/utils.h"
 
 namespace rt::obj {
@@ -17,33 +15,40 @@ namespace rt::obj {
 
     static std::vector<std::string> split(const std::string &str);
 
-    Obj::Obj() : group{std::make_unique<shapes::Group>()} {}
+    Obj::Obj() {
+        groups[default_group_name_] = std::make_unique<shapes::Group>();
+        current_group_ = groups[default_group_name_].get();
+    }
 
-    Obj parse(std::istream &is) {
-        return parse_verbose(is).first;
+    Obj Parser::parse(std::istream &is) {
+        return Parser::parse_verbose(is).first;
     }
 
     const Point &Obj::vertex_at(size_t i) const {
         return vertices[i - 1];
     }
 
-    const shapes::Triangle &Obj::triangle_at(size_t i) const {
-        return dynamic_cast<const shapes::Triangle &>(*group->children[i - 1]);
+    const shapes::Triangle &Obj::triangle_at(size_t i, const std::string &group_name) const {
+        return dynamic_cast<const shapes::Triangle &>(*group(group_name).children[i - 1]);
     }
 
-    std::pair<Obj, int> parse_verbose(std::istream &is) {
+    std::pair<Obj, int> Parser::parse_verbose(std::istream &is) {
         Parser parser;
         std::string line;
         int ignored_lines_count = 0;
 
         while (std::getline(is, line)) {
-            if (auto vertex = parser.parse_vertex(line); vertex.has_value()) {
+            if (auto vertex = Parser::parse_vertex(line); vertex.has_value()) {
                 parser.obj.vertices.push_back(vertex.value());
             } else if (auto face = parser.parse_face(line); !face.empty()) {
                 for (auto &child: face) {
-                    parser.obj.group->add_child(std::move(child));
+                    if (parser.obj.current_group() == &parser.obj.default_group()) {
+                        parser.obj.default_group().add_child(std::move(child));
+                    } else {
+                        parser.obj.current_group()->add_child(std::move(child));
+                    }
                 }
-            } else ignored_lines_count++;
+            } else if (!parser.parse_group(line)) ignored_lines_count++;
         }
 
         return {std::move(parser.obj), ignored_lines_count};
@@ -89,6 +94,31 @@ namespace rt::obj {
         }
 
         return triangles;
+    }
+
+    bool Parser::parse_group(const std::string &line) {
+        if (!starts_with(line, "g ")) return false;
+        auto name = line.substr(2);
+        obj.groups.insert({name, std::make_unique<shapes::Group>()});
+        return obj.current_group(name);
+    }
+
+    shapes::Group &Obj::group(const std::string &name) const {
+        return *groups[name];
+    }
+
+    shapes::Group &Obj::default_group() const {
+        return group(default_group_name_);
+    }
+
+    shapes::Group *Obj::current_group() const {
+        return current_group_;
+    }
+
+    bool Obj::current_group(const std::string &name) {
+        if (groups.find(name) == groups.end()) return false;
+        current_group_ = groups[name].get();
+        return true;
     }
 
     std::optional<real> scan_real(const std::string &str) {

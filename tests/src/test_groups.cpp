@@ -56,7 +56,7 @@ namespace rt::tests::groups {
             group.add_child(child);
 
             ASSERT_FALSE_MSG("Group is not empty", group.empty());
-            ASSERT_TRUE_MSG("Group contains the added child", group.contains(child));
+            ASSERT_TRUE_MSG("Group contains the added child", group.contains_ptr(child));
             ASSERT_EQ_MSG("The group is the added child's parent", &group, child->parent);
         });
     }

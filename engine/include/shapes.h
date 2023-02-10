@@ -47,6 +47,8 @@ namespace rt::shapes {
 
         virtual std::ostream &display(std::ostream &out) const;
 
+        virtual bool operator==(const Shape &other) const;
+
         Aggregate intersect(const Ray &ray);
 
         Vec normal_at(const Point &world_point);
@@ -191,7 +193,9 @@ namespace rt::shapes {
 
         void add_children(const std::vector<Shape *> &shapes);
 
-        bool contains(const Shape *shape) const;
+        bool contains_ptr(const Shape *shape) const;
+
+        bool contains_val(const Shape &shape) const;
 
         Bounds bounds() const override;
 
@@ -215,6 +219,15 @@ namespace rt::shapes {
 
     private:
         mutable std::optional<Bounds> cached_bounds;
+    };
+
+    class NamedGroup : public Group {
+    public:
+        std::string name;
+
+        NamedGroup(std::string name);
+
+        bool operator==(const Shape &other) const override;
     };
 
     class Triangle : public Shape {
@@ -241,7 +254,7 @@ namespace rt::shapes {
 
         Type type() const override;
 
-        bool operator==(const Triangle &that) const;
+        bool operator==(const Shape &other) const override;
 
         std::ostream &display(std::ostream &out) const override;
     };

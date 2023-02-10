@@ -16,7 +16,7 @@ namespace rt::obj {
     static std::vector<std::string> split(const std::string &str);
 
     Obj::Obj() {
-        groups[default_group_name_] = std::make_unique<shapes::Group>();
+        groups[default_group_name_] = std::make_unique<shapes::NamedGroup>(default_group_name_);
         current_group_ = groups[default_group_name_].get();
     }
 
@@ -99,7 +99,7 @@ namespace rt::obj {
     bool Parser::parse_group(const std::string &line) {
         if (!starts_with(line, "g ")) return false;
         auto name = line.substr(2);
-        obj.groups.insert({name, std::make_unique<shapes::Group>()});
+        obj.groups.insert({name, std::make_unique<shapes::NamedGroup>(name)});
         return obj.current_group(name);
     }
 
@@ -119,6 +119,14 @@ namespace rt::obj {
         if (groups.find(name) == groups.end()) return false;
         current_group_ = groups[name].get();
         return true;
+    }
+
+    std::unique_ptr<shapes::Group> Obj::to_group() const {
+        auto group = std::make_unique<shapes::Group>();
+        for (auto &[key, value]: groups) {
+            group->add_child(std::move(value));
+        }
+        return group;
     }
 
     std::optional<real> scan_real(const std::string &str) {

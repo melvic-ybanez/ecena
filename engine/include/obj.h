@@ -5,7 +5,7 @@
 #ifndef ECENA_OBJ_H
 #define ECENA_OBJ_H
 
-#include <map>
+#include <unordered_map>
 #include "../math/include/tuples.h"
 #include "shapes.h"
 
@@ -29,11 +29,13 @@ namespace rt::obj {
 
         shapes::Group *current_group() const;
 
+        std::unique_ptr<shapes::Group> to_group() const;
+
     private:
         friend class Parser;
 
         std::vector<Point> vertices;
-        mutable std::map<std::string, std::unique_ptr<shapes::Group>> groups;
+        mutable std::unordered_map<std::string, std::unique_ptr<shapes::NamedGroup>> groups;
 
         shapes::Group *current_group_;
     };

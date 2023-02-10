@@ -54,6 +54,10 @@ namespace rt::shapes {
         return cached_parent_space_bounds.value();
     }
 
+    bool Shape::operator==(const Shape &other) const {
+        return this->type() == other.type();
+    }
+
     /**
      * Do not divide a primitive shape.
      */
@@ -311,8 +315,18 @@ namespace rt::shapes {
         }
     }
 
-    bool Group::contains(const Shape *shape) const {
-        return std::find_if(children.begin(), children.end(), [&shape](auto &s) { return s.get() == shape; }) !=
+    bool Group::contains_ptr(const Shape *shape) const {
+        // note: we can't implement this in terms of `contains_val` (by comparing the corresponding
+        // pointed-to values) because the latter allows two different pointers that happen to have
+        // the same pointed-to values
+        return std::find_if(children.begin(), children.end(), [&](auto &s) { return s.get() == shape; }) !=
+               children.end();
+    }
+
+    bool Group::contains_val(const Shape &shape) const {
+        // note: we can't implement this in terms of `contains_ptr` (by comparing the corresponding addresses)
+        // because the latter won't allow different addresses despite having the same pointed-to values.
+        return std::find_if(children.begin(), children.end(), [&](auto &s) { return *s == shape; }) !=
                children.end();
     }
 
@@ -335,6 +349,14 @@ namespace rt::shapes {
 
     const Shape *Group::operator[](size_t i) const {
         return children[i].get();
+    }
+
+    NamedGroup::NamedGroup(std::string name) :name{std::move(name)} {}
+
+    bool NamedGroup::operator==(const Shape &other) const {
+        if (!Group::operator==(other)) return false;
+        auto &that = dynamic_cast<const NamedGroup &>(other);
+        return this->name == that.name;
     }
 
     std::ostream &operator<<(std::ostream &out, const Shape &shape) {
@@ -475,7 +497,9 @@ namespace rt::shapes {
         return box + p1 + p2 + p3;
     }
 
-    bool Triangle::operator==(const Triangle &that) const {
+    bool Triangle::operator==(const Shape &other) const {
+        if (!Shape::operator==(other)) return false;
+        auto &that = dynamic_cast<const Triangle &>(other);
         return this->p1 == that.p1 && this->p2 == that.p2 && this->p3 == that.p3;
     }
 

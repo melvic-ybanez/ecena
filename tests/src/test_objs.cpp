@@ -76,13 +76,13 @@ namespace rt::tests::objs {
         });
         set("Triangulating polygons", [] {
             std::stringstream obj_str{
-                "v -1 1 0\n"
-                "v -1 0 0\n"
-                "v 1 0 0\n"
-                "v 1 1 0\n"
-                "v 0 2 0\n"
-                "\n"
-                "f 1 2 3 4 5"
+                    "v -1 1 0\n"
+                    "v -1 0 0\n"
+                    "v 1 0 0\n"
+                    "v 1 1 0\n"
+                    "v 0 2 0\n"
+                    "\n"
+                    "f 1 2 3 4 5"
             };
             auto obj = obj::Parser::parse(obj_str);
             auto &t1 = obj.triangle_at(1);
@@ -99,18 +99,22 @@ namespace rt::tests::objs {
     }
 
     void groups() {
-        set("Triangles in groups", [] {
-            std::stringstream obj_str{
-                "v -1 1 0\n"
-                "v -1 0 0\n"
-                "v 1 0 0\n"
-                "v 1 1 0\n"
-                "\n"
-                "g FirstGroup\n"
-                "f 1 2 3\n"
-                "g SecondGroup\n"
-                "f 1 3 4"
+        auto make_stream = []() -> std::stringstream {
+            return std::stringstream{
+                    "v -1 1 0\n"
+                    "v -1 0 0\n"
+                    "v 1 0 0\n"
+                    "v 1 1 0\n"
+                    "\n"
+                    "g FirstGroup\n"
+                    "f 1 2 3\n"
+                    "g SecondGroup\n"
+                    "f 1 3 4"
             };
+        };
+
+        set("Triangles in groups", [&] {
+            auto obj_str = make_stream();
             auto obj = obj::Parser::parse(obj_str);
             auto &t1 = obj.triangle_at(1, "FirstGroup");
             auto &t2 = obj.triangle_at(1, "SecondGroup");
@@ -119,6 +123,16 @@ namespace rt::tests::objs {
             shapes::Triangle t2_expected{obj.vertex_at(1), obj.vertex_at(3), obj.vertex_at(4)};
             ASSERT_EQ_MSG("T1", t1_expected, t1);
             ASSERT_EQ_MSG("T2", t2_expected, t2);
+        });
+
+        set("Converting an OBJ file to a group", [&] {
+            auto obj_str = make_stream();
+            auto obj = obj::Parser::parse(obj_str);
+            auto group = obj.to_group();
+            shapes::NamedGroup first_group{"FirstGroup"};
+            shapes::NamedGroup second_group{"SecondGroup"};
+            ASSERT_TRUE_MSG("First group", group->contains_val(first_group));
+            ASSERT_TRUE_MSG("Second group", group->contains_val(second_group));
         });
     }
 }

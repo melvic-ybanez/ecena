@@ -305,7 +305,7 @@ namespace rt::dsl::eval {
 
         auto transform = matrix::identity<4, 4>();
         std::reverse(transforms.begin(), transforms.end());
-        for (auto t: transforms) {
+        for (const auto &t: transforms) {
             transform = transform * t;
         }
 

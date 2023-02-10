@@ -36,7 +36,7 @@ namespace rt::intersections {
 
     Intersection *Aggregate::hit() {
         sort();
-        for (auto e: elems) {
+        for (const auto e: elems) {
             if (e->t >= 0) return e;
         }
         return nullptr;

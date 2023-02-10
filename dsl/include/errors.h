@@ -36,6 +36,10 @@ namespace rt::dsl::errors {
     Error invalid_kind(const std::string &kind, const std::string &object, int line);
 
     Error required_type(const std::string &type, int line);
+
+    Error invalid_path(const std::string &path, int line);
+
+    Error obj_not_found(int line);
 }
 
 #endif //ECENA_ERRORS_H

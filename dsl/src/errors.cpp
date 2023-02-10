@@ -48,4 +48,12 @@ namespace rt::dsl::errors {
     Error required_type(const std::string &type, int line) {
         return {"Required type: '" + type + "'", line};
     }
+
+    Error invalid_path(const std::string &path, int line) {
+        return {"Invalid path: '" + path + "'", line};
+    }
+
+    Error obj_not_found(int line) {
+        return {"No OBJ model provided", line};
+    }
 }

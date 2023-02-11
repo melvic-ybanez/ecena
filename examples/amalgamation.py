@@ -206,7 +206,7 @@ sphere_group = {
     'threshold': 2,
 }
 
-data = json.dumps({
+data = {
     "camera": {
         "h_size": 1000,
         "v_size": 563,
@@ -218,6 +218,6 @@ data = json.dumps({
         "light": {"position": [-2, 13, -7], "intensity": [1, 1, 1]},
         "objects": [background, sphere_group] + rest_of_spheres
     }
-}, indent=2)
+}
 
-print(data)
+print(json.dumps(data, indent=2))

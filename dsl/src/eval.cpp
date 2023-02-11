@@ -3,6 +3,7 @@
 //
 
 #include <fstream>
+#include <sstream>
 
 #include "../include/eval.h"
 #include "../include/errors.h"
@@ -147,9 +148,9 @@ namespace rt::dsl::eval {
         }
         if (!has_type) throw errors::required_type("type", line);
 
-        std::array<std::string, 10> parsed_keys{
+        std::array<std::string, 11> parsed_keys{
                 "type", "minimum", "maximum", "closed", "children", "threshold", "points", "min",
-                "max", "path"
+                "max", "path", "source"
         };
 
         for (const auto &field: obj->fields) {
@@ -190,7 +191,6 @@ namespace rt::dsl::eval {
             }
         }
         for (const auto &field: obj->fields) {
-            if (field.key() == "children") continue;
             if (field.key() == "threshold") {
                 auto threshold = to_real(*field.value_, field.line);
                 group->divide(static_cast<int>(threshold));
@@ -214,7 +214,11 @@ namespace rt::dsl::eval {
             if (field.key() == "path") {
                 auto path = to_str(*field.value_, field.line);
                 std::ifstream in{path->value};
-                if (!in) throw errors::invalid_path(path->value, field.line);
+                if (!in.is_open()) throw errors::invalid_path(path->value, field.line);
+                return obj::Parser::parse(in);
+            } else if (field.key() == "source") {
+                auto source = to_str(*field.value_, field.line);
+                std::stringstream in{source->value};
                 return obj::Parser::parse(in);
             }
         }

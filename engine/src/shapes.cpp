@@ -409,7 +409,7 @@ namespace rt::shapes {
         std::vector<std::unique_ptr<Shape>> left{};
         std::vector<std::unique_ptr<Shape>> right{};
 
-        std::vector<std::unique_ptr<Shape>> new_children{};
+        std::vector<std::unique_ptr<Shape>> remaining{};
 
         auto [left_bounds, right_bounds] = bounds().split();
 
@@ -421,11 +421,11 @@ namespace rt::shapes {
             } else if (right_bounds.contains(child_bounds)) {
                 right.push_back(std::move(child));
             } else {
-                new_children.push_back(std::move(child));
+                remaining.push_back(std::move(child));
             }
         }
 
-        children = std::move(new_children);
+        children = std::move(remaining);
 
         return {std::move(left), std::move(right)};
     }
@@ -444,6 +444,9 @@ namespace rt::shapes {
             if (!left.empty()) make_subgroup(std::move(left));
             if (!right.empty()) make_subgroup(std::move(right));
         }
+
+        // this is to avoid an infinite recursion caused by an empty group
+        if (count() < 2) return;
 
         for (auto &child: children) {
             child->divide(threshold);

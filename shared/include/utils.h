@@ -58,6 +58,8 @@ namespace rt {
     }
 
     bool starts_with(const std::string &str, const std::string &search_str);
+
+    void replace_all(std::string &str, const std::string &from, const std::string &to);
 }
 
 #endif //ECENA_UTILS_H

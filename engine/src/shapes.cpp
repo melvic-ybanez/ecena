@@ -9,8 +9,8 @@
 
 namespace rt::shapes {
     std::ostream &operator<<(std::ostream &out, const Type &type) {
-        std::array<std::string, 9> type_strings{
-                "Shape", "Sphere", "Plane", "Test", "Cube", "Cylinder", "Cone", "Group", "Triangle"
+        std::array<std::string, 10> type_strings{
+                "Shape", "Sphere", "Plane", "Test", "Cube", "Cylinder", "Cone", "Group", "Triangle", "NamedGroup"
         };
         auto index = static_cast<int>(type);
         return out << type_strings[index];
@@ -351,7 +351,7 @@ namespace rt::shapes {
         return children[i].get();
     }
 
-    NamedGroup::NamedGroup(std::string name) :name{std::move(name)} {}
+    NamedGroup::NamedGroup(std::string name) : name{std::move(name)} {}
 
     bool NamedGroup::operator==(const Shape &other) const {
         if (!Group::operator==(other)) return false;

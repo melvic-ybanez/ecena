@@ -101,17 +101,17 @@ namespace rt::math {
         Color(const Tuple &tuple);  // NOLINT
         Color();
 
-        static const Color black_;
-
-        static const Color red_;
-
-        static const Color white_;
-
         real red() const;
 
         real green() const;
 
         real blue() const;
+
+        static const Color black_;
+
+        static const Color red_;
+
+        static const Color white_;
     };
 
     Color operator*(const Color &c1, const Color &c2);

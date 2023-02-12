@@ -6,6 +6,7 @@
 
 #include "../include/lexer.h"
 #include "../include/errors.h"
+#include "../../shared/include/utils.h"
 
 namespace rt::dsl {
     Lexer::Lexer() {
@@ -51,9 +52,9 @@ namespace rt::dsl {
                 add_token(TokenType::dot);
                 break;
             case ' ':
-            case '\r':
             case '\t':
                 break;
+            case '\r':
             case '\n':
                 next_line();
                 break;
@@ -113,6 +114,7 @@ namespace rt::dsl {
         } else {
             advance(); // remove the closing quotation
             auto content = source.substr(start + 1, current - start - 2);
+            replace_all(content, "\\n", "\n");
             add_token(TokenType::string, content);
         }
     }

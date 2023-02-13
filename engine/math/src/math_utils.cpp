@@ -16,6 +16,10 @@ namespace rt::math {
             Dimensions(static_cast<double>(width),
                        static_cast<double>(height)) {}
 
+    bool Dimensions::operator==(const Dimensions &that) const {
+        return this->width == that.width && this->height == that.height;
+    }
+
     bool compare_reals(real a, real b) {
         auto result = std::abs(a - b);
         return std::isnan(result) || result < epsilon;

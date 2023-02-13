@@ -120,6 +120,9 @@ namespace rt::dsl {
     }
 
     void Lexer::scan_digit() {
+        // TODO: We might be able to use `stod`'s second argument to
+        //  count the number of successfully parsed characters and update `current` with it.
+
         while (std::isdigit(peek()) && !is_at_end()) advance();
         if (peek() == '.' && std::isdigit(peek_next())) {
             advance();

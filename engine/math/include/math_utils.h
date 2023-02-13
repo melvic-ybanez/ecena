@@ -31,6 +31,8 @@ namespace rt::math {
         Dimensions(real width, real height);
 
         Dimensions(int width, int height);
+
+        bool operator==(const Dimensions &that) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Dimensions &dimensions);

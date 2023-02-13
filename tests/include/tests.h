@@ -10,7 +10,7 @@ namespace rt::tests {
         void test();
     }
 
-    namespace canvas {
+    namespace canvas_ {
         void test();
     }
 

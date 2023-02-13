@@ -12,7 +12,7 @@ int main() {
     reset();
 
     tuples::test();
-    canvas::test();
+    canvas_::test();
     matrices::test();
     transformations::test();
     rays::test();

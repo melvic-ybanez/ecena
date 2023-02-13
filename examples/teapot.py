@@ -24,7 +24,8 @@ data = {
                 'type': 'obj',
                 'source': source,
                 'threshold': 2,
-                'transform': [['translate', [0, 0, 100]]]
+                'transform': [['translate', [0, 0, 100]]],
+                'material': {'color': [160.0 / 255.0, 82.0 / 255.0, 45.0 / 255.0]}
             }
         ]
     }

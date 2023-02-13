@@ -2,23 +2,27 @@
 // Created by Melvic Ybanez on 12/10/22.
 //
 
+#include <array>
 #include "../include/tests.h"
 #include "../include/asserts.h"
 #include "../../engine/include/canvas.h"
 #include "../../engine/include/ppm.h"
 
-namespace rt::tests::canvas {
+namespace rt::tests::canvas_ {
     static void init();
 
     static void access();
 
-    static void ppm();
+    static void write_to_ppm();
+
+    static void read_from_ppm();
 
     void test() {
         set("Canvas", [] {
             init();
             access();
-            ppm();
+            write_to_ppm();
+            read_from_ppm();
         });
     }
 
@@ -56,8 +60,8 @@ namespace rt::tests::canvas {
         });
     }
 
-    void ppm() {
-        set("PPM", [] {
+    void write_to_ppm() {
+        set("Write to PPM", [] {
             scenario("Constructing the header", [] {
                 rt::Canvas canvas{5, 3};
                 rt::Ppm ppm{canvas};
@@ -100,6 +104,72 @@ namespace rt::tests::canvas {
                 rt::Canvas canvas{5, 3};
                 rt::Ppm ppm{canvas};
                 ASSERT_EQ('\n', ppm.pixel_data().back());
+            });
+        });
+    }
+
+    void read_from_ppm() {
+        set("Read from PPM", [] {
+            scenario("Reading a file with the wrong magic number", [] {
+                std::stringstream file{
+                        "P32\n"
+                        "1 1\n"
+                        "255\n"
+                        "0 0 0\n"
+                };
+                auto canvas = canvas::from_ppm(file);
+                ASSERT_FALSE(canvas.has_value());
+            });
+            scenario("Reading a PPM returns a canvas of the right size", [] {
+                std::stringstream ppm{
+                        "P3\n"
+                        "10 2\n"
+                        "255\n"
+                        "0 0 0  0 0 0  0 0 0  0 0 0  0 0 0\n"
+                        "0 0 0  0 0 0  0 0 0  0 0 0  0 0 0\n"
+                        "0 0 0  0 0 0  0 0 0  0 0 0  0 0 0\n"
+                        "0 0 0  0 0 0  0 0 0  0 0 0  0 0 0\n"
+                };
+                auto canvas = canvas::from_ppm(ppm);
+                ASSERT_EQ(math::Dimensions(10, 2), canvas.value().size);
+            });
+            set("Reading pixel data from a PPM file", [] {
+                std::stringstream ppm{
+                        "P3\n"
+                        "4 3\n"
+                        "255\n"
+                        "255 127 0  0 127 255  127 255 0  255 255 255\n"
+                        "0 0 0  255 0 0  0 255 0  0 0 255\n"
+                        "255 255 0  0 255 255  255 0 255  127 127 127\n"
+                };
+                auto canvas = canvas::from_ppm(ppm);
+                std::array<int, 12> xs{0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3};
+                std::array<int, 12> ys{0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2};
+                std::array<Color, 12> colors{
+                        {{1, 0.498, 0}, {0, 0.498, 1}, {0.498, 1, 0}, {1, 1, 1},
+                         {0, 0, 0}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1},
+                         {1, 1, 0}, {0, 1, 1}, {1, 0, 1}, {0.498, 0.498, 0.498}}
+                };
+                for (int i = 0; i < xs.size(); i++) {
+                    auto color = canvas.value()[ys[i]][xs[i]];
+                    ASSERT_EQ_MSG(std::to_string(i) + ":", colors[i], color);
+                }
+            });
+            set("PPM parsing ignores comment lines", [] {
+                std::stringstream ppm{
+                        "P3\n"
+                        "# this is a comment\n"
+                        "2 1\n"
+                        "# this, too\n"
+                        "255\n"
+                        "# another comment\n"
+                        "255 255 255\n"
+                        "# oh, no, comments in the pixel data!\n"
+                        "255 0 255\n"
+                };
+                auto canvas = canvas::from_ppm(ppm);
+                ASSERT_EQ_MSG("at 0 0", Color::white_, canvas.value().pixels[0][0]);
+                ASSERT_EQ_MSG("at 1 0", Color(1, 0, 1), canvas.value().pixels[0][1]);
             });
         });
     }

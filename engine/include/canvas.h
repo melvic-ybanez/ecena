@@ -5,11 +5,13 @@
 #ifndef ECENA_CANVAS_H
 #define ECENA_CANVAS_H
 
+#include <optional>
 #include <vector>
+
 #include "../math/include/math_utils.h"
 #include "../math/include/tuples.h"
 
-namespace rt {
+namespace rt::canvas {
     using PixelRow = std::vector<math::Color>;
     using PixelTable = std::vector<PixelRow>;
 
@@ -22,14 +24,22 @@ namespace rt {
 
         Canvas(int width, int height);
 
-        int width() const;
+        [[nodiscard]] int width() const;
 
-        int height() const;
+        [[nodiscard]] int height() const;
 
         PixelRow &operator[](int row);
     };
 
     std::ostream &operator<<(std::ostream &out, const Canvas &canvas);
+
+    std::optional<Canvas> from_ppm(std::istream &is);
+}
+
+namespace rt {
+    using PixelRow = canvas::PixelRow;
+    using PixelTable = canvas::PixelTable;
+    using Canvas = canvas::Canvas;
 }
 
 #endif //ECENA_CANVAS_H

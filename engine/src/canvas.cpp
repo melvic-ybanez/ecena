@@ -6,11 +6,10 @@
 #include "../include/canvas.h"
 #include "../../shared/include/utils.h"
 
-#define PARSE_INT_SEP(is, value, sep) if (!read_line(is, sep)) return std::nullopt; \
-    int value = std::stoi(line, &pos); \
-    if (pos != line.size()) return std::nullopt
-#define PARSE_INT(is, value) PARSE_INT_SEP(is, value, ' ')
-#define PARSE_INT_LINE(is, value) PARSE_INT_SEP(is, value, '\n')
+#define PARSE_INT(var_name) int var_name = 0; \
+    if (auto maybe_val = read_int(); !maybe_val.has_value()) return std::nullopt; \
+    else var_name = maybe_val.value(); \
+    skip_comments()
 
 namespace rt::canvas {
     Canvas::Canvas() : Canvas(1, 1) {}
@@ -42,41 +41,65 @@ namespace rt::canvas {
 
     std::optional<Canvas> from_ppm(std::istream &is) {
         std::string line;
-        size_t pos;
 
-        auto read_line = [&](std::istream &is, char sep) -> std::istream &{
-            while (is.peek() == '#') std::getline(is, line);
-            return std::getline(is, line, sep);
+        auto skip_whitespace = [&] {
+            while ((is.peek() == ' ' || is.peek() == '\n') && is.peek() != EOF) is.get();
         };
 
-        if (!read_line(is, '\n') || line != "P3") return std::nullopt;
+        auto skip_comments = [&] {
+            skip_whitespace();
+            while (is.peek() == '#') {
+                std::getline(is, line);
+                skip_whitespace();
+            }
+        };
 
-        PARSE_INT(is, width);
-        PARSE_INT_LINE(is, height);
-        PARSE_INT_LINE(is, max_value);
+        // read the first integer in the stream
+        auto read_int = [&]() -> std::optional<int> {
+            std::string int_str;
+
+            while (is.peek() != ' ' && is.peek() != '\n' && is.peek() != EOF) {
+                char c;
+                is.get(c);
+                int_str += c;
+            }
+
+            size_t pos;
+            int value = std::stoi(int_str, &pos);
+
+            if (pos != int_str.size()) return std::nullopt;
+            return value;
+        };
+
+        skip_comments();
+        if (!std::getline(is, line) || line != "P3") return std::nullopt;
+
+        skip_comments();
+        PARSE_INT(width);
+        PARSE_INT(height);
+        PARSE_INT(max_value);
 
         Canvas canvas{width, height};
 
-        int i = 0;
-        while (read_line(is, '\n')) {
-            std::stringstream row{line};
-            while (row.peek() != EOF) {
-                PARSE_INT(row, x);
-                PARSE_INT(row, y);
-                PARSE_INT(row, z);
+        int r = 0;
+        int c = 0;
+        while (is.peek() != EOF) {
+            PARSE_INT(x);
+            PARSE_INT(y);
+            PARSE_INT(z);
 
-                int r = i / width;
-                int c = i % width;
+            canvas.pixels[r][c] = {
+                    static_cast<real>(x) / max_value,
+                    static_cast<real>(y) / max_value,
+                    static_cast<real>(z) / max_value
+            };
 
-                canvas.pixels[r][c] = {
-                        static_cast<real>(x) / max_value,
-                        static_cast<real>(y) / max_value,
-                        static_cast<real>(z) / max_value
-                };
-
-                i++;
-                while (row.peek() == ' ') row.get();
+            c++;
+            if (c == width) {
+                c = 0;
+                r++;
             }
+
         }
 
         return canvas;

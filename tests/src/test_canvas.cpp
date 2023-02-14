@@ -171,6 +171,19 @@ namespace rt::tests::canvas_ {
                 ASSERT_EQ_MSG("at 0 0", Color::white_, canvas.value().pixels[0][0]);
                 ASSERT_EQ_MSG("at 1 0", Color(1, 0, 1), canvas.value().pixels[0][1]);
             });
+            scenario("PPM parsing allows on RGB triple to span lines", [] {
+                std::stringstream ppm{
+                        "P3\n"
+                        "1 1\n"
+                        "255\n"
+                        "51\n"
+                        "153\n"
+                        "\n"
+                        "204\n"
+                };
+                auto canvas = canvas::from_ppm(ppm);
+                ASSERT_EQ_MSG("First pixel", Color(0.2, 0.6, 0.8), canvas->pixels[0][0]);
+            });
         });
     }
 }

@@ -3,6 +3,7 @@
 //
 
 #include <cmath>
+#include <utility>
 #include "../../engine/include/shapes.h"\
 
 
@@ -55,5 +56,12 @@ namespace rt::patterns {
         if (static_cast<int>(std::floor(point.x()) + std::floor(point.y()) + std::floor(point.z())) % 2 == 0)
             return first;
         return second;
+    }
+
+    TextureMap::TextureMap(std::unique_ptr<UV> uv, uv::Map map) : uv{std::move(uv)}, map{std::move(map)} {}
+
+    Color TextureMap::at(const Point &point) const {
+        auto [u, v] = map(point);
+        return uv->at(u, v);
     }
 }

@@ -33,6 +33,7 @@ int main() {
     triangles::test();
     dsl_::test();
     objs::test();
+    uv_::test();
 
     std::cout << "Ran " << test_count << " tests. Successful: " << success_count << ". Failed: "
               << test_count - success_count << ".";

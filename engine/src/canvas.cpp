@@ -30,6 +30,10 @@ namespace rt::canvas {
         return pixels[row];
     }
 
+    Color Canvas::pixel_at(size_t col, size_t row) const {
+        return pixels[row][col];
+    }
+
     std::ostream &operator<<(std::ostream &out, const Canvas &canvas) {
         std::vector<std::string> row_str;
         for (const auto &row: canvas.pixels) {

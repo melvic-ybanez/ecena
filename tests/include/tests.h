@@ -93,6 +93,10 @@ namespace rt::tests {
     namespace objs {
         void test();
     }
+
+    namespace uv_ {
+        void test();
+    }
 }
 
 #endif //ECENA_TESTS_H

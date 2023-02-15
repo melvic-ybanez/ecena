@@ -29,6 +29,8 @@ namespace rt::canvas {
         [[nodiscard]] int height() const;
 
         PixelRow &operator[](int row);
+
+        [[nodiscard]] Color pixel_at(size_t col, size_t row) const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Canvas &canvas);

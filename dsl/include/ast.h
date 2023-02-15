@@ -5,7 +5,6 @@
 #ifndef ECENA_AST_H
 #define ECENA_AST_H
 
-#include <string>
 #include <vector>
 #include "../../engine/include/data.h"
 
@@ -43,7 +42,7 @@ namespace rt::dsl {
 
         explicit Object(std::vector<Field> fields);
 
-        ExprType type() const override;
+        [[nodiscard]] ExprType type() const override;
 
         std::ostream &display(std::ostream &out) const override;
     };
@@ -58,7 +57,7 @@ namespace rt::dsl {
 
         bool operator!=(const std::string &str) const;
 
-        ExprType type() const override;
+        [[nodiscard]] ExprType type() const override;
 
         std::ostream &display(std::ostream &out) const override;
     };
@@ -67,9 +66,9 @@ namespace rt::dsl {
     public:
         double value;
 
-        Number(double value);
+        explicit Number(double value);
 
-        ExprType type() const override;
+        [[nodiscard]] ExprType type() const override;
 
         std::ostream &display(std::ostream &out) const override;
     };
@@ -78,9 +77,9 @@ namespace rt::dsl {
     public:
         std::vector<std::unique_ptr<Expr>> elems;
 
-        Array(std::vector<std::unique_ptr<Expr>> elems);
+        explicit Array(std::vector<std::unique_ptr<Expr>> elems);
 
-        ExprType type() const override;
+        [[nodiscard]] ExprType type() const override;
 
         std::ostream &display(std::ostream &out) const override;
     };
@@ -89,16 +88,16 @@ namespace rt::dsl {
     public:
         bool value;
 
-        Boolean(bool value);
+        explicit Boolean(bool value);
 
-        ExprType type() const override;
+        [[nodiscard]] ExprType type() const override;
 
         std::ostream &display(std::ostream &out) const override;
     };
 
     class Null : public Expr {
     public:
-        ExprType type() const override;
+        [[nodiscard]] ExprType type() const override;
 
         std::ostream &display(std::ostream &out) const override;
     };
@@ -111,9 +110,9 @@ namespace rt::dsl {
 
         Field(std::unique_ptr<String> key, std::unique_ptr<Expr> value, int line);
 
-        const String &key() const;
+        [[nodiscard]] const String &key() const;
 
-        const Expr &value() const;
+        [[nodiscard]] const Expr &value() const;
     };
 
     std::ostream &operator<<(std::ostream &out, const Expr &expr);

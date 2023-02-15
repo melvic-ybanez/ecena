@@ -7,6 +7,7 @@
 
 #include "../math/include/tuples.h"
 #include "../math/include/matrix.h"
+#include "uv.h"
 
 
 namespace rt::shapes {
@@ -34,7 +35,7 @@ namespace rt::patterns {
 
         virtual ~Pattern() = default;
 
-        virtual Color at(const Point &point) const = 0;
+        [[nodiscard]] virtual Color at(const Point &point) const = 0;
 
         [[nodiscard]] Color at(const Shape &shape, const Point &world_point) const;
     };
@@ -79,6 +80,18 @@ namespace rt::patterns {
         using Pattern::at;
 
         Checkers(Color first, Color second);
+
+        [[nodiscard]] Color at(const Point &point) const override;
+    };
+
+    class TextureMap : public Pattern {
+    public:
+        std::unique_ptr<UV> uv;
+        uv::Map map;
+
+        TextureMap(std::unique_ptr<UV> uv, uv::Map map);
+
+        using Pattern::at;
 
         [[nodiscard]] Color at(const Point &point) const override;
     };

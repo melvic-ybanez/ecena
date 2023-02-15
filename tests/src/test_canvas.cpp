@@ -152,7 +152,7 @@ namespace rt::tests::canvas_ {
                 };
                 for (int i = 0; i < xs.size(); i++) {
                     auto color = canvas.value()[ys[i]][xs[i]];
-                    ASSERT_EQ_MSG(std::to_string(i) + ":", colors[i], color);
+                    ASSERT_EQ_MSG(std::to_string(i) + " - Color", colors[i], color);
                 }
             });
             set("PPM parsing ignores comment lines", [] {
@@ -182,7 +182,18 @@ namespace rt::tests::canvas_ {
                         "204\n"
                 };
                 auto canvas = canvas::from_ppm(ppm);
-                ASSERT_EQ_MSG("First pixel", Color(0.2, 0.6, 0.8), canvas->pixels[0][0]);
+                ASSERT_EQ(Color(0.2, 0.6, 0.8), canvas->pixels[0][0]);
+            });
+            scenario("PPM parsing respects the scale setting", [] {
+                std::stringstream ppm{
+                        "P3\n"
+                        "2 2\n"
+                        "100\n"
+                        "100 100 100 50 50 50\n"
+                        "75 50 25  0 0 0\n"
+                };
+                auto canvas = canvas::from_ppm(ppm);
+                ASSERT_EQ(Color(0.75, 0.5, 0.25), canvas->pixel_at(0, 1));
             });
         });
     }

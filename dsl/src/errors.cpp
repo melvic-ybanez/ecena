@@ -6,9 +6,9 @@
 #include "../include/errors.h"
 
 namespace rt::dsl::errors {
-    Error::Error(const std::string &message, int line) : std::runtime_error(message), line{line} {}
+    Error::Error(const std::string& message, int line) : std::runtime_error(message), line{line} {}
 
-    std::ostream &operator<<(std::ostream &out, const Error &error) {
+    std::ostream& operator<<(std::ostream& out, const Error& error) {
         return out << "An error occurred prior to rendering. " << error.what() << ". Line: " << error.line;
     }
 
@@ -20,7 +20,7 @@ namespace rt::dsl::errors {
         return {"Unterminated string", line};
     }
 
-    Error expected(const Token &token, const std::string &expected, const std::string &where) {
+    Error expected(const Token& token, const std::string& expected, const std::string& where) {
         return {"Expected: '" + expected + "' " + where + ". Got: '" + token.lexeme + "'", token.line};
     }
 
@@ -28,7 +28,7 @@ namespace rt::dsl::errors {
         return type_mismatch(type_to_str(expected), type_to_str(got), line);
     }
 
-    Error type_mismatch(const std::string &expected, const std::string &got, int line) {
+    Error type_mismatch(const std::string& expected, const std::string& got, int line) {
         return {"Type mismatch. Expected: " + expected + ". Got: " + got, line};
     }
 
@@ -37,23 +37,27 @@ namespace rt::dsl::errors {
                 line};
     }
 
-    Error unknown_field(const std::string &field_name, int line) {
+    Error unknown_field(const std::string& field_name, int line) {
         return {"Unknown field: " + field_name, line};
     }
 
-    Error invalid_kind(const std::string &kind, const std::string &object, int line) {
+    Error invalid_kind(const std::string& kind, const std::string& object, int line) {
         return {"Invalid type '" + kind + "' for object '" + object + "'", line};
     }
 
-    Error required_type(const std::string &type, int line) {
-        return {"Required type: '" + type + "'", line};
+    Error required_field(const std::string& field, int line) {
+        return {"Required field: '" + field + "'", line};
     }
 
-    Error invalid_path(const std::string &path, int line) {
+    Error invalid_path(const std::string& path, int line) {
         return {"Invalid path: '" + path + "'", line};
     }
 
     Error obj_not_found(int line) {
         return {"No OBJ model provided", line};
+    }
+
+    Error unable_to_load_path(const std::string& path, int line) {
+        return {"Unable to load from path: '" + path + "'", line};
     }
 }

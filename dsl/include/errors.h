@@ -14,30 +14,32 @@ namespace rt::dsl::errors {
     public:
         int line;
 
-        Error(const std::string &message, int line);
+        Error(const std::string& message, int line);
     };
 
-    std::ostream &operator<<(std::ostream &out, const Error &error);
+    std::ostream& operator<<(std::ostream& out, const Error& error);
 
     Error invalid_character(char c, int line);
 
     Error unterminated_string(int line);
 
-    Error expected(const Token &token, const std::string &expected, const std::string &where);
+    Error expected(const Token& token, const std::string& expected, const std::string& where);
 
     Error type_mismatch(ExprType expected, ExprType got, int line);
 
-    Error type_mismatch(const std::string &expected, const std::string &got, int line);
+    Error type_mismatch(const std::string& expected, const std::string& got, int line);
 
     Error wrong_args_count(size_t expected, size_t got, int line);
 
-    Error unknown_field(const std::string &field_name, int line);
+    Error unknown_field(const std::string& field_name, int line);
 
-    Error invalid_kind(const std::string &kind, const std::string &object, int line);
+    Error invalid_kind(const std::string& kind, const std::string& object, int line);
 
-    Error required_type(const std::string &type, int line);
+    Error required_field(const std::string& field, int line);
 
-    Error invalid_path(const std::string &path, int line);
+    Error invalid_path(const std::string& path, int line);
+
+    Error unable_to_load_path(const std::string& path, int line);
 
     Error obj_not_found(int line);
 }

@@ -10,17 +10,16 @@ def middle_group():
             {
                 "type": "sphere",
                 "name": "middle_sphere",
-                "transform": [['rotate_z', -math.pi / 4], ["translate", [-0.5, 1, 0.5]]],
-                "material": {
-                    "color": [0.1, 1, 0.5],
-                    "diffuse": 0.7,
-                    "specular": 0.3,
-                    "pattern": {
-                        "type": "checkers",
-                        "components": [[21.0 / 255, 184.0 / 255, 0], [0.1, 1, 0.5]],
-                        "transform": [["scale", [0.25, 0.25, 0.25]], ["rotate_y", -math.pi / 4]]
+                "transform": [['rotate_y', math.pi * 1.3], ['rotate_x', -math.pi / 4], ['rotate_z', -math.pi / 4], ["translate", [-0.5, 1, 0.5]]],
+                'material': {
+                    'pattern': {
+                        'type': 'texture',
+                        'path': 'examples/map.ppm',
+                        'uv_pattern': 'image',
                     },
-                    "reflectivity": 0.5
+                    'diffuse': 0.7,
+                    'specular': 0.3,
+                    'reflectivity': 0.5
                 }
             },
             cube,

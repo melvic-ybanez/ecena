@@ -16,17 +16,17 @@ namespace rt {
 
     Bounds::Bounds(Point min, Point max) : min{std::move(min)}, max{std::move(max)} {}
 
-    Bounds::Bounds(const Point &min) : Bounds(min, -min) {}
+    Bounds::Bounds(const Point& min) : Bounds(min, -min) {}
 
     Bounds Bounds::cube() {
         return {{-1, -1, -1}};
     }
 
-    Bounds Bounds::operator+(const Bounds &other) const {
+    Bounds Bounds::operator+(const Bounds& other) const {
         return *this + other.min + other.max;
     }
 
-    Bounds Bounds::transform(const Matrix<4, 4> &transformation) const {
+    Bounds Bounds::transform(const Matrix<4, 4>& transformation) const {
         std::vector<Point> corners{
                 {min.x(), min.y(), min.z()}, // lower left back
                 {max.x(), min.y(), min.z()}, // lower right back
@@ -39,13 +39,13 @@ namespace rt {
         };
 
         Bounds bounds;
-        for (const auto &corner: corners) {
+        for (const auto& corner: corners) {
             bounds = bounds + (transformation * corner);
         }
         return bounds;
     }
 
-    Bounds Bounds::operator+(const Point &point) const {
+    Bounds Bounds::operator+(const Point& point) const {
         Point new_min{
                 std::min(min.x(), point.x()),
                 std::min(min.y(), point.y()),
@@ -59,21 +59,21 @@ namespace rt {
         return {new_min, new_max};
     }
 
-    bool Bounds::operator==(const Bounds &that) const {
+    bool Bounds::operator==(const Bounds& that) const {
         return this->min == that.min && this->max == that.max;
     }
 
-    std::ostream &operator<<(std::ostream &out, const Bounds &bounds) {
+    std::ostream& operator<<(std::ostream& out, const Bounds& bounds) {
         return out << "{ min: " << bounds.min << ", max" << bounds.max << " }";
     }
 
-    bool Bounds::contains(const Point &point) const {
+    bool Bounds::contains(const Point& point) const {
         return point.x() >= min.x() && point.x() <= max.x()
                && point.y() >= min.y() && point.y() <= max.y()
                && point.z() >= min.z() && point.z() <= max.z();
     }
 
-    bool Bounds::contains(const Bounds &bounds) const {
+    bool Bounds::contains(const Bounds& bounds) const {
         return contains(bounds.min) && contains(bounds.max);
     }
 

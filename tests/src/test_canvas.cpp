@@ -36,8 +36,8 @@ namespace rt::tests::canvas_ {
             ASSERT_EQ_MSG("Canvas width is the number of columns", canvas.width(), canvas.pixels[0].size());
 
             bool all_black = true;
-            for (const auto &row: canvas.pixels) {
-                for (const auto &pixel: row) {
+            for (const auto& row: canvas.pixels) {
+                for (const auto& pixel: row) {
                     if (pixel != rt::Color::black_) {
                         all_black = false;
                         break;

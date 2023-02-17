@@ -10,7 +10,7 @@
 namespace rt::comps {
     struct Comps {
         real t{};
-        Shape *object{};
+        Shape* object{};
         Point point;
 
         // this point lies just above the surface to prevent objects from
@@ -27,14 +27,14 @@ namespace rt::comps {
         real n2;
     };
 
-    Comps prepare(const Intersection &hit, const Ray &ray, Aggregate &aggregate);
+    Comps prepare(const Intersection& hit, const Ray& ray, Aggregate& aggregate);
 
-    Comps prepare(const Intersection &hit, const Ray &ray);
+    Comps prepare(const Intersection& hit, const Ray& ray);
 
     /**
      * Computes the reflectance, which is the fraction of the light that is reflected
      */
-    real schlick(const Comps &comps);
+    real schlick(const Comps& comps);
 }
 
 namespace rt {

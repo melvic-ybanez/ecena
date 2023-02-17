@@ -9,7 +9,7 @@
 #include "canvas.h"
 
 namespace rt::uv {
-    using Map = std::function<std::pair<real, real>(const Point &)>;
+    using Map = std::function<std::pair<real, real>(const Point&)>;
 
     class UV {
     public:
@@ -19,13 +19,13 @@ namespace rt::uv {
 
         virtual ~UV() = default;
 
-        UV(const UV &that) = delete;
+        UV(const UV& that) = delete;
 
-        UV(UV &&that) = delete;
+        UV(UV&& that) = delete;
 
-        UV &operator=(const UV &that) = delete;
+        UV& operator=(const UV& that) = delete;
 
-        UV &operator=(UV &&that) = delete;
+        UV& operator=(UV&& that) = delete;
     };
 
     class Image : public UV {
@@ -39,7 +39,7 @@ namespace rt::uv {
 }
 
 namespace rt::uv::maps {
-    std::pair<real, real> spherical(const Point &point);
+    std::pair<real, real> spherical(const Point& point);
 }
 
 namespace rt {

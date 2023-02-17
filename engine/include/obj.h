@@ -16,18 +16,18 @@ namespace rt::obj {
 
         Obj();
 
-        [[nodiscard]] const Point &vertex_at(size_t i) const;
+        [[nodiscard]] const Point& vertex_at(size_t i) const;
 
-        [[nodiscard]] const shapes::Triangle &
-        triangle_at(size_t i, const std::string &group_name = default_group_name_) const;
+        [[nodiscard]] const shapes::Triangle&
+        triangle_at(size_t i, const std::string& group_name = default_group_name_) const;
 
-        shapes::Group &group(const std::string &name) const;
+        shapes::Group& group(const std::string& name) const;
 
-        shapes::Group &default_group() const;
+        shapes::Group& default_group() const;
 
-        bool current_group(const std::string &name);
+        bool current_group(const std::string& name);
 
-        shapes::Group *current_group() const;
+        shapes::Group* current_group() const;
 
         std::unique_ptr<shapes::Group> to_group() const;
 
@@ -37,24 +37,24 @@ namespace rt::obj {
         std::vector<Point> vertices;
         mutable std::unordered_map<std::string, std::unique_ptr<shapes::NamedGroup>> groups;
 
-        shapes::Group *current_group_;
+        shapes::Group* current_group_;
     };
 
     class Parser {
     public:
-        static std::optional<Point> parse_vertex(const std::string &line);
+        static std::optional<Point> parse_vertex(const std::string& line);
 
-        static Obj parse(std::istream &is);
+        static Obj parse(std::istream& is);
 
         /**
          * Like `parse`, but also returns the number of ignored lines,
          * mainly for debugging or testing purposes.
          */
-        static std::pair<Obj, int> parse_verbose(std::istream &is);
+        static std::pair<Obj, int> parse_verbose(std::istream& is);
 
-        std::vector<std::unique_ptr<shapes::Triangle>> parse_face(const std::string &line);
+        std::vector<std::unique_ptr<shapes::Triangle>> parse_face(const std::string& line);
 
-        bool parse_group(const std::string &line);
+        bool parse_group(const std::string& line);
 
     private:
         Obj obj;

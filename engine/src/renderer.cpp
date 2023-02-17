@@ -7,11 +7,11 @@
 #include <fstream>
 
 namespace rt {
-    Ppm render(Data &data) {
+    Ppm render(Data& data) {
         return Ppm{data.camera.render(data.world)};
     }
 
-    void render_with_logging(Data &data, std::ofstream &out_img) {
+    void render_with_logging(Data& data, std::ofstream& out_img) {
         std::cout << "Rendering...\n";
 
         auto start_time = clock();

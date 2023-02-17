@@ -6,9 +6,9 @@
 #include "../include/comps.h"
 
 namespace rt::comps {
-    static void compute_n1_and_n2(Comps &comps, const Intersection &hit, Aggregate &aggregate);
+    static void compute_n1_and_n2(Comps& comps, const Intersection& hit, Aggregate& aggregate);
 
-    Comps prepare(const Intersection &hit, const Ray &ray, Aggregate &aggregate) {
+    Comps prepare(const Intersection& hit, const Ray& ray, Aggregate& aggregate) {
         Comps comps;
         comps.t = hit.t;
         comps.object = hit.object;
@@ -34,14 +34,14 @@ namespace rt::comps {
         return comps;
     }
 
-    Comps prepare(const Intersection &hit, const Ray &ray) {
+    Comps prepare(const Intersection& hit, const Ray& ray) {
         Aggregate agg{{new Intersection(hit.t, hit.object)}};
         return prepare(hit, ray, agg);
     }
 
-    void compute_n1_and_n2(Comps &comps, const Intersection &hit, Aggregate &aggregate) {
-        std::vector<Shape *> containers;
-        for (auto i : aggregate.elems) {
+    void compute_n1_and_n2(Comps& comps, const Intersection& hit, Aggregate& aggregate) {
+        std::vector<Shape*> containers;
+        for (auto i: aggregate.elems) {
             if (i == &hit) {
                 if (containers.empty()) comps.n1 = 1.0;
                 else comps.n1 = containers.back()->material->refractive_index;
@@ -64,7 +64,7 @@ namespace rt::comps {
         }
     }
 
-    real schlick(const Comps &comps) {
+    real schlick(const Comps& comps) {
         auto cos = comps.eye_vec.dot(comps.normal_vec);
 
         // total internal reflection

@@ -24,10 +24,10 @@ namespace rt::tests::cones {
             set("Intersecting a cone with a ray", [] {
                 shapes::Cone cone;
                 std::array<Point, 3> origins{
-                    Point{0, 0, -5}, Point{0, 0, -5}, Point{1, 1, -5}
+                        Point{0, 0, -5}, Point{0, 0, -5}, Point{1, 1, -5}
                 };
                 std::array<Vec, 3> directions{
-                    Vec{0, 0, 1}, Vec{1, 1, 1}, Vec{-0.5, -1, 1}
+                        Vec{0, 0, 1}, Vec{1, 1, 1}, Vec{-0.5, -1, 1}
                 };
                 std::array<real, 3> t0s{5, 8.66025, 4.55006};
                 std::array<real, 3> t1s{5, 8.66025, 49.44994};
@@ -60,10 +60,10 @@ namespace rt::tests::cones {
             set("Computing the normal vector on a cone", [] {
                 shapes::Cone cone;
                 std::array<Point, 3> points{
-                    Point{0, 0, 0}, Point{1, 1, 1}, Point{-1, -1, 0}
+                        Point{0, 0, 0}, Point{1, 1, 1}, Point{-1, -1, 0}
                 };
                 std::array<Vec, 3> normals{
-                    Vec{0, 0, 0}, Vec{1, -std::sqrt(2), 1}, Vec{-1, 1, 0}
+                        Vec{0, 0, 0}, Vec{1, -std::sqrt(2), 1}, Vec{-1, 1, 0}
                 };
 
                 for (int i = 0; i < points.size(); i++) {

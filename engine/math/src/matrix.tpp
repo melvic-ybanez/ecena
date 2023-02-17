@@ -2,17 +2,17 @@
 
 namespace rt::math::matrix {
     template<size_t R, size_t C>
-    Row<C> &Matrix<R, C>::operator[](size_t row) {
+    Row<C>& Matrix<R, C>::operator[](size_t row) {
         return elems_[row];
     }
 
     template<size_t R, size_t C>
-    const Row<C> &Matrix<R, C>::operator[](size_t row) const {
+    const Row<C>& Matrix<R, C>::operator[](size_t row) const {
         return elems_[row];
     }
 
     template<size_t R, size_t C>
-    bool Matrix<R, C>::operator==(const Matrix<R, C> &other) const {
+    bool Matrix<R, C>::operator==(const Matrix<R, C>& other) const {
         bool equals = true;
         for (auto r = 0; r < R; r++) {
             for (auto c = 0; c < C; c++) {
@@ -28,18 +28,18 @@ namespace rt::math::matrix {
 
     template<size_t R, size_t C>
     template<size_t R1, size_t C1>
-    bool Matrix<R, C>::operator!=(const Matrix<R1, C1> &that) const {
+    bool Matrix<R, C>::operator!=(const Matrix<R1, C1>& that) const {
         return !(*this == that);
     }
 
     template<size_t R, size_t C>
-    const Table<R, C> &Matrix<R, C>::elems() const {
+    const Table<R, C>& Matrix<R, C>::elems() const {
         return elems_;
     }
 
     template<size_t R, size_t C>
     template<size_t C0>
-    Matrix<R, C0> Matrix<R, C>::operator*(const Matrix<C, C0> &that) const {
+    Matrix<R, C0> Matrix<R, C>::operator*(const Matrix<C, C0>& that) const {
         Matrix<R, C0> product;
         for (auto r = 0; r < R; r++) {
             for (auto c = 0; c < C0; c++) {
@@ -136,9 +136,9 @@ namespace rt::math::matrix {
     }
 
     template<size_t R, size_t C>
-    std::ostream &operator<<(std::ostream &out, const Matrix<R, C> &matrix) {
-        for (const auto &row: matrix.elems()) {
-            for (const auto &elem: row) {
+    std::ostream& operator<<(std::ostream& out, const Matrix<R, C>& matrix) {
+        for (const auto& row: matrix.elems()) {
+            for (const auto& elem: row) {
                 out << elem << ' ';
             }
             out << std::endl;
@@ -147,7 +147,7 @@ namespace rt::math::matrix {
     }
 
     template<size_t R>
-    Tuple operator*(const Matrix<R, 4> &matrix, const Tuple &tuple) {
+    Tuple operator*(const Matrix<R, 4>& matrix, const Tuple& tuple) {
         Matrix<4, 1> other{{{{tuple.x()}, {tuple.y()}, {tuple.z()}, {tuple.w()}}}};
         Matrix<R, 1> result = matrix * other;
         return Tuple{result[0][0], result[0][1], result[0][2], result[0][3]};
@@ -160,7 +160,7 @@ namespace rt::math::matrix {
         if (opt_identity.has_value()) return opt_identity.value();
 
         opt_identity = {{}};
-        auto &identity_ = opt_identity.value();
+        auto& identity_ = opt_identity.value();
 
         // set all the elements along the diagonal to 1
         for (auto r = 0; r < R; r++) {

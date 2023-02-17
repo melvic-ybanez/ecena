@@ -26,7 +26,7 @@ namespace rt::canvas {
         return static_cast<int>(size.height);
     }
 
-    PixelRow &Canvas::operator[](int row) {
+    PixelRow& Canvas::operator[](int row) {
         return pixels[row];
     }
 
@@ -34,16 +34,16 @@ namespace rt::canvas {
         return pixels[row][col];
     }
 
-    std::ostream &operator<<(std::ostream &out, const Canvas &canvas) {
+    std::ostream& operator<<(std::ostream& out, const Canvas& canvas) {
         std::vector<std::string> row_str;
-        for (const auto &row: canvas.pixels) {
+        for (const auto& row: canvas.pixels) {
             row_str.push_back(join_to_array(row));
         }
 
         return out << "{ pixels: " << join_to_array(row_str) << ", size: " << canvas.size << " }";
     }
 
-    std::optional<Canvas> from_ppm(std::istream &is) {
+    std::optional<Canvas> from_ppm(std::istream& is) {
         std::string line;
 
         auto skip_whitespace = [&] {

@@ -63,7 +63,7 @@ namespace rt::tests::world {
             scenario("Shading an intersection", [] {
                 auto world = default_world();
                 Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
-                auto &shape = world.objects[0];
+                auto& shape = world.objects[0];
                 Intersection i{4, shape.get()};
                 auto comps = comps::prepare(i, ray);
                 auto color = world.shade_hit(comps);
@@ -74,7 +74,7 @@ namespace rt::tests::world {
                 auto world = default_world();
                 world.light = {Point{0, 0.25, 0}, Color::white_};
                 Ray ray{Point{0, 0, 0}, Vec{0, 0, 1}};
-                auto &shape = world.objects[1];
+                auto& shape = world.objects[1];
                 Intersection i{0.5, shape.get()};
                 auto comps = comps::prepare(i, ray);
                 auto color = world.shade_hit(comps);
@@ -182,9 +182,9 @@ namespace rt::tests::world {
             scenario("An intersection behind the ray", [] {
                 auto world = default_world();
 
-                auto &outer = world.objects[0];
+                auto& outer = world.objects[0];
                 outer->material->ambient = 1;
-                auto &inner = world.objects[1];
+                auto& inner = world.objects[1];
                 inner->material->ambient = 1;
 
                 Ray ray{Point{0, 0, 0.75}, Vec{0, 0, -1}};
@@ -247,7 +247,7 @@ namespace rt::tests::world {
                 Ray ray{{0, 0, 0},
                         {0, 0, 1}};
 
-                auto &shape = world.objects[1];
+                auto& shape = world.objects[1];
                 shape->material->ambient = 1;
 
                 Intersection i{1, shape.get()};
@@ -296,7 +296,7 @@ namespace rt::tests::world {
         set("Refractions", [] {
             scenario("The refracted color with an opaque surface", [] {
                 auto world = default_world();
-                auto &shape = world.objects[0];
+                auto& shape = world.objects[0];
 
                 Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 Aggregate xs{{new Intersection{4, shape.get()}, new Intersection{6, shape.get()}}};
@@ -307,7 +307,7 @@ namespace rt::tests::world {
             });
             scenario("The refracted color at the maximum recursive depth", [] {
                 auto world = default_world();
-                auto &shape = world.objects[0];
+                auto& shape = world.objects[0];
                 shape->material->transparency = 1.0;
                 shape->material->refractive_index = 1.5;
 
@@ -320,7 +320,7 @@ namespace rt::tests::world {
             });
             scenario("The refracted color under total internal reflection", [] {
                 auto world = default_world();
-                auto &shape = world.objects[0];
+                auto& shape = world.objects[0];
                 shape->material->transparency = 1.0;
                 shape->material->refractive_index = 1.5;
 
@@ -335,11 +335,11 @@ namespace rt::tests::world {
             scenario("The refracted color with a refracted ray", [] {
                 auto world = default_world();
 
-                auto &shape1 = world.objects[0];
+                auto& shape1 = world.objects[0];
                 shape1->material->ambient = 1.0;
                 shape1->material->pattern = std::make_unique<TestPattern>();
 
-                auto &shape2 = world.objects[1];
+                auto& shape2 = world.objects[1];
                 shape2->material->transparency = 1.0;
                 shape2->material->refractive_index = 1.5;
 

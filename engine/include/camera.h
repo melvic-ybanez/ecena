@@ -37,10 +37,10 @@ namespace rt {
 
         [[nodiscard]] Ray ray_for_pixel(int x, int y) const;
 
-        [[nodiscard]] Canvas render(const World &world) const;
+        [[nodiscard]] Canvas render(const World& world) const;
     };
 
-    std::ostream &operator<<(std::ostream &out, const Camera &camera);
+    std::ostream& operator<<(std::ostream& out, const Camera& camera);
 }
 
 #endif //ECENA_CAMERA_H

@@ -14,7 +14,7 @@ namespace rt::tests::triangles {
 
     static void intersections();
 
-    static void  bounds();
+    static void bounds();
 
     void test() {
         set("Triangles", [] {

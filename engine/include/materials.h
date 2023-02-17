@@ -24,11 +24,11 @@ namespace rt::materials {
 
         Material();
 
-        bool operator==(const Material &other) const;
+        bool operator==(const Material& other) const;
 
-        bool operator!=(const Material &other) const;
+        bool operator!=(const Material& other) const;
 
-        Color color_at(const Shape &object, const Point &point) const;
+        Color color_at(const Shape& object, const Point& point) const;
 
         bool is_reflective() const;
 
@@ -37,15 +37,15 @@ namespace rt::materials {
 
     Material glass();
 
-    std::ostream &operator<<(std::ostream &out, const Material &mat);
+    std::ostream& operator<<(std::ostream& out, const Material& mat);
 }
 
 namespace rt::materials::refractive_indices {
-     constexpr inline real vacuum = 1;
-     constexpr inline real air = 1.00029;
-     constexpr inline real water = 1.333;
-     constexpr inline real glass = 1.5;
-     constexpr inline real diamond = 2.417;
+    constexpr inline real vacuum = 1;
+    constexpr inline real air = 1.00029;
+    constexpr inline real water = 1.333;
+    constexpr inline real glass = 1.5;
+    constexpr inline real diamond = 2.417;
 }
 
 namespace rt {

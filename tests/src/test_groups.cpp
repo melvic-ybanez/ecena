@@ -159,7 +159,7 @@ namespace rt::tests::groups {
             subgroup_children.push_back(std::unique_ptr<shapes::Sphere>(s2));
             group.make_subgroup(std::move(subgroup_children));
 
-            auto subgroup = dynamic_cast<shapes::Group *>(group.children[0].get());
+            auto subgroup = dynamic_cast<shapes::Group*>(group.children[0].get());
 
             ASSERT_EQ_MSG("Count", 1, group.count());
             ASSERT_EQ_MSG("First subgroup child", s1, subgroup->children[0].get());
@@ -184,14 +184,14 @@ namespace rt::tests::groups {
 
             ASSERT_EQ_MSG("First child", s3, group.children[0].get());
 
-            auto subgroup = dynamic_cast<shapes::Group *>(group.children[1].get());
+            auto subgroup = dynamic_cast<shapes::Group*>(group.children[1].get());
             ASSERT_EQ_MSG("Subgroup count", 2, subgroup->count());
 
-            auto subgroup_1st_child = dynamic_cast<shapes::Group *>(subgroup->children[0].get());
+            auto subgroup_1st_child = dynamic_cast<shapes::Group*>(subgroup->children[0].get());
             ASSERT_EQ_MSG("First subgroup child count", 1, subgroup_1st_child->count());
             ASSERT_EQ_MSG("First subgroup only child", s1, subgroup_1st_child->children[0].get());
 
-            auto subgroup_2nd_child = dynamic_cast<shapes::Group *>(subgroup->children[1].get());
+            auto subgroup_2nd_child = dynamic_cast<shapes::Group*>(subgroup->children[1].get());
             ASSERT_EQ_MSG("Second subgroup child count", 1, subgroup_2nd_child->count());
             ASSERT_EQ_MSG("Second subgroup only child", s2, subgroup_2nd_child->children[0].get());
         });
@@ -216,11 +216,11 @@ namespace rt::tests::groups {
             ASSERT_EQ_MSG("Second child", s4, group[1]);
             ASSERT_EQ_MSG("Subgroup count", 2, subgroup->count());
 
-            auto subgroup_1st_child = dynamic_cast<const shapes::Group *>((*subgroup)[0]);
+            auto subgroup_1st_child = dynamic_cast<const shapes::Group*>((*subgroup)[0]);
             ASSERT_EQ_MSG("First subgroup child count", 1, subgroup_1st_child->count());
             ASSERT_EQ_MSG("First subgroup only child", s1, (*subgroup_1st_child)[0]);
 
-            auto subgroup_2nd_child = dynamic_cast<const shapes::Group *>((*subgroup)[1]);
+            auto subgroup_2nd_child = dynamic_cast<const shapes::Group*>((*subgroup)[1]);
             ASSERT_EQ_MSG("Second subgroup child count", 2, subgroup_2nd_child->count());
             ASSERT_EQ_MSG("Second subgroup first child", s2, (*subgroup_2nd_child)[0]);
             ASSERT_EQ_MSG("Second subgroup second child", s3, (*subgroup_2nd_child)[1]);

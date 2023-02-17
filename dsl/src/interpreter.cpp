@@ -20,7 +20,7 @@ namespace rt::dsl {
         return source;
     }
 
-    std::optional<Data> interpret(const std::string &source) {
+    std::optional<Data> interpret(const std::string& source) {
         std::unique_ptr<rt::dsl::Object> object;
         rt::Data data;
         Lexer lexer{source};
@@ -30,7 +30,7 @@ namespace rt::dsl {
             Parser parser{tokens};
             object = parser.parse_object();
             data = eval::to_data(*object);
-        } catch (rt::dsl::errors::Error &error) {
+        } catch (rt::dsl::errors::Error& error) {
             std::cout << error;
             return std::nullopt;
         }

@@ -13,7 +13,7 @@ namespace rt::tests {
         scenario_msg = "";
     }
 
-    void assert_true(const std::string &message, bool cond, const char *function_name, int line_no) {
+    void assert_true(const std::string& message, bool cond, const char* function_name, int line_no) {
         indent_set();
 
         if (cond) {
@@ -29,18 +29,18 @@ namespace rt::tests {
         std::cout << std::endl;
     }
 
-    void assert_equals_reals(const std::string &message, real v1, real v2, const char *function_name, int line_no) {
+    void assert_equals_reals(const std::string& message, real v1, real v2, const char* function_name, int line_no) {
         return assert_equals<real, real>(message, v1, v2, function_name, line_no,
                                          [](real v1, real v2) { return math::compare_reals(v1, v2); });
     }
 
-    void scenario(const std::string &message, const std::function<void()> &f) {
+    void scenario(const std::string& message, const std::function<void()>& f) {
         scenario_msg = message;
         f();
         scenario_msg = "";
     }
 
-    void set(const std::string &message, const std::function<void()> &f) {
+    void set(const std::string& message, const std::function<void()>& f) {
         indent_set();
         std::cout << message << std::endl;
 

@@ -16,9 +16,9 @@ namespace rt {
         int max_color_;
 
     public:
-        explicit Ppm(const Canvas &canvas, const std::string &identifier = "P3", int max_color = 255);
+        explicit Ppm(const Canvas& canvas, const std::string& identifier = "P3", int max_color = 255);
 
-        const std::string &identifier() const;
+        const std::string& identifier() const;
 
         std::string header() const;
 
@@ -31,7 +31,7 @@ namespace rt {
         int max_color() const;
     };
 
-    std::ostream &operator<<(std::ostream &out, const Ppm &ppm);
+    std::ostream& operator<<(std::ostream& out, const Ppm& ppm);
 }
 
 #endif //ECENA_PPM_H

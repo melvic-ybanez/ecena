@@ -36,24 +36,24 @@ namespace rt::dsl {
 
         bool is_at_end() const;
 
-        const Token &peek() const;
+        const Token& peek() const;
 
-        const Token &advance();
+        const Token& advance();
 
-        const Token &previous() const;
+        const Token& previous() const;
 
-        Token consume(TokenType type, const std::string &expected, const std::string &where);
+        Token consume(TokenType type, const std::string& expected, const std::string& where);
 
         std::vector<Field> parse_fields();
 
         Field parse_field();
 
         template<typename T>
-        std::unique_ptr<T> do_or_sync(std::function<std::unique_ptr<T> ()> f) {
+        std::unique_ptr<T> do_or_sync(std::function<std::unique_ptr<T>()> f) {
             int current_ = current;
             try {
                 return f();
-            } catch (errors::Error &error) {
+            } catch (errors::Error& error) {
                 current = current_;
                 return nullptr;
             }

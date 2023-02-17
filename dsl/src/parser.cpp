@@ -10,7 +10,7 @@
 
 namespace rt::dsl {
     template<typename T, typename V, TokenType>
-    static std::unique_ptr<T> parse_to_type(Parser &parser);
+    static std::unique_ptr<T> parse_to_type(Parser& parser);
 
     Parser::Parser(const std::vector<Token> tokens) : tokens{tokens}, current{0} {}
 
@@ -18,7 +18,7 @@ namespace rt::dsl {
         return peek().type == TokenType::eof;
     }
 
-    const Token &Parser::peek() const {
+    const Token& Parser::peek() const {
         return tokens[current];
     }
 
@@ -34,17 +34,17 @@ namespace rt::dsl {
         return !is_at_end() && peek().type == type;
     }
 
-    const Token &Parser::previous() const {
+    const Token& Parser::previous() const {
         return tokens[current - 1];
     }
 
-    const Token &Parser::advance() {
+    const Token& Parser::advance() {
         if (is_at_end()) return previous();
         current++;
         return previous();
     }
 
-    Token Parser::consume(TokenType type, const std::string &expected, const std::string &where) {
+    Token Parser::consume(TokenType type, const std::string& expected, const std::string& where) {
         if (check(type)) {
             advance();
             return previous();
@@ -89,7 +89,7 @@ namespace rt::dsl {
     }
 
     template<typename T, typename V, TokenType TT>
-    std::unique_ptr<T> parse_to_type(Parser &parser) {
+    std::unique_ptr<T> parse_to_type(Parser& parser) {
         if (auto result = parser.match(TT); result.has_value()) {
             return std::make_unique<T>(std::get<V>(result.value().value.value()));
         }

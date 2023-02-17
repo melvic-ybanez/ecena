@@ -8,26 +8,27 @@
 #include "../../shared/include/utils.h"
 
 namespace rt {
-    Aggregate World::intersect(const Ray &ray) const {
+    Aggregate World::intersect(const Ray& ray) const {
         Aggregate aggregate;
 
-        for (auto &obj: objects) {
+        for (auto& obj: objects) {
             auto agg = obj->intersect(ray);
             aggregate.combine_with(agg);
         }
         return aggregate;
     }
 
-    Color World::shade_hit(const Comps &comps, int remaining) const {
+    Color World::shade_hit(const Comps& comps, int remaining) const {
         if (!light.has_value()) return Color::black_;
         auto shadowed = is_shadowed_at(comps.over_point);
-        auto surface = lights::lighting(*comps.object, *comps.object->material, light.value(), comps.over_point, comps.eye_vec,
-                                comps.normal_vec, shadowed);
+        auto surface = lights::lighting(*comps.object, *comps.object->material, light.value(), comps.over_point,
+                                        comps.eye_vec,
+                                        comps.normal_vec, shadowed);
 
         auto reflected = reflected_color(comps, remaining);
         auto refracted = refracted_color(comps, remaining);
 
-        auto &mat = comps.object->material;
+        auto& mat = comps.object->material;
         if (mat->is_reflective() && mat->is_transparent()) {
             auto reflectance = schlick(comps);
             return surface + reflected * reflectance + refracted * (1 - reflectance);
@@ -36,7 +37,7 @@ namespace rt {
         return surface + reflected + refracted;
     }
 
-    Color World::color_at(const Ray &ray, int remaining, const Color &bg_color) const {
+    Color World::color_at(const Ray& ray, int remaining, const Color& bg_color) const {
         auto xs = intersect(ray);
         auto hit = xs.hit();
         if (hit == nullptr) return bg_color;
@@ -44,13 +45,13 @@ namespace rt {
         return shade_hit(comps, remaining);
     }
 
-    std::ostream &operator<<(std::ostream &out, const World &world) {
+    std::ostream& operator<<(std::ostream& out, const World& world) {
         return out << "{ objects: " << join_to_array(world.objects)
                    << ", light: " << optional_to_str(world.light)
                    << " }";
     }
 
-    bool World::is_shadowed_at(const Point &point) const {
+    bool World::is_shadowed_at(const Point& point) const {
         auto direction = Vec(light->position - point);
         auto distance = direction.magnitude();
         Ray ray{point, direction.normalize()};
@@ -60,12 +61,12 @@ namespace rt {
         return hit != nullptr && hit->t < distance;
     }
 
-    World &World::add_object(std::unique_ptr<Shape> &shape) {
+    World& World::add_object(std::unique_ptr<Shape>& shape) {
         objects.push_back(std::move(shape));
         return *this;
     }
 
-    Color World::reflected_color(const Comps &comps, int remaining) const {
+    Color World::reflected_color(const Comps& comps, int remaining) const {
         if (remaining == 0 || !comps.object->material->is_reflective()) return Color::black_;
 
         Ray reflect_ray{comps.over_point, comps.reflect_vec};
@@ -74,7 +75,7 @@ namespace rt {
         return color * comps.object->material->reflectivity;
     }
 
-    Color World::refracted_color(const Comps &comps, int remaining) const {
+    Color World::refracted_color(const Comps& comps, int remaining) const {
         if (remaining == 0 || !comps.object->material->is_transparent()) return Color::black_;
 
         auto n_ratio = 0.0;

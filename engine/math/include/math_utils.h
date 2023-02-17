@@ -32,10 +32,10 @@ namespace rt::math {
 
         Dimensions(int width, int height);
 
-        bool operator==(const Dimensions &that) const;
+        bool operator==(const Dimensions& that) const;
     };
 
-    std::ostream &operator<<(std::ostream &out, const Dimensions &dimensions);
+    std::ostream& operator<<(std::ostream& out, const Dimensions& dimensions);
 
     bool close_to_zero(real value);
 

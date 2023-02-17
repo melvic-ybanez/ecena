@@ -28,11 +28,11 @@ namespace rt::tests {
 
     void reset();
 
-    void assert_true(const std::string &message, bool cond, const char *function_name, int line_no);
+    void assert_true(const std::string& message, bool cond, const char* function_name, int line_no);
 
     template<typename T1, typename T2>
-    void assert_equals(const std::string &message, const T1 &t1, const T2 &t2, const char *function_name, int line_no,
-                       std::function<bool(const T1 &, const T2 &)> compare = [](const T1 &t1, const T2 &t2) {
+    void assert_equals(const std::string& message, const T1& t1, const T2& t2, const char* function_name, int line_no,
+                       std::function<bool(const T1&, const T2&)> compare = [](const T1& t1, const T2& t2) {
                            return t1 == t2;
                        }) {
         std::ostringstream msg_stream;
@@ -45,16 +45,16 @@ namespace rt::tests {
         assert_true(msg_stream.str(), cond, function_name, line_no);
     }
 
-    void assert_equals_reals(const std::string &message, real v1, real v2, const char *function_name, int line_no);
+    void assert_equals_reals(const std::string& message, real v1, real v2, const char* function_name, int line_no);
 
     /**
      * Like `assert_equals()`, but allows a group of statements inside a function `f`. The message parameter passed
      * will be available within the scope of `f`, and is automatically used in any `ASSERT_*` functions that
      * do not end with the `_MSG` suffix.
      */
-    void scenario(const std::string &message, const std::function<void()> &f);
+    void scenario(const std::string& message, const std::function<void()>& f);
 
-    void set(const std::string &message, const std::function<void()> &f);
+    void set(const std::string& message, const std::function<void()>& f);
 
     void indent_set();
 

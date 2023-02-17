@@ -66,8 +66,8 @@ namespace rt::tests::objs {
                     "f 1 3 4"
             };
             auto obj = obj::Parser::parse(obj_str);
-            auto &t1 = obj.triangle_at(1);
-            auto &t2 = obj.triangle_at(2);
+            auto& t1 = obj.triangle_at(1);
+            auto& t2 = obj.triangle_at(2);
 
             shapes::Triangle t1_expected{obj.vertex_at(1), obj.vertex_at(2), obj.vertex_at(3)};
             shapes::Triangle t2_expected{obj.vertex_at(1), obj.vertex_at(3), obj.vertex_at(4)};
@@ -85,9 +85,9 @@ namespace rt::tests::objs {
                     "f 1 2 3 4 5"
             };
             auto obj = obj::Parser::parse(obj_str);
-            auto &t1 = obj.triangle_at(1);
-            auto &t2 = obj.triangle_at(2);
-            auto &t3 = obj.triangle_at(3);
+            auto& t1 = obj.triangle_at(1);
+            auto& t2 = obj.triangle_at(2);
+            auto& t3 = obj.triangle_at(3);
 
             shapes::Triangle t1_expected{obj.vertex_at(1), obj.vertex_at(2), obj.vertex_at(3)};
             shapes::Triangle t2_expected{obj.vertex_at(1), obj.vertex_at(3), obj.vertex_at(4)};
@@ -116,8 +116,8 @@ namespace rt::tests::objs {
         set("Triangles in groups", [&] {
             auto obj_str = make_stream();
             auto obj = obj::Parser::parse(obj_str);
-            auto &t1 = obj.triangle_at(1, "FirstGroup");
-            auto &t2 = obj.triangle_at(1, "SecondGroup");
+            auto& t1 = obj.triangle_at(1, "FirstGroup");
+            auto& t2 = obj.triangle_at(1, "SecondGroup");
 
             shapes::Triangle t1_expected{obj.vertex_at(1), obj.vertex_at(2), obj.vertex_at(3)};
             shapes::Triangle t2_expected{obj.vertex_at(1), obj.vertex_at(3), obj.vertex_at(4)};

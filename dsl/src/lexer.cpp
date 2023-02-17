@@ -15,7 +15,7 @@ namespace rt::dsl {
         line = 1;
     }
 
-    Lexer::Lexer(const std::string &source) : Lexer() {
+    Lexer::Lexer(const std::string& source) : Lexer() {
         this->source = source;
     }
 

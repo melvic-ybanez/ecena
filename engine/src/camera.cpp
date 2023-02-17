@@ -61,7 +61,7 @@ namespace rt {
         return {origin, direction};
     }
 
-    Canvas Camera::render(const World &world) const {
+    Canvas Camera::render(const World& world) const {
         Canvas canvas{static_cast<int>(h_size), static_cast<int>(v_size)};
 
         if (antialias) {
@@ -80,7 +80,7 @@ namespace rt {
                 for (auto x = 0; x < canvas.width(); x++) {
                     auto source_x = x * scale;
                     auto average = (high_res[source_y][source_x] + high_res[source_y + 1][source_x]
-                            + high_res[source_y][source_x + 1] + high_res[source_y + 1][source_x + 1]) * 0.25;
+                                    + high_res[source_y][source_x + 1] + high_res[source_y + 1][source_x + 1]) * 0.25;
                     canvas[y][x] = average;
                 }
             }
@@ -110,7 +110,7 @@ namespace rt {
         return canvas;
     }
 
-    std::ostream &operator<<(std::ostream &out, const Camera &camera) {
+    std::ostream& operator<<(std::ostream& out, const Camera& camera) {
         return out << "{ h_size: " << camera.h_size << ", v_size: " << camera.v_size
                    << ", field_of_view: " << camera.field_of_view << ", transform: "
                    << camera.transform << " }";

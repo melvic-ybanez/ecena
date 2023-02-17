@@ -20,14 +20,14 @@ namespace rt::intersections {
     class Intersection {
     public:
         real t;
-        Shape *object;
+        Shape* object;
 
-        Intersection(real t, Shape *object);
+        Intersection(real t, Shape* object);
 
-        bool operator<(const Intersection &that) const;
+        bool operator<(const Intersection& that) const;
     };
 
-    using AggregateData = std::vector<Intersection *>;
+    using AggregateData = std::vector<Intersection*>;
 
     class Aggregate {
     public:
@@ -37,27 +37,27 @@ namespace rt::intersections {
 
         Aggregate() = default;
 
-        Aggregate(const Aggregate &from) = default;
+        Aggregate(const Aggregate& from) = default;
 
-        Aggregate(Aggregate &&from) = default;
+        Aggregate(Aggregate&& from) = default;
 
-        Aggregate &operator=(const Aggregate &from) = default;
+        Aggregate& operator=(const Aggregate& from) = default;
 
-        Aggregate &operator=(Aggregate &&from) = default;
+        Aggregate& operator=(Aggregate&& from) = default;
 
         ~Aggregate();
 
         size_t count() const;
 
-        Intersection *operator[](size_t i);
+        Intersection* operator[](size_t i);
 
         bool empty() const;
 
-        Intersection *hit();
+        Intersection* hit();
 
-        void add(Intersection *intersection);
+        void add(Intersection* intersection);
 
-        void combine_with(Aggregate &that);
+        void combine_with(Aggregate& that);
 
         void sort();
 
@@ -65,7 +65,7 @@ namespace rt::intersections {
         bool is_sorted = false;
     };
 
-    std::ostream &operator<<(std::ostream &out, const Intersection &intersection);
+    std::ostream& operator<<(std::ostream& out, const Intersection& intersection);
 }
 
 namespace rt {

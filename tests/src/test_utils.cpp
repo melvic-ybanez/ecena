@@ -27,12 +27,12 @@ namespace rt::tests {
         return shapes::Type::test;
     }
 
-    Aggregate TestShape::local_intersect(const Ray &local_ray) {
+    Aggregate TestShape::local_intersect(const Ray& local_ray) {
         this->saved_ray = local_ray;
         return {};
     }
 
-    Vec TestShape::local_normal_at(const Point &local_point) {
+    Vec TestShape::local_normal_at(const Point& local_point) {
         return {local_point.x(), local_point.y(), local_point.z()};
     }
 
@@ -40,7 +40,7 @@ namespace rt::tests {
         return Bounds::cube();
     }
 
-    Color TestPattern::at(const Point &point) const {
+    Color TestPattern::at(const Point& point) const {
         return point;
     }
 

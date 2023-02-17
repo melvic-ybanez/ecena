@@ -25,23 +25,23 @@ namespace rt::math::matrix {
 
         Matrix() = default;
 
-        Row<C> &operator[](size_t row);
+        Row<C>& operator[](size_t row);
 
-        const Row<C> &operator[](size_t row) const;
+        const Row<C>& operator[](size_t row) const;
 
-        bool operator==(const Matrix<R, C> &other) const;
+        bool operator==(const Matrix<R, C>& other) const;
 
         template<size_t R1, size_t C1>
-        bool operator!=(const Matrix<R1, C1> &that) const;
+        bool operator!=(const Matrix<R1, C1>& that) const;
 
-        const Table<R, C> &elems() const;
+        const Table<R, C>& elems() const;
 
         /**
          * Multiply this matrix by another matrix, provided that the former's number of columns
          * is the same as the latter's number of rows.
          */
         template<size_t C0>
-        Matrix<R, C0> operator*(const Matrix<C, C0> &that) const;
+        Matrix<R, C0> operator*(const Matrix<C, C0>& that) const;
 
         Matrix<R - 1, C - 1> submatrix(size_t row, size_t col) const;
 
@@ -76,10 +76,10 @@ namespace rt::math::matrix {
     };  // end of Matrix
 
     template<size_t R, size_t C>
-    std::ostream &operator<<(std::ostream &out, const Matrix<R, C> &matrix);
+    std::ostream& operator<<(std::ostream& out, const Matrix<R, C>& matrix);
 
     template<size_t R>
-    Tuple operator*(const Matrix<R, 4> &matrix, const Tuple &tuple);
+    Tuple operator*(const Matrix<R, 4>& matrix, const Tuple& tuple);
 
     template<size_t R, size_t C>
     Matrix<R, C> identity();

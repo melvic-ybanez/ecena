@@ -8,7 +8,7 @@
 namespace rt {
     Data::Data() : camera{100, 100, math::pi / 3} {}
 
-    std::ostream &operator<<(std::ostream &out, const Data &data) {
+    std::ostream& operator<<(std::ostream& out, const Data& data) {
         return out << "{ camera: " << data.camera << ", world: " << data.world << " }";
     }
 }

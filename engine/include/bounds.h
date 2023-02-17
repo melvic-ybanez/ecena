@@ -26,24 +26,24 @@ namespace rt {
         /**
          * Creates a bounding box with opposing minium and maximum
          */
-        Bounds(const Point &min);
+        Bounds(const Point& min);
 
-        Bounds transform(const Matrix<4, 4> &transformation) const;
+        Bounds transform(const Matrix<4, 4>& transformation) const;
 
-        Bounds operator+(const Bounds &other) const;
+        Bounds operator+(const Bounds& other) const;
 
-        Bounds operator+(const Point &point) const;
+        Bounds operator+(const Point& point) const;
 
-        bool operator==(const Bounds &that) const;
+        bool operator==(const Bounds& that) const;
 
-        bool contains(const Point &point) const;
+        bool contains(const Point& point) const;
 
-        bool contains(const Bounds &bounds) const;
+        bool contains(const Bounds& bounds) const;
 
         std::pair<Bounds, Bounds> split() const;
     };
 
-    std::ostream &operator<<(std::ostream &out, const Bounds &bounds);
+    std::ostream& operator<<(std::ostream& out, const Bounds& bounds);
 }
 
 #endif //ECENA_BOUNDS_H

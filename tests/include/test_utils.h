@@ -16,9 +16,9 @@ namespace rt::tests {
 
         rt::shapes::Type type() const override;
 
-        Aggregate local_intersect(const Ray &local_ray) override;
+        Aggregate local_intersect(const Ray& local_ray) override;
 
-        Vec local_normal_at(const Point &local_point) override;
+        Vec local_normal_at(const Point& local_point) override;
 
         Bounds bounds() const override;
     };
@@ -27,7 +27,7 @@ namespace rt::tests {
     public:
         using Pattern::at;
 
-        Color at(const Point &point) const override;
+        Color at(const Point& point) const override;
     };
 
     std::unique_ptr<Shape> glass_sphere();

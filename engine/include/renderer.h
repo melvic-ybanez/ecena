@@ -9,9 +9,9 @@
 #include "data.h"
 
 namespace rt {
-    Ppm render(Data &data);
+    Ppm render(Data& data);
 
-    void render_with_logging(Data &data, std::ofstream &out_img);
+    void render_with_logging(Data& data, std::ofstream& out_img);
 }
 
 #endif //ECENA_RENDERER_H

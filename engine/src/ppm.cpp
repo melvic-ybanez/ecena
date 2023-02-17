@@ -9,10 +9,10 @@
 namespace rt {
     const int Ppm::max_line_width = 70;
 
-    Ppm::Ppm(const Canvas &canvas, const std::string &identifier, int max_color) :
+    Ppm::Ppm(const Canvas& canvas, const std::string& identifier, int max_color) :
             identifier_{identifier}, canvas{canvas}, max_color_{max_color} {}
 
-    const std::string &Ppm::identifier() const {
+    const std::string& Ppm::identifier() const {
         return identifier_;
     }
 
@@ -23,11 +23,11 @@ namespace rt {
 
     std::string Ppm::pixel_data() const {
         std::string out;
-        for (const auto &row: canvas.pixels) {
+        for (const auto& row: canvas.pixels) {
             std::vector<std::string> color_strs;
 
             int count = 0;
-            for (const auto &pixel: row) {
+            for (const auto& pixel: row) {
                 auto r = math::scale(pixel.red(), max_color_);
                 auto g = math::scale(pixel.green(), max_color_);
                 auto b = math::scale(pixel.blue(), max_color_);
@@ -42,7 +42,7 @@ namespace rt {
 
             // make sure the rows don't go beyond the max line width
             size_t len = 0;
-            for (const auto &color_str: color_strs) {
+            for (const auto& color_str: color_strs) {
                 if (color_str == "\n") {
                     out += color_str;
                     len = 0;
@@ -79,7 +79,7 @@ namespace rt {
         return max_color_;
     }
 
-    std::ostream &operator<<(std::ostream &out, const Ppm &ppm) {
+    std::ostream& operator<<(std::ostream& out, const Ppm& ppm) {
         out << ppm.header() << "\n" << ppm.pixel_data();
         return out;
     }

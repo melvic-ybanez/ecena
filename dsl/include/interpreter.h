@@ -10,7 +10,7 @@
 namespace rt::dsl {
     std::string read_source();
 
-    std::optional<Data> interpret(const std::string &source);
+    std::optional<Data> interpret(const std::string& source);
 }
 
 #endif //ECENA_INTERPRETER_H

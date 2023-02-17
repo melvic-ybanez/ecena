@@ -7,21 +7,21 @@
 #include "../include/ray.h"
 
 namespace rt {
-    Ray::Ray(const Point &origin, const Vec &direction): origin{origin}, direction{direction} {}
+    Ray::Ray(const Point& origin, const Vec& direction) : origin{origin}, direction{direction} {}
 
-    Ray::Ray(Point &&origin, Vec &&direction): origin{std::move(origin)}, direction{std::move(direction)} {}
+    Ray::Ray(Point&& origin, Vec&& direction) : origin{std::move(origin)}, direction{std::move(direction)} {}
 
-    Ray::Ray(Tuple &&origin, Tuple &&direction) : Ray(Point{origin}, Vec{direction}) {}
+    Ray::Ray(Tuple&& origin, Tuple&& direction) : Ray(Point{origin}, Vec{direction}) {}
 
     Point Ray::at(real t) const {
         return origin + direction * t;
     }
 
-    std::ostream &operator<<(std::ostream &out, const Ray &ray) {
+    std::ostream& operator<<(std::ostream& out, const Ray& ray) {
         return out << "origin: " << ray.origin << "; direction " << ray.direction;
     }
 
-    Ray Ray::transform(const Matrix<4, 4> &matrix) const {
+    Ray Ray::transform(const Matrix<4, 4>& matrix) const {
         return Ray{matrix * origin, matrix * direction};
     }
 
@@ -49,7 +49,7 @@ namespace rt {
         return transform(math::matrix::shearing(xy, xz, yx, yz, zx, zy));
     }
 
-    bool Ray::operator==(const Ray &that) const {
+    bool Ray::operator==(const Ray& that) const {
         return this->origin == that.origin && this->direction == that.direction;
     }
 }

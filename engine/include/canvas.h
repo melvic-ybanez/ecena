@@ -28,14 +28,14 @@ namespace rt::canvas {
 
         [[nodiscard]] int height() const;
 
-        PixelRow &operator[](int row);
+        PixelRow& operator[](int row);
 
         [[nodiscard]] Color pixel_at(size_t col, size_t row) const;
     };
 
-    std::ostream &operator<<(std::ostream &out, const Canvas &canvas);
+    std::ostream& operator<<(std::ostream& out, const Canvas& canvas);
 
-    std::optional<Canvas> from_ppm(std::istream &is);
+    std::optional<Canvas> from_ppm(std::istream& is);
 }
 
 namespace rt {

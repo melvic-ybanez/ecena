@@ -23,17 +23,17 @@ namespace rt::dsl {
 
         virtual ~Expr() = default;
 
-        Expr(const Expr &from) = delete;
+        Expr(const Expr& from) = delete;
 
-        Expr(const Expr &&from) noexcept = delete;
+        Expr(const Expr&& from) noexcept = delete;
 
-        Expr &operator=(const Expr &from) = delete;
+        Expr& operator=(const Expr& from) = delete;
 
-        Expr &operator=(Expr &&from) noexcept = delete;
+        Expr& operator=(Expr&& from) noexcept = delete;
 
         virtual ExprType type() const = 0;
 
-        virtual std::ostream &display(std::ostream &out) const = 0;
+        virtual std::ostream& display(std::ostream& out) const = 0;
     };
 
     class Object : public Expr {
@@ -44,22 +44,22 @@ namespace rt::dsl {
 
         [[nodiscard]] ExprType type() const override;
 
-        std::ostream &display(std::ostream &out) const override;
+        std::ostream& display(std::ostream& out) const override;
     };
 
     class String : public Expr {
     public:
         std::string value;
 
-        String(const std::string &value);
+        String(const std::string& value);
 
-        bool operator==(const std::string &str) const;
+        bool operator==(const std::string& str) const;
 
-        bool operator!=(const std::string &str) const;
+        bool operator!=(const std::string& str) const;
 
         [[nodiscard]] ExprType type() const override;
 
-        std::ostream &display(std::ostream &out) const override;
+        std::ostream& display(std::ostream& out) const override;
     };
 
     class Number : public Expr {
@@ -70,7 +70,7 @@ namespace rt::dsl {
 
         [[nodiscard]] ExprType type() const override;
 
-        std::ostream &display(std::ostream &out) const override;
+        std::ostream& display(std::ostream& out) const override;
     };
 
     class Array : public Expr {
@@ -81,7 +81,7 @@ namespace rt::dsl {
 
         [[nodiscard]] ExprType type() const override;
 
-        std::ostream &display(std::ostream &out) const override;
+        std::ostream& display(std::ostream& out) const override;
     };
 
     class Boolean : public Expr {
@@ -92,14 +92,14 @@ namespace rt::dsl {
 
         [[nodiscard]] ExprType type() const override;
 
-        std::ostream &display(std::ostream &out) const override;
+        std::ostream& display(std::ostream& out) const override;
     };
 
     class Null : public Expr {
     public:
         [[nodiscard]] ExprType type() const override;
 
-        std::ostream &display(std::ostream &out) const override;
+        std::ostream& display(std::ostream& out) const override;
     };
 
     class Field {
@@ -110,14 +110,14 @@ namespace rt::dsl {
 
         Field(std::unique_ptr<String> key, std::unique_ptr<Expr> value, int line);
 
-        [[nodiscard]] const String &key() const;
+        [[nodiscard]] const String& key() const;
 
-        [[nodiscard]] const Expr &value() const;
+        [[nodiscard]] const Expr& value() const;
     };
 
-    std::ostream &operator<<(std::ostream &out, const Expr &expr);
+    std::ostream& operator<<(std::ostream& out, const Expr& expr);
 
-    std::ostream &operator<<(std::ostream &out, const Field &field);
+    std::ostream& operator<<(std::ostream& out, const Field& field);
 }
 
 #endif //ECENA_AST_H

@@ -19,7 +19,7 @@ namespace rt {
         Data();
     };
 
-    std::ostream &operator<<(std::ostream &out, const Data &data);
+    std::ostream& operator<<(std::ostream& out, const Data& data);
 }
 
 #endif //ECENA_DATA_H

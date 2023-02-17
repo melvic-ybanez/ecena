@@ -16,7 +16,7 @@ namespace rt::math {
             Dimensions(static_cast<double>(width),
                        static_cast<double>(height)) {}
 
-    bool Dimensions::operator==(const Dimensions &that) const {
+    bool Dimensions::operator==(const Dimensions& that) const {
         return this->width == that.width && this->height == that.height;
     }
 
@@ -36,7 +36,7 @@ namespace rt::math {
         return std::abs(value) < epsilon;
     }
 
-    std::ostream &operator<<(std::ostream &out, const Dimensions &dimensions) {
+    std::ostream& operator<<(std::ostream& out, const Dimensions& dimensions) {
         return out << "{ width: " << dimensions.width << ", height: " << dimensions.height << " }";
     }
 

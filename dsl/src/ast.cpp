@@ -7,13 +7,13 @@
 #include "../../shared/include/utils.h"
 
 namespace rt::dsl {
-    std::ostream &operator<<(std::ostream &out, const Expr &expr) {
+    std::ostream& operator<<(std::ostream& out, const Expr& expr) {
         return expr.display(out);
     }
 
     std::string type_to_str(ExprType type) {
         std::array<std::string, 6> type_strings{
-            "Object", "Number", "String", "Array", "Boolean", "Null"
+                "Object", "Number", "String", "Array", "Boolean", "Null"
         };
         return type_strings[static_cast<int>(type)];
     }
@@ -24,31 +24,31 @@ namespace rt::dsl {
         return ExprType::object;
     }
 
-    std::ostream &Object::display(std::ostream &out) const {
+    std::ostream& Object::display(std::ostream& out) const {
         return out << join_to_object(fields);
     }
 
-    String::String(const std::string &value) : value{value} {}
+    String::String(const std::string& value) : value{value} {}
 
     ExprType String::type() const {
         return ExprType::string;
     }
 
-    bool String::operator==(const std::string &str) const {
+    bool String::operator==(const std::string& str) const {
         return value == str;
     }
 
-    bool String::operator!=(const std::string &str) const {
+    bool String::operator!=(const std::string& str) const {
         return !(*this == str);
     }
 
-    std::ostream &String::display(std::ostream &out) const {
+    std::ostream& String::display(std::ostream& out) const {
         return out << "\"" << value << "\"";
     }
 
     Number::Number(double value) : value{value} {}
 
-    std::ostream &Number::display(std::ostream &out) const {
+    std::ostream& Number::display(std::ostream& out) const {
         return out << value;
     }
 
@@ -62,7 +62,7 @@ namespace rt::dsl {
         return ExprType::boolean;
     }
 
-    std::ostream &Boolean::display(std::ostream &out) const {
+    std::ostream& Boolean::display(std::ostream& out) const {
         return out << value;
     }
 
@@ -71,15 +71,15 @@ namespace rt::dsl {
             value_{std::move(value)},
             line{line} {}
 
-    const String &Field::key() const {
+    const String& Field::key() const {
         return *key_;
     }
 
-    const Expr &Field::value() const {
+    const Expr& Field::value() const {
         return *value_;
     }
 
-    std::ostream &operator<<(std::ostream &out, const Field &field) {
+    std::ostream& operator<<(std::ostream& out, const Field& field) {
         return out << field.key() << ": " << field.value();
     }
 
@@ -89,7 +89,7 @@ namespace rt::dsl {
         return ExprType::array;
     }
 
-    std::ostream &Array::display(std::ostream &out) const {
+    std::ostream& Array::display(std::ostream& out) const {
         return out << join_to_array(elems);
     }
 
@@ -97,7 +97,7 @@ namespace rt::dsl {
         return ExprType::null;
     }
 
-    std::ostream &Null::display(std::ostream &out) const {
+    std::ostream& Null::display(std::ostream& out) const {
         return out << "null";
     }
 }

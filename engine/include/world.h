@@ -19,22 +19,22 @@ namespace rt {
         std::vector<std::unique_ptr<Shape>> objects;
         std::optional<PointLight> light;    // the source of light
 
-        Aggregate intersect(const Ray &ray) const;
+        Aggregate intersect(const Ray& ray) const;
 
-        Color shade_hit(const Comps &comps, int remaining = default_depth_) const;
+        Color shade_hit(const Comps& comps, int remaining = default_depth_) const;
 
-        Color color_at(const Ray &ray, int remaining = default_depth_, const Color &bg_color = Color::black_) const;
+        Color color_at(const Ray& ray, int remaining = default_depth_, const Color& bg_color = Color::black_) const;
 
-        bool is_shadowed_at(const Point &point) const;
+        bool is_shadowed_at(const Point& point) const;
 
-        World &add_object(std::unique_ptr<Shape> &shape);
+        World& add_object(std::unique_ptr<Shape>& shape);
 
-        Color reflected_color(const Comps &comps, int remaining = default_depth_) const;
+        Color reflected_color(const Comps& comps, int remaining = default_depth_) const;
 
-        Color refracted_color(const Comps &comps, int remaining = default_depth_) const;
+        Color refracted_color(const Comps& comps, int remaining = default_depth_) const;
     };
 
-    std::ostream &operator<<(std::ostream &out, const World &world);
+    std::ostream& operator<<(std::ostream& out, const World& world);
 }
 
 #endif //ECENA_WORLD_H

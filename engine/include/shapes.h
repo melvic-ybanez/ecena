@@ -17,7 +17,7 @@ namespace rt::shapes {
         shape, sphere, plane, test, cube, cylinder, cone, group, triangle
     };
 
-    std::ostream &operator<<(std::ostream &out, const Type &type);
+    std::ostream& operator<<(std::ostream& out, const Type& type);
 
     class Shape {
     public:
@@ -25,19 +25,19 @@ namespace rt::shapes {
 
         std::unique_ptr<Material> material;
 
-        Shape *parent;
+        Shape* parent;
 
         Shape();
 
         virtual ~Shape() = default;
 
-        Shape(const Shape &shape) = delete;
+        Shape(const Shape& shape) = delete;
 
-        Shape(Shape &&shape) noexcept = delete;
+        Shape(Shape&& shape) noexcept = delete;
 
-        Shape &operator=(const Shape &shape) = delete;
+        Shape& operator=(const Shape& shape) = delete;
 
-        Shape &operator=(Shape &&shape) noexcept = delete;
+        Shape& operator=(Shape&& shape) noexcept = delete;
 
         virtual Bounds bounds() const = 0;
 
@@ -45,26 +45,26 @@ namespace rt::shapes {
 
         virtual void divide(int threshold);
 
-        virtual std::ostream &display(std::ostream &out) const;
+        virtual std::ostream& display(std::ostream& out) const;
 
-        virtual bool operator==(const Shape &other) const;
+        virtual bool operator==(const Shape& other) const;
 
-        Aggregate intersect(const Ray &ray);
+        Aggregate intersect(const Ray& ray);
 
-        Vec normal_at(const Point &world_point);
+        Vec normal_at(const Point& world_point);
 
-        Point world_to_object(const Point &point) const;
+        Point world_to_object(const Point& point) const;
 
-        Vec normal_to_world(const Vec &local_normal) const;
+        Vec normal_to_world(const Vec& local_normal) const;
 
         bool has_parent() const;
 
         Bounds parent_space_bounds() const;
 
     protected:
-        virtual Aggregate local_intersect(const Ray &local_ray) = 0;
+        virtual Aggregate local_intersect(const Ray& local_ray) = 0;
 
-        virtual Vec local_normal_at(const Point &local_point) = 0;
+        virtual Vec local_normal_at(const Point& local_point) = 0;
 
     private:
         mutable std::optional<Bounds> cached_parent_space_bounds;
@@ -74,9 +74,9 @@ namespace rt::shapes {
     public:
         Type type() const override;
 
-        Aggregate local_intersect(const Ray &ray) override;
+        Aggregate local_intersect(const Ray& ray) override;
 
-        Vec local_normal_at(const Point &local_point) override;
+        Vec local_normal_at(const Point& local_point) override;
 
         Bounds bounds() const override;
     };
@@ -85,22 +85,22 @@ namespace rt::shapes {
     public:
         Type type() const override;
 
-        Aggregate local_intersect(const Ray &ray) override;
+        Aggregate local_intersect(const Ray& ray) override;
 
-        Vec local_normal_at(const Point &local_point) override;
+        Vec local_normal_at(const Point& local_point) override;
 
         Bounds bounds() const override;
     };
 
     class Cube : public Shape {
     public:
-        static Aggregate intersect(const Ray &ray, Shape *cube_like);
+        static Aggregate intersect(const Ray& ray, Shape* cube_like);
 
         Type type() const override;
 
-        Aggregate local_intersect(const Ray &ray) override;
+        Aggregate local_intersect(const Ray& ray) override;
 
-        Vec local_normal_at(const Point &local_point) override;
+        Vec local_normal_at(const Point& local_point) override;
 
         Bounds bounds() const override;
 
@@ -119,16 +119,16 @@ namespace rt::shapes {
         CylinderLike(real minimum, real maximum, bool closed = false);
 
     protected:
-        Aggregate intersect(const Ray &ray, real a, real b, real c);
+        Aggregate intersect(const Ray& ray, real a, real b, real c);
 
-        Vec normal_at(const Point &point, real y);
+        Vec normal_at(const Point& point, real y);
 
         /**
          * Checks if the intersection at `t` is within the radius from the y-axis.
          */
-        bool check_cap(const Ray &ray, real t, real limit) const;
+        bool check_cap(const Ray& ray, real t, real limit) const;
 
-        Aggregate &intersect_caps(const Ray &ray, Aggregate &xs);
+        Aggregate& intersect_caps(const Ray& ray, Aggregate& xs);
 
         virtual real min_limit() const = 0;
 
@@ -143,9 +143,9 @@ namespace rt::shapes {
 
         Type type() const override;
 
-        Aggregate local_intersect(const Ray &ray) override;
+        Aggregate local_intersect(const Ray& ray) override;
 
-        Vec local_normal_at(const Point &local_point) override;
+        Vec local_normal_at(const Point& local_point) override;
 
         Bounds bounds() const override;
 
@@ -163,9 +163,9 @@ namespace rt::shapes {
 
         Type type() const override;
 
-        Aggregate local_intersect(const Ray &ray) override;
+        Aggregate local_intersect(const Ray& ray) override;
 
-        Vec local_normal_at(const Point &local_point) override;
+        Vec local_normal_at(const Point& local_point) override;
 
         Bounds bounds() const override;
 
@@ -181,21 +181,21 @@ namespace rt::shapes {
 
         Type type() const override;
 
-        Aggregate local_intersect(const Ray &ray) override;
+        Aggregate local_intersect(const Ray& ray) override;
 
-        Vec local_normal_at(const Point &local_point) override;
+        Vec local_normal_at(const Point& local_point) override;
 
         bool empty() const;
 
-        void add_child(Shape *shape);
+        void add_child(Shape* shape);
 
         void add_child(std::unique_ptr<Shape> shape);
 
-        void add_children(const std::vector<Shape *> &shapes);
+        void add_children(const std::vector<Shape*>& shapes);
 
-        bool contains_ptr(const Shape *shape) const;
+        bool contains_ptr(const Shape* shape) const;
 
-        bool contains_val(const Shape &shape) const;
+        bool contains_val(const Shape& shape) const;
 
         Bounds bounds() const override;
 
@@ -215,7 +215,7 @@ namespace rt::shapes {
 
         size_t count() const;
 
-        const Shape *operator[](size_t i) const;
+        const Shape* operator[](size_t i) const;
 
     private:
         mutable std::optional<Bounds> cached_bounds;
@@ -227,7 +227,7 @@ namespace rt::shapes {
 
         NamedGroup(std::string name);
 
-        bool operator==(const Shape &other) const override;
+        bool operator==(const Shape& other) const override;
     };
 
     class Triangle : public Shape {
@@ -246,20 +246,20 @@ namespace rt::shapes {
 
         Triangle(Point p1, Point p2, Point p3);
 
-        Aggregate local_intersect(const Ray &ray) override;
+        Aggregate local_intersect(const Ray& ray) override;
 
-        Vec local_normal_at(const Point &local_point) override;
+        Vec local_normal_at(const Point& local_point) override;
 
         Bounds bounds() const override;
 
         Type type() const override;
 
-        bool operator==(const Shape &other) const override;
+        bool operator==(const Shape& other) const override;
 
-        std::ostream &display(std::ostream &out) const override;
+        std::ostream& display(std::ostream& out) const override;
     };
 
-    std::ostream &operator<<(std::ostream &out, const Shape &shape);
+    std::ostream& operator<<(std::ostream& out, const Shape& shape);
 }
 
 namespace rt {

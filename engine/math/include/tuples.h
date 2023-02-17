@@ -36,9 +36,9 @@ namespace rt::math {
 
         Tuple operator/(real scalar) const;
 
-        bool operator==(const Tuple &other) const;
+        bool operator==(const Tuple& other) const;
 
-        bool operator!=(const Tuple &other) const;
+        bool operator!=(const Tuple& other) const;
 
         Tuple translate(real x, real y, real z) const;
 
@@ -52,14 +52,14 @@ namespace rt::math {
 
         Tuple shear(real xy, real xz, real yx, real yz, real zx, real zy) const;
 
-        friend std::ostream &operator<<(std::ostream &out, const Tuple &t);
+        friend std::ostream& operator<<(std::ostream& out, const Tuple& t);
 
-        Tuple transform(const matrix::Matrix<4, 4> &transformation) const;
+        Tuple transform(const matrix::Matrix<4, 4>& transformation) const;
     };
 
-    Tuple operator+(const Tuple &u, const Tuple &v);
+    Tuple operator+(const Tuple& u, const Tuple& v);
 
-    Tuple operator-(const Tuple &u, const Tuple &v);
+    Tuple operator-(const Tuple& u, const Tuple& v);
 
     class Point : public Tuple {
     public:
@@ -67,7 +67,7 @@ namespace rt::math {
 
         Point();
 
-        Point(const Tuple &tuple);  // NOLINT
+        Point(const Tuple& tuple);  // NOLINT
     };
 
     class Vec : public Tuple {
@@ -76,7 +76,7 @@ namespace rt::math {
 
         Vec();
 
-        Vec(const Tuple &tuple);    // NOLINT
+        Vec(const Tuple& tuple);    // NOLINT
 
         real magnitude() const;
 
@@ -85,20 +85,20 @@ namespace rt::math {
          */
         Vec normalize() const;
 
-        real dot(const Vec &other) const;
+        real dot(const Vec& other) const;
 
-        real dot(const Tuple &other) const;
+        real dot(const Tuple& other) const;
 
-        Vec cross(const Vec &other) const;
+        Vec cross(const Vec& other) const;
 
-        Vec reflect(const Vec &normal) const;
+        Vec reflect(const Vec& normal) const;
     };
 
     class Color : public Tuple {
     public:
         Color(real r, real g, real b);
 
-        Color(const Tuple &tuple);  // NOLINT
+        Color(const Tuple& tuple);  // NOLINT
         Color();
 
         real red() const;
@@ -114,7 +114,7 @@ namespace rt::math {
         static const Color white_;
     };
 
-    Color operator*(const Color &c1, const Color &c2);
+    Color operator*(const Color& c1, const Color& c2);
 }
 
 namespace rt {

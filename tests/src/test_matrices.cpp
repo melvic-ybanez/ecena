@@ -179,7 +179,7 @@ namespace rt::tests::matrices {
                           {7, 0, 5, 4},
                           {6, -2, 0, 5}}}
                 };
-                const auto &product{matrix * matrix2};
+                const auto& product{matrix * matrix2};
 
                 ASSERT_EQ(matrix, product * matrix2.inverse());
             });

@@ -109,8 +109,8 @@ namespace rt::tests::cylinders {
                         Point{0, 0, -2}, Point{0, -1, -2}
                 };
                 std::array<Vec, 5> directions{
-                    Vec{0, -1, 0}, Vec{0, -1, 2}, Vec{0, -1, 1},
-                    Vec{0, 1, 2}, Vec{0, 1, 1}
+                        Vec{0, -1, 0}, Vec{0, -1, 2}, Vec{0, -1, 1},
+                        Vec{0, 1, 2}, Vec{0, 1, 1}
                 };
 
                 for (int i = 0; i < origins.size(); i++) {
@@ -143,12 +143,12 @@ namespace rt::tests::cylinders {
             set("The normal vector on a cylinder's end caps", [] {
                 shapes::Cylinder cylinder{1, 2, true};
                 std::array<Point, 6> points{
-                    Point{0, 1, 0}, Point{0.5, 1, 0}, Point{0, 1, 0.5},
-                    Point{0, 2, 0}, Point{0.5, 2, 0}, Point{0, 2, 0.5}
+                        Point{0, 1, 0}, Point{0.5, 1, 0}, Point{0, 1, 0.5},
+                        Point{0, 2, 0}, Point{0.5, 2, 0}, Point{0, 2, 0.5}
                 };
                 std::array<Vec, 6> normals{
-                    Vec{0, -1, 0}, Vec{0, -1, 0}, Vec{0, -1, 0},
-                    Vec{0, 1, 0}, Vec{0, 1, 0}, Vec{0, 1, 0}
+                        Vec{0, -1, 0}, Vec{0, -1, 0}, Vec{0, -1, 0},
+                        Vec{0, 1, 0}, Vec{0, 1, 0}, Vec{0, 1, 0}
                 };
 
                 for (int i = 0; i < points.size(); i++) {

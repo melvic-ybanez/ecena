@@ -19,7 +19,7 @@ namespace rt::uv {
 }
 
 namespace rt::uv::maps {
-    std::pair<real, real> spherical(const Point &point) {
+    std::pair<real, real> spherical(const Point& point) {
         // they call this azimuthal angle. range: (-pi, pi]
         auto theta = std::atan2(point.x(), point.z());
 

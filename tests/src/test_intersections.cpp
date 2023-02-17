@@ -223,11 +223,12 @@ namespace rt::tests::intersections {
             scenario("Under total internal reflection", [] {
                 auto shape = glass_sphere();
                 Ray ray{Point{0, 0, std::sqrt(2) / 2}, Vec{0, 1, 0}};
-                Aggregate xs{{new Intersection{-std::sqrt(2) / 2, shape.get()}, new Intersection{std::sqrt(2) / 2, shape.get()}}};
+                Aggregate xs{{new Intersection{-std::sqrt(2) / 2, shape.get()},
+                              new Intersection{std::sqrt(2) / 2, shape.get()}}};
                 auto comps = comps::prepare(*xs[1], ray, xs);
                 auto reflectance = schlick(comps);
-                ASSERT_EQ(1.0, reflectance);
-;            });
+                ASSERT_EQ(1.0, reflectance);;
+            });
             scenario("With a perpendicular viewing angle", [] {
                 auto shape = glass_sphere();
                 Ray ray{Point{0, 0, 0}, Vec{0, 1, 0}};

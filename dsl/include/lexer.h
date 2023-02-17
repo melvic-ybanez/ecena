@@ -19,7 +19,7 @@ namespace rt::dsl {
 
         Lexer();
 
-        Lexer(const std::string &source);
+        Lexer(const std::string& source);
 
         std::vector<Token> scan_all();
 

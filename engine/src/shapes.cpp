@@ -8,7 +8,7 @@
 #include "../include/shapes.h"
 
 namespace rt::shapes {
-    std::ostream &operator<<(std::ostream &out, const Type &type) {
+    std::ostream& operator<<(std::ostream& out, const Type& type) {
         std::array<std::string, 10> type_strings{
                 "Shape", "Sphere", "Plane", "Test", "Cube", "Cylinder", "Cone", "Group", "Triangle", "NamedGroup"
         };
@@ -23,12 +23,12 @@ namespace rt::shapes {
     Shape::Shape() : transformation{math::matrix::identity<4, 4>()}, material(std::make_unique<Material>()),
                      parent{nullptr} {}
 
-    Aggregate Shape::intersect(const Ray &ray) {
+    Aggregate Shape::intersect(const Ray& ray) {
         auto local_ray = ray.transform(transformation.inverse());
         return local_intersect(local_ray);
     }
 
-    Vec Shape::normal_at(const Point &world_point) {
+    Vec Shape::normal_at(const Point& world_point) {
         auto local_point = world_to_object(world_point);
         auto local_normal = local_normal_at(local_point);
         return normal_to_world(local_normal);
@@ -38,11 +38,11 @@ namespace rt::shapes {
         return parent != nullptr;
     }
 
-    Point Shape::world_to_object(const Point &point) const {
+    Point Shape::world_to_object(const Point& point) const {
         return transformation.inverse() * (has_parent() ? parent->world_to_object(point) : point);
     }
 
-    Vec Shape::normal_to_world(const Vec &local_normal) const {
+    Vec Shape::normal_to_world(const Vec& local_normal) const {
         auto world_normal = Vec{transformation.inverse().transpose() * local_normal}.normalize();
         if (has_parent()) return parent->normal_to_world(world_normal);
         return world_normal;
@@ -54,7 +54,7 @@ namespace rt::shapes {
         return cached_parent_space_bounds.value();
     }
 
-    bool Shape::operator==(const Shape &other) const {
+    bool Shape::operator==(const Shape& other) const {
         return this->type() == other.type();
     }
 
@@ -63,7 +63,7 @@ namespace rt::shapes {
      */
     void Shape::divide(int threshold) {}
 
-    Aggregate Sphere::local_intersect(const Ray &local_ray) {
+    Aggregate Sphere::local_intersect(const Ray& local_ray) {
         // compute the discriminant
         auto sphere_to_ray = local_ray.origin - Point{0, 0, 0};
         auto a = local_ray.direction.dot(local_ray.direction);
@@ -83,7 +83,7 @@ namespace rt::shapes {
         return Type::sphere;
     }
 
-    Vec Sphere::local_normal_at(const Point &local_point) {
+    Vec Sphere::local_normal_at(const Point& local_point) {
         return local_point - Point{0, 0, 0};
     }
 
@@ -91,12 +91,12 @@ namespace rt::shapes {
         return Type::plane;
     }
 
-    Vec Plane::local_normal_at(const Point &local_point) {
+    Vec Plane::local_normal_at(const Point& local_point) {
         // all the points on a plane maps to the same normal
         return {0, 1, 0};
     }
 
-    Aggregate Plane::local_intersect(const Ray &ray) {
+    Aggregate Plane::local_intersect(const Ray& ray) {
         if (std::abs(ray.direction.y()) < math::epsilon) return {};
 
         // the formula works only if the plane is in xz (left-hand rule) and the
@@ -110,11 +110,11 @@ namespace rt::shapes {
         return Type::cube;
     }
 
-    Aggregate Cube::local_intersect(const Ray &ray) {
+    Aggregate Cube::local_intersect(const Ray& ray) {
         return Cube::intersect(ray, this);
     }
 
-    Aggregate Cube::intersect(const Ray &ray, Shape *cube_like) {
+    Aggregate Cube::intersect(const Ray& ray, Shape* cube_like) {
         auto [min, max] = cube_like->bounds();
         auto [x_t_min, x_t_max] = Cube::check_axis(ray.origin.x(), ray.direction.x(), min.x(), max.x());
         auto [y_t_min, y_t_max] = Cube::check_axis(ray.origin.y(), ray.direction.y(), min.y(), max.y());
@@ -145,7 +145,7 @@ namespace rt::shapes {
         return {t_min, t_max};
     }
 
-    Vec Cube::local_normal_at(const Point &local_point) {
+    Vec Cube::local_normal_at(const Point& local_point) {
         auto max_c = std::max({std::abs(local_point.x()), std::abs(local_point.y()), std::abs(local_point.z())});
 
         if (max_c == std::abs(local_point.x())) {
@@ -163,7 +163,7 @@ namespace rt::shapes {
     CylinderLike::CylinderLike(real minimum, real maximum, bool closed) : min{minimum}, max{maximum},
                                                                           closed{closed} {}
 
-    Aggregate CylinderLike::intersect(const Ray &ray, real a, real b, real c) {
+    Aggregate CylinderLike::intersect(const Ray& ray, real a, real b, real c) {
         auto [origin, direction] = ray;
 
         auto discriminant = b * b - 4 * a * c;
@@ -190,13 +190,13 @@ namespace rt::shapes {
         return std::move(intersect_caps(ray, xs));
     }
 
-    bool CylinderLike::check_cap(const Ray &ray, real t, real limit) const {
+    bool CylinderLike::check_cap(const Ray& ray, real t, real limit) const {
         auto x = ray.origin.x() + t * ray.direction.x();
         auto z = ray.origin.z() + t * ray.direction.z();
         return (x * x + z * z) <= std::abs(limit);
     }
 
-    Aggregate &CylinderLike::intersect_caps(const Ray &ray, Aggregate &xs) {
+    Aggregate& CylinderLike::intersect_caps(const Ray& ray, Aggregate& xs) {
         if (!closed || math::close_to_zero(ray.direction.y())) return xs;
 
         // intersection with the lower end cap (y = min)
@@ -210,7 +210,7 @@ namespace rt::shapes {
         return xs;
     }
 
-    Vec CylinderLike::normal_at(const Point &point, real y) {
+    Vec CylinderLike::normal_at(const Point& point, real y) {
         auto distance_from_y_squared = std::pow(point.x(), 2) + std::pow(point.z(), 2);
         if (distance_from_y_squared < 1 && point.y() >= max - math::epsilon) {
             return {0, 1, 0};
@@ -228,7 +228,7 @@ namespace rt::shapes {
         return Type::cylinder;
     }
 
-    Aggregate Cylinder::local_intersect(const Ray &ray) {
+    Aggregate Cylinder::local_intersect(const Ray& ray) {
         auto [origin, direction] = ray;
         auto a = math::pow2(direction.x()) + math::pow2(direction.z());
 
@@ -244,7 +244,7 @@ namespace rt::shapes {
         return CylinderLike::intersect(ray, a, b, c);
     }
 
-    Vec Cylinder::local_normal_at(const Point &local_point) {
+    Vec Cylinder::local_normal_at(const Point& local_point) {
         return CylinderLike::normal_at(local_point, 0);
     }
 
@@ -262,7 +262,7 @@ namespace rt::shapes {
         return Type::cone;
     }
 
-    Aggregate Cone::local_intersect(const Ray &local_ray) {
+    Aggregate Cone::local_intersect(const Ray& local_ray) {
         auto [o, d] = local_ray;
         auto a = math::pow2(d.x()) - math::pow2(d.y()) + math::pow2(d.z());
         auto b = 2 * o.x() * d.x() - 2 * o.y() * d.y() + 2 * o.z() * d.z();
@@ -278,7 +278,7 @@ namespace rt::shapes {
         return CylinderLike::intersect(local_ray, a, b, c);
     }
 
-    Vec Cone::local_normal_at(const Point &local_point) {
+    Vec Cone::local_normal_at(const Point& local_point) {
         auto y = std::sqrt(math::pow2(local_point.x()) + math::pow2(local_point.z()));
         if (local_point.y() > 0) y = -y;
         return CylinderLike::normal_at(local_point, y);
@@ -300,7 +300,7 @@ namespace rt::shapes {
         return children.empty();
     }
 
-    void Group::add_child(Shape *shape) {
+    void Group::add_child(Shape* shape) {
         add_child(std::unique_ptr<Shape>(shape));
     }
 
@@ -309,63 +309,63 @@ namespace rt::shapes {
         children.push_back(std::move(shape));
     }
 
-    void Group::add_children(const std::vector<Shape *> &shapes) {
+    void Group::add_children(const std::vector<Shape*>& shapes) {
         for (auto shape: shapes) {
             add_child(shape);
         }
     }
 
-    bool Group::contains_ptr(const Shape *shape) const {
+    bool Group::contains_ptr(const Shape* shape) const {
         // note: we can't implement this in terms of `contains_val` (by comparing the corresponding
         // pointed-to values) because the latter allows two different pointers that happen to have
         // the same pointed-to values
-        return std::find_if(children.begin(), children.end(), [&](auto &s) { return s.get() == shape; }) !=
+        return std::find_if(children.begin(), children.end(), [&](auto& s) { return s.get() == shape; }) !=
                children.end();
     }
 
-    bool Group::contains_val(const Shape &shape) const {
+    bool Group::contains_val(const Shape& shape) const {
         // note: we can't implement this in terms of `contains_ptr` (by comparing the corresponding addresses)
         // because the latter won't allow different addresses despite having the same pointed-to values.
-        return std::find_if(children.begin(), children.end(), [&](auto &s) { return *s == shape; }) !=
+        return std::find_if(children.begin(), children.end(), [&](auto& s) { return *s == shape; }) !=
                children.end();
     }
 
-    Aggregate Group::local_intersect(const Ray &ray) {
+    Aggregate Group::local_intersect(const Ray& ray) {
         // If the ray does not intersect with the bounding box,
         // do not bother checking the children for intersections.
         if (Cube::intersect(ray, this).empty()) return {};
 
         Aggregate xs;
-        for (auto &child: children) {
+        for (auto& child: children) {
             auto xs_ = child->intersect(ray);
             xs.combine_with(xs_);
         }
         return xs;
     }
 
-    Vec Group::local_normal_at(const Point &local_point) {
+    Vec Group::local_normal_at(const Point& local_point) {
         throw std::runtime_error("Groups don't support this operation");
     }
 
-    const Shape *Group::operator[](size_t i) const {
+    const Shape* Group::operator[](size_t i) const {
         return children[i].get();
     }
 
     NamedGroup::NamedGroup(std::string name) : name{std::move(name)} {}
 
-    bool NamedGroup::operator==(const Shape &other) const {
+    bool NamedGroup::operator==(const Shape& other) const {
         if (!Group::operator==(other)) return false;
-        auto &that = dynamic_cast<const NamedGroup &>(other);
+        auto& that = dynamic_cast<const NamedGroup&>(other);
         return this->name == that.name;
     }
 
-    std::ostream &operator<<(std::ostream &out, const Shape &shape) {
+    std::ostream& operator<<(std::ostream& out, const Shape& shape) {
         out << "{ ";
         shape.display(out);
         return out << " }";
     }
 
-    std::ostream &Shape::display(std::ostream &out) const {
+    std::ostream& Shape::display(std::ostream& out) const {
         return out << "type: " << type() << ", material: " << *material;
     }
 
@@ -398,7 +398,7 @@ namespace rt::shapes {
         if (cached_bounds.has_value()) return cached_bounds.value();
 
         Bounds bounds;
-        for (auto &child: children) {
+        for (auto& child: children) {
             bounds = bounds + child->parent_space_bounds();
         }
         cached_bounds = bounds;
@@ -413,7 +413,7 @@ namespace rt::shapes {
 
         auto [left_bounds, right_bounds] = bounds().split();
 
-        for (auto &child: children) {
+        for (auto& child: children) {
             auto child_bounds = child->parent_space_bounds();
 
             if (left_bounds.contains(child_bounds)) {
@@ -432,7 +432,7 @@ namespace rt::shapes {
 
     void Group::make_subgroup(std::vector<std::unique_ptr<Shape>> from_children) {
         std::unique_ptr<Group> subgroup = std::make_unique<Group>();
-        for (auto &child: from_children) {
+        for (auto& child: from_children) {
             subgroup->add_child(std::move(child));
         }
         add_child(std::move(subgroup));
@@ -448,7 +448,7 @@ namespace rt::shapes {
         // this is to avoid an infinite recursion caused by an empty group
         if (count() < 2) return;
 
-        for (auto &child: children) {
+        for (auto& child: children) {
             child->divide(threshold);
         }
     }
@@ -463,14 +463,14 @@ namespace rt::shapes {
         normal = e2.cross(e1).normalize();
     }
 
-    Vec Triangle::local_normal_at(const Point &local_point) {
+    Vec Triangle::local_normal_at(const Point& local_point) {
         return normal;
     }
 
     /**
      * This is an implementation of the Moller-Trumbore algorithm.
      */
-    Aggregate Triangle::local_intersect(const Ray &ray) {
+    Aggregate Triangle::local_intersect(const Ray& ray) {
         auto dir_cross_e2 = ray.direction.cross(e2);
         auto determinant = e1.dot(dir_cross_e2);
         if (math::close_to_zero(determinant)) return {};
@@ -500,13 +500,13 @@ namespace rt::shapes {
         return box + p1 + p2 + p3;
     }
 
-    bool Triangle::operator==(const Shape &other) const {
+    bool Triangle::operator==(const Shape& other) const {
         if (!Shape::operator==(other)) return false;
-        auto &that = dynamic_cast<const Triangle &>(other);
+        auto& that = dynamic_cast<const Triangle&>(other);
         return this->p1 == that.p1 && this->p2 == that.p2 && this->p3 == that.p3;
     }
 
-    std::ostream &Triangle::display(std::ostream &out) const {
+    std::ostream& Triangle::display(std::ostream& out) const {
         out << "p1: " << p1 << ", p2: " << p2 << ", p3: " << p3;
         Shape::display(out);
         return out;

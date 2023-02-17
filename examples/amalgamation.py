@@ -10,11 +10,12 @@ def middle_group():
             {
                 "type": "sphere",
                 "name": "middle_sphere",
-                "transform": [['rotate_y', math.pi * 1.3], ['rotate_x', -math.pi / 4], ['rotate_z', -math.pi / 4], ["translate", [-0.5, 1, 0.5]]],
+                "transform": [['rotate_y', math.pi * 1.3], ['rotate_x', -math.pi / 4], ['rotate_z', -math.pi / 4],
+                              ["translate", [-0.5, 1, 0.5]]],
                 'material': {
                     'pattern': {
                         'type': 'texture',
-                        'path': 'examples/map.ppm',
+                        'path': 'examples/map_green.ppm',
                         'uv_pattern': 'image',
                     },
                     'diffuse': 0.7,
@@ -141,9 +142,11 @@ rest_of_spheres = [
         "name": "left_sphere",
         "transform": [["scale", [0.35, 0.35, 0.35]], ["translate", [-1.7, 0.35, -0.75]]],
         "material": {
-            "diffuse": 0.7,
-            "specular": 0.3,
-            'color': [0.5, 0.6, 1],
+            'pattern': {
+                'type': 'texture',
+                'path': 'examples/blue_marble.ppm',
+                'uv_pattern': 'image',
+            },
             "reflectivity": 0.5
         }
     },

@@ -15,7 +15,7 @@ def middle_group():
                 'material': {
                     'pattern': {
                         'type': 'texture',
-                        'path': 'examples/map_green.ppm',
+                        'path': 'examples/ppms/map_green.ppm',
                         'uv_pattern': 'image',
                     },
                     'diffuse': 0.7,
@@ -106,8 +106,15 @@ def right_group():
             {
                 "type": "sphere",
                 "name": "right_sphere",
-                "transform": [['scale', [0.9, 0.9, 0.9]], ["translate", [2.1, 0.9, 2]]],
-                "material": {"color": [1, 0.5, 0.5], "diffuse": 0.7, "specular": 0.3, "reflectivity": 0.5}
+                "transform": [['scale', [0.9, 0.9, 0.9]], ['rotate_y', math.pi / 2], ["translate", [2.1, 0.9, 2]]],
+                "material": {
+                    'pattern': {
+                        'type': 'texture',
+                        'path': 'examples/ppms/light_red_marble.ppm',
+                        'uv_pattern': 'image',
+                    },
+                    "reflectivity": 0.5
+                }
             },
             {
                 'type': 'sphere',
@@ -144,7 +151,7 @@ rest_of_spheres = [
         "material": {
             'pattern': {
                 'type': 'texture',
-                'path': 'examples/blue_marble.ppm',
+                'path': 'examples/ppms/blue_marble.ppm',
                 'uv_pattern': 'image',
             },
             "reflectivity": 0.5

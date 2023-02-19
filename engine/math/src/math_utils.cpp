@@ -5,7 +5,6 @@
 #include <cmath>
 #include "../include/math_utils.h"
 #include <cstdlib>
-#include <cmath>
 
 namespace rt::math {
     Dimensions::Dimensions() : Dimensions(0, 0) {}

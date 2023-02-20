@@ -9,6 +9,36 @@ The project has two main parts:
 To learn more about the DSL, head to the [DSL wiki page](https://github.com/melvic-ybanez/ecena/wiki/DSL) 
 2. __Rendering engine__. This is the one responsible for the drawing of the 3D world.
 
+## Building the Project
+
+If you want to build Ecena outside of CLion, you first need to install [cmake](https://cmake.org/)
+on your machine (refer to your operating system's installation instructions).
+
+After that, you can enter the following commands:
+
+```
+$ cd <path-to-ecena>
+$ cmake .
+$ cmake --build . --target ecena
+```
+
+The second command is needed to generate the build files. 
+
+If everything is successful, you
+should see a file named _ecena_ generated in the current directory. 
+
+## Running the Tests
+
+Building the tests is similar to building the main module, except the target's name would be 
+`ecena_tests` as opposed to `ecena`:
+
+```
+cmake --build . --target ecena_tests
+```
+
+Entering `./ecena_tests` into the terminal should execute the tests and report
+the results.
+
 ## Examples
 
 While you can certainly write simple scenes directly in JSON, for more complicated scenes, a more expressive language that can generate JSON data is recommended. This project ships with [examples](https://github.com/melvic-ybanez/ecena/tree/main/examples), written in Python, that you can test and examine. 

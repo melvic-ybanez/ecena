@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <unordered_map>
 
 #include "../include/eval.h"
 #include "../include/errors.h"
@@ -63,8 +64,8 @@ namespace rt::dsl::eval {
         Data data;
 
         for (const auto& field: object.fields) {
-            if (field.key() == "camera") data.camera = to_camera(*field.value_, field.line);
-            else if (field.key() == "world") data.world = to_world(*field.value_, field.line);
+            if (field.key() == "camera") data.camera = to_camera(field.value(), field.line);
+            else if (field.key() == "world") data.world = to_world(field.value(), field.line);
             else throw_unknown_field_error(field);
         }
 
@@ -77,7 +78,7 @@ namespace rt::dsl::eval {
 
         for (const auto& field: obj->fields) {
             auto& key = field.key();
-            auto& value = *field.value_;
+            auto& value = field.value();
 
             if (key == "h_size") camera.h_size = to_real(value, field.line);
             else if (key == "v_size") camera.v_size = to_real(value, field.line);
@@ -107,8 +108,8 @@ namespace rt::dsl::eval {
         World world;
 
         for (const auto& field: obj->fields) {
-            if (field.key() == "objects") world.objects = to_shapes(*field.value_, field.line);
-            else if (field.key() == "light") world.light = to_point_light(*field.value_, field.line);
+            if (field.key() == "objects") world.objects = to_shapes(field.value(), field.line);
+            else if (field.key() == "light") world.light = to_point_light(field.value(), field.line);
             else throw_unknown_field_error(field);
         }
 
@@ -135,7 +136,7 @@ namespace rt::dsl::eval {
         bool has_type = false;
         for (const auto& field: obj->fields) {
             if (field.key() == "type") {
-                auto type = to_str(*field.value_, field.line);
+                auto type = to_str(field.value(), field.line);
                 if (*type == "sphere") shape = std::make_unique<shapes::Sphere>();
                 if (*type == "plane") shape = std::make_unique<shapes::Plane>();
                 if (*type == "cube") shape = std::make_unique<shapes::Cube>();
@@ -150,9 +151,9 @@ namespace rt::dsl::eval {
         }
         if (!has_type) abort(errors::required_field("type", line));
 
-        std::array<std::string, 11> parsed_keys{
+        std::array<std::string, 12> parsed_keys{
                 "type", "minimum", "maximum", "closed", "children", "threshold", "points", "min",
-                "max", "path", "source"
+                "max", "path", "source", "materials"
         };
 
         for (const auto& field: obj->fields) {
@@ -164,9 +165,9 @@ namespace rt::dsl::eval {
                 continue;
             }
             if (key == "material") {
-                shape->material = to_material(shape->type(), *field.value_, field.line);
+                shape->material = to_material(shape->type(), field.value(), field.line);
             } else if (key == "transform") {
-                shape->transformation = to_transform(*field.value_, field.line);
+                shape->transformation = to_transform(field.value(), field.line);
             } else throw_unknown_field_error(field);
         }
 
@@ -176,9 +177,9 @@ namespace rt::dsl::eval {
     std::unique_ptr<shapes::CylinderLike> to_cylinder_like(shapes::CylinderLike* cylinder_like, const Object* obj) {
         for (const auto& field: obj->fields) {
             auto& key = field.key();
-            if (key == "minimum" || key == "min") cylinder_like->min = to_real(*field.value_, field.line);
-            if (key == "maximum" || key == "max") cylinder_like->max = to_real(*field.value_, field.line);
-            if (key == "closed") cylinder_like->closed = to_bool(*field.value_, field.line);
+            if (key == "minimum" || key == "min") cylinder_like->min = to_real(field.value(), field.line);
+            if (key == "maximum" || key == "max") cylinder_like->max = to_real(field.value(), field.line);
+            if (key == "closed") cylinder_like->closed = to_bool(field.value(), field.line);
         }
         return std::unique_ptr<shapes::CylinderLike>(cylinder_like);
     }
@@ -186,7 +187,7 @@ namespace rt::dsl::eval {
     std::unique_ptr<shapes::Group> to_group(const Object* obj, std::unique_ptr<shapes::Group> group) {
         for (const auto& field: obj->fields) {
             if (field.key() == "children") {
-                auto children = to_shapes(*field.value_, field.line);
+                auto children = to_shapes(field.value(), field.line);
                 for (auto& child: children) {
                     group->add_child(std::move(child));
                 }
@@ -194,7 +195,7 @@ namespace rt::dsl::eval {
         }
         for (const auto& field: obj->fields) {
             if (field.key() == "threshold") {
-                auto threshold = to_real(*field.value_, field.line);
+                auto threshold = to_real(field.value(), field.line);
                 group->divide(static_cast<int>(threshold));
             }
         }
@@ -204,7 +205,7 @@ namespace rt::dsl::eval {
     std::unique_ptr<shapes::Triangle> to_triangle(const Object* obj) {
         for (const auto& field: obj->fields) {
             if (field.key() == "points") {
-                auto components = to_array_of<Point>(*field.value_, 3, field.line, to_point);
+                auto components = to_array_of<Point>(field.value(), 3, field.line, to_point);
                 return std::make_unique<shapes::Triangle>(components[0], components[1], components[2]);
             }
         }
@@ -212,16 +213,32 @@ namespace rt::dsl::eval {
     }
 
     obj::Obj to_obj(const Object* object, int line) {
+        std::unordered_map<std::string, std::unique_ptr<Material>> group_mats;
+
+        for (const auto& field: object->fields) {
+            if (field.key() == "materials") {
+                auto arr = to_array(field.value(), std::nullopt, field.line);
+
+                for (const auto& elem: arr->elems) {
+                    auto kv = to_array(*elem, 2, field.line);
+                    auto group_name = to_str(*kv->elems[0], field.line)->value;
+                    auto mat = to_material(shapes::Type::group, *kv->elems[1], field.line);
+                    group_mats.insert(std::make_pair<std::string, std::unique_ptr<Material>>(
+                            std::move(group_name), std::move(mat)));
+                }
+            }
+        }
+
         for (const auto& field: object->fields) {
             if (field.key() == "path") {
-                auto path = to_str(*field.value_, field.line)->value;
+                auto path = to_str(field.value(), field.line)->value;
                 std::ifstream in{path};
                 if (!in) throw errors::invalid_path(path, field.line);
-                return obj::Parser::parse(in);
+                return std::move(obj::Parser::parse(in).set_materials(group_mats));
             } else if (field.key() == "source") {
-                auto source = to_str(*field.value_, field.line);
+                auto source = to_str(field.value(), field.line);
                 std::stringstream in{source->value};
-                return obj::Parser::parse(in);
+                return std::move(obj::Parser::parse(in).set_materials(group_mats));
             }
         }
         throw errors::obj_not_found(line);
@@ -239,7 +256,7 @@ namespace rt::dsl::eval {
         for (auto& field: obj->fields) {
             SKIP_DOC_FIELDS;
             auto& key = field.key();
-            auto& value = *field.value_;
+            auto& value = field.value();
 
             if (key == "color") material->color = to_color(value, field.line);
             else if (key == "specular") material->specular = to_real(value, field.line);
@@ -272,13 +289,13 @@ namespace rt::dsl::eval {
             auto& key = field.key();
             field_line = field.line;
             if (key == "type") {
-                type = to_str(*field.value_, field_line)->value;
+                type = to_str(field.value(), field_line)->value;
             } else if (key == "components") {
-                components = to_array_of<Color>(*field.value_, std::nullopt, field_line, to_color);
+                components = to_array_of<Color>(field.value(), std::nullopt, field_line, to_color);
             } else if (key == "uv_pattern") {
-                uv_pattern_str = to_str(*field.value_, field_line)->value;
+                uv_pattern_str = to_str(field.value(), field_line)->value;
             } else if (key == "path") {
-                path = to_str(*field.value_, field_line)->value;
+                path = to_str(field.value(), field_line)->value;
             }
         }
 
@@ -320,7 +337,7 @@ namespace rt::dsl::eval {
             SKIP_DOC_FIELDS;
             auto& key = field.key();
             if (key == "type" || key == "components" || key == "path" || key == "uv_pattern") continue;
-            if (key == "transform") pattern->transformation = to_transform(*field.value_, field.line);
+            if (key == "transform") pattern->transformation = to_transform(field.value(), field.line);
             else throw_unknown_field_error(field);
         }
 
@@ -418,7 +435,7 @@ namespace rt::dsl::eval {
         auto arr = to_array(expr, size, line);
         std::vector<T> elem_values;
 
-        for (auto& elem: arr->elems) {
+        for (const auto& elem: arr->elems) {
             elem_values.push_back(fn(*elem, line));
         }
 
@@ -458,8 +475,8 @@ namespace rt::dsl::eval {
 
         for (auto& field: object->fields) {
             SKIP_DOC_FIELDS;
-            if (field.key() == "position") light.position = to_point(*field.value_, field.line);
-            else if (field.key() == "intensity") light.intensity = to_color(*field.value_, field.line);
+            if (field.key() == "position") light.position = to_point(field.value(), field.line);
+            else if (field.key() == "intensity") light.intensity = to_color(field.value(), field.line);
             else throw_unknown_field_error(field);
         }
 

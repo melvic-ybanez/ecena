@@ -33,6 +33,8 @@ namespace rt::materials {
         bool is_reflective() const;
 
         bool is_transparent() const;
+
+        void reset(const Material& other);
     };
 
     Material glass();

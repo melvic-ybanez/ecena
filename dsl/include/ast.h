@@ -104,9 +104,9 @@ namespace rt::dsl {
 
     class Field {
     public:
-        int line;
         std::unique_ptr<String> key_;
         std::unique_ptr<Expr> value_;
+        int line;
 
         Field(std::unique_ptr<String> key, std::unique_ptr<Expr> value, int line);
 

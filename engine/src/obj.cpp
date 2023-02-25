@@ -129,6 +129,18 @@ namespace rt::obj {
         return group;
     }
 
+    Obj& Obj::set_materials(std::unordered_map<std::string, std::unique_ptr<Material>>& group_mats) {
+        for (auto& [key, group]: groups) {
+            if (group_mats.find(key) != group_mats.end()) {
+                group->material = std::move(group_mats.at(key));
+                for (auto &child: group->children) {
+                    child->material->reset(*group->material);
+                }
+            }
+        }
+        return *this;
+    }
+
     std::optional<real> scan_real(const std::string& str) {
         size_t pos;
         auto value = std::stod(str, &pos);

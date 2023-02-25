@@ -12,8 +12,6 @@
 namespace rt::obj {
     class Obj {
     public:
-        constexpr static auto default_group_name_ = "default";
-
         Obj();
 
         [[nodiscard]] const Point& vertex_at(size_t i) const;
@@ -30,6 +28,10 @@ namespace rt::obj {
         shapes::Group* current_group() const;
 
         std::unique_ptr<shapes::Group> to_group() const;
+
+        constexpr static auto default_group_name_ = "default";
+
+        Obj& set_materials(std::unordered_map<std::string, std::unique_ptr<Material>>& group_mats);
 
     private:
         friend class Parser;

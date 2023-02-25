@@ -40,6 +40,17 @@ namespace rt::materials {
         return transparency > 0;
     }
 
+    void Material::reset(const Material& other) {
+        this->color = other.color;
+        this->ambient = other.ambient;
+        this->diffuse = other.diffuse;
+        this->specular = other.specular;
+        this->shininess = other.shininess;
+        this->reflectivity = other.reflectivity;
+        this->transparency = other.transparency;
+        this->refractive_index = other.refractive_index;
+    }
+
     Material glass() {
         Material material;
         material.diffuse = 0.1;

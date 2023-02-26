@@ -20,7 +20,11 @@ namespace rt::obj {
         current_group_ = groups[default_group_name_].get();
     }
 
-    Parser::Parser(GroupMats group_mats) : group_mats{std::move(group_mats)} {}
+    Parser::Parser(GroupMats group_mats) : group_mats{std::move(group_mats)} {
+        if (this->group_mats.find(Obj::default_group_name_) != this->group_mats.end()) {
+            obj.default_group().material = this->group_mats.at(Obj::default_group_name_);
+        }
+    }
 
     Obj Parser::parse(std::istream& is) {
         return Parser::parse_verbose(is).first;
@@ -88,20 +92,10 @@ namespace rt::obj {
             } else return {};
         }
 
-        auto find_mat = [&]() -> Material* {
-            Material* tri_mat;
-            for (auto& [key, group]: obj.groups) {
-                if (group_mats.find(key) != group_mats.end()) {
-                    group->material = group_mats.at(key);
-                    tri_mat = group->material;
-                }
-            }
-            return tri_mat;
-        };
-
         // perform fan triangulation
         for (int i = 1; i < vertices.size() - 1; i++) {
-            auto tri = std::make_unique<shapes::Triangle>(vertices[0], vertices[i], vertices[i + 1], find_mat());
+            auto tri = std::make_unique<shapes::Triangle>(vertices[0], vertices[i], vertices[i + 1],
+                                                          obj.current_group()->material);
             triangles.push_back(std::move(tri));
         }
 
@@ -111,7 +105,14 @@ namespace rt::obj {
     bool Parser::parse_group(const std::string& line) {
         if (!starts_with(line, "g ")) return false;
         auto name = line.substr(2);
-        obj.groups.insert({name, std::make_unique<shapes::NamedGroup>(name)});
+        auto group = std::make_unique<shapes::NamedGroup>(name);
+
+        if (group_mats.find(name) != group_mats.end()) {
+            group->material = group_mats.at(name);
+        }
+
+        obj.groups.insert({name, std::move(group)});
+
         return obj.current_group(name);
     }
 

@@ -14,9 +14,8 @@
 namespace rt {
     class World {
     public:
-        constexpr static int default_depth_ = 5;
-
         std::vector<std::unique_ptr<Shape>> objects;
+        std::vector<std::unique_ptr<const Material>> materials;
         std::optional<PointLight> light;    // the source of light
 
         Aggregate intersect(const Ray& ray) const;
@@ -32,6 +31,8 @@ namespace rt {
         Color reflected_color(const Comps& comps, int remaining = default_depth_) const;
 
         Color refracted_color(const Comps& comps, int remaining = default_depth_) const;
+
+        constexpr static int default_depth_ = 5;
     };
 
     std::ostream& operator<<(std::ostream& out, const World& world);

@@ -44,9 +44,9 @@ namespace rt::dsl::eval {
     to_cylinder_like(shapes::CylinderLike* cylinder_like, const Object* obj);
 
     static std::unique_ptr<shapes::Group>
-    to_group(const Object* obj, std::unique_ptr<shapes::Group> group = std::make_unique<shapes::Group>());
+    to_group(World& world, const Object* obj, std::unique_ptr<shapes::Group> group = std::make_unique<shapes::Group>());
 
-    static obj::Obj to_obj(const Object* obj, int line);
+    static obj::Obj to_obj(World& world, const Object* obj, int line);
 
     static std::unique_ptr<shapes::Triangle> to_triangle(const Object* obj);
 
@@ -108,7 +108,7 @@ namespace rt::dsl::eval {
         World world;
 
         for (const auto& field: obj->fields) {
-            if (field.key() == "objects") world.objects = to_shapes(field.value(), field.line);
+            if (field.key() == "objects") world.objects = to_shapes(world, field.value(), field.line);
             else if (field.key() == "light") world.light = to_point_light(field.value(), field.line);
             else throw_unknown_field_error(field);
         }
@@ -116,12 +116,12 @@ namespace rt::dsl::eval {
         return world;
     }
 
-    std::vector<std::unique_ptr<Shape>> to_shapes(const Expr& expr, int line) {
+    std::vector<std::unique_ptr<Shape>> to_shapes(World& world, const Expr& expr, int line) {
         auto arr = to_array(expr, std::nullopt, line);
         std::vector<std::unique_ptr<Shape>> shapes;
 
         for (const auto& elem: arr->elems) {
-            if (auto shape = to_shape(*elem, line); shape != nullptr) {
+            if (auto shape = to_shape(world, *elem, line); shape != nullptr) {
                 shapes.push_back(std::move(shape));
             }
         }
@@ -129,7 +129,7 @@ namespace rt::dsl::eval {
         return shapes;
     }
 
-    std::unique_ptr<Shape> to_shape(const Expr& expr, int line) {
+    std::unique_ptr<Shape> to_shape(World& world, const Expr& expr, int line) {
         auto obj = to_object(expr, line);
         std::unique_ptr<Shape> shape;
 
@@ -142,8 +142,8 @@ namespace rt::dsl::eval {
                 if (*type == "cube") shape = std::make_unique<shapes::Cube>();
                 if (*type == "cylinder") shape = to_cylinder_like(new shapes::Cylinder, obj);
                 if (*type == "cone") shape = to_cylinder_like(new shapes::Cone, obj);
-                if (*type == "group") shape = to_group(obj);
-                if (*type == "obj") shape = to_group(obj, to_obj(obj, field.line).to_group());
+                if (*type == "group") shape = to_group(world, obj);
+                if (*type == "obj") shape = to_group(world, obj, to_obj(world, obj, field.line).to_group());
                 if (*type == "triangle") shape = to_triangle(obj);
 
                 has_type = true;
@@ -165,7 +165,7 @@ namespace rt::dsl::eval {
                 continue;
             }
             if (key == "material") {
-                shape->material = to_material(shape->type(), field.value(), field.line);
+                shape->material = to_material(world, shape->type(), field.value(), field.line);
             } else if (key == "transform") {
                 shape->transformation = to_transform(field.value(), field.line);
             } else throw_unknown_field_error(field);
@@ -184,10 +184,10 @@ namespace rt::dsl::eval {
         return std::unique_ptr<shapes::CylinderLike>(cylinder_like);
     }
 
-    std::unique_ptr<shapes::Group> to_group(const Object* obj, std::unique_ptr<shapes::Group> group) {
+    std::unique_ptr<shapes::Group> to_group(World& world, const Object* obj, std::unique_ptr<shapes::Group> group) {
         for (const auto& field: obj->fields) {
             if (field.key() == "children") {
-                auto children = to_shapes(field.value(), field.line);
+                auto children = to_shapes(world, field.value(), field.line);
                 for (auto& child: children) {
                     group->add_child(std::move(child));
                 }
@@ -212,8 +212,8 @@ namespace rt::dsl::eval {
         return nullptr;
     }
 
-    obj::Obj to_obj(const Object* object, int line) {
-        std::unordered_map<std::string, std::unique_ptr<Material>> group_mats;
+    obj::Obj to_obj(World& world, const Object* object, int line) {
+        obj::GroupMats group_mats;
 
         for (const auto& field: object->fields) {
             if (field.key() == "materials") {
@@ -222,36 +222,42 @@ namespace rt::dsl::eval {
                 for (const auto& elem: arr->elems) {
                     auto kv = to_array(*elem, 2, field.line);
                     auto group_name = to_str(*kv->elems[0], field.line)->value;
-                    auto mat = to_material(shapes::Type::group, *kv->elems[1], field.line);
-                    group_mats.insert(std::make_pair<std::string, std::unique_ptr<Material>>(
+                    auto mat = to_material(world, shapes::Type::group, *kv->elems[1], field.line);
+                    group_mats.insert(std::make_pair<std::string, Material*>(
                             std::move(group_name), std::move(mat)));
                 }
             }
         }
+
+        obj::Parser parser{group_mats};
 
         for (const auto& field: object->fields) {
             if (field.key() == "path") {
                 auto path = to_str(field.value(), field.line)->value;
                 std::ifstream in{path};
                 if (!in) throw errors::invalid_path(path, field.line);
-                return std::move(obj::Parser::parse(in).set_materials(group_mats));
+                return std::move(parser.parse(in));
             } else if (field.key() == "source") {
                 auto source = to_str(field.value(), field.line);
                 std::stringstream in{source->value};
-                return std::move(obj::Parser::parse(in).set_materials(group_mats));
+                return std::move(parser.parse(in));
             }
         }
         throw errors::obj_not_found(line);
     }
 
-    std::unique_ptr<Material> to_material(shapes::Type shape_type, const Expr& expr, int line) {
+    Material* to_material(World& world, shapes::Type shape_type, const Expr& expr, int line) {
         IGNORE_ERRORS(
                 auto mat_str = to_str(expr, line);
-                if (*mat_str == "glass") return std::unique_ptr<Material>{new Material{materials::glass()}};
+                if (*mat_str == "glass") {
+                    auto material = new Material{materials::glass()};
+                    world.materials.push_back(std::unique_ptr<Material>(material));
+                    return material;
+                };
         )
 
         auto obj = to_object(expr, line);
-        auto material = std::make_unique<Material>();
+        auto material = new Material;
 
         for (auto& field: obj->fields) {
             SKIP_DOC_FIELDS;
@@ -269,6 +275,8 @@ namespace rt::dsl::eval {
             else if (key == "refractive_index") material->refractive_index = to_real(value, field.line);
             else throw_unknown_field_error(field);
         }
+
+        world.materials.push_back(std::unique_ptr<Material>(material));
 
         return material;
     }

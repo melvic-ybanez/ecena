@@ -20,6 +20,8 @@ namespace rt::obj {
         current_group_ = groups[default_group_name_].get();
     }
 
+    Parser::Parser(GroupMats group_mats) : group_mats{std::move(group_mats)} {}
+
     Obj Parser::parse(std::istream& is) {
         return Parser::parse_verbose(is).first;
     }
@@ -33,25 +35,24 @@ namespace rt::obj {
     }
 
     std::pair<Obj, int> Parser::parse_verbose(std::istream& is) {
-        Parser parser;
         std::string line;
         int ignored_lines_count = 0;
 
         while (std::getline(is, line)) {
             if (auto vertex = Parser::parse_vertex(line); vertex.has_value()) {
-                parser.obj.vertices.push_back(vertex.value());
-            } else if (auto face = parser.parse_face(line); !face.empty()) {
+                obj.vertices.push_back(vertex.value());
+            } else if (auto face = parse_face(line); !face.empty()) {
                 for (auto& child: face) {
-                    if (parser.obj.current_group() == &parser.obj.default_group()) {
-                        parser.obj.default_group().add_child(std::move(child));
+                    if (obj.current_group() == &obj.default_group()) {
+                        obj.default_group().add_child(std::move(child));
                     } else {
-                        parser.obj.current_group()->add_child(std::move(child));
+                        obj.current_group()->add_child(std::move(child));
                     }
                 }
-            } else if (!parser.parse_group(line)) ignored_lines_count++;
+            } else if (!parse_group(line)) ignored_lines_count++;
         }
 
-        return {std::move(parser.obj), ignored_lines_count};
+        return {std::move(obj), ignored_lines_count};
     }
 
     std::optional<Point> Parser::parse_vertex(const std::string& line) {
@@ -87,9 +88,20 @@ namespace rt::obj {
             } else return {};
         }
 
+        auto find_mat = [&]() -> Material* {
+            Material* tri_mat;
+            for (auto& [key, group]: obj.groups) {
+                if (group_mats.find(key) != group_mats.end()) {
+                    group->material = group_mats.at(key);
+                    tri_mat = group->material;
+                }
+            }
+            return tri_mat;
+        };
+
         // perform fan triangulation
         for (int i = 1; i < vertices.size() - 1; i++) {
-            auto tri = std::make_unique<shapes::Triangle>(vertices[0], vertices[i], vertices[i + 1]);
+            auto tri = std::make_unique<shapes::Triangle>(vertices[0], vertices[i], vertices[i + 1], find_mat());
             triangles.push_back(std::move(tri));
         }
 
@@ -127,18 +139,6 @@ namespace rt::obj {
             group->add_child(std::move(value));
         }
         return group;
-    }
-
-    Obj& Obj::set_materials(std::unordered_map<std::string, std::unique_ptr<Material>>& group_mats) {
-        for (auto& [key, group]: groups) {
-            if (group_mats.find(key) != group_mats.end()) {
-                group->material = std::move(group_mats.at(key));
-                for (auto &child: group->children) {
-                    child->material->reset(*group->material);
-                }
-            }
-        }
-        return *this;
     }
 
     std::optional<real> scan_real(const std::string& str) {

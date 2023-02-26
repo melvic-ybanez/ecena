@@ -52,12 +52,12 @@ namespace rt::tests::shapes_ {
             });
             scenario("Update", [] {
                 TestShape shape;
-                auto old_mat = std::move(shape.material);
+                auto old_mat = shape.material;
                 auto mat = std::make_unique<Material>();
                 auto mat1 = std::make_unique<Material>();
                 mat->ambient = 1;
                 mat1->ambient = 1;
-                shape.material = std::move(mat);
+                shape.material = mat.get();
                 ASSERT_EQ(*mat1, *shape.material);
                 ASSERT_NEQ(*shape.material, *old_mat);
             });

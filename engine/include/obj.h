@@ -10,6 +10,8 @@
 #include "shapes.h"
 
 namespace rt::obj {
+    using GroupMats = std::unordered_map<std::string, Material*>;
+
     class Obj {
     public:
         Obj();
@@ -31,8 +33,6 @@ namespace rt::obj {
 
         constexpr static auto default_group_name_ = "default";
 
-        Obj& set_materials(std::unordered_map<std::string, std::unique_ptr<Material>>& group_mats);
-
     private:
         friend class Parser;
 
@@ -44,15 +44,17 @@ namespace rt::obj {
 
     class Parser {
     public:
+        Parser(GroupMats group_mats = {});
+
         static std::optional<Point> parse_vertex(const std::string& line);
 
-        static Obj parse(std::istream& is);
+        Obj parse(std::istream& is);
 
         /**
          * Like `parse`, but also returns the number of ignored lines,
          * mainly for debugging or testing purposes.
          */
-        static std::pair<Obj, int> parse_verbose(std::istream& is);
+        std::pair<Obj, int> parse_verbose(std::istream& is);
 
         std::vector<std::unique_ptr<shapes::Triangle>> parse_face(const std::string& line);
 
@@ -60,6 +62,7 @@ namespace rt::obj {
 
     private:
         Obj obj;
+        GroupMats group_mats;
     };
 }
 

@@ -20,8 +20,8 @@ namespace rt::shapes {
         return Type::shape;
     }
 
-    Shape::Shape() : transformation{math::matrix::identity<4, 4>()}, material(std::make_unique<Material>()),
-                     parent{nullptr} {}
+    Shape::Shape(Material* material) : transformation{math::matrix::identity<4, 4>()}, material{material},
+                                             parent{nullptr} {}
 
     Aggregate Shape::intersect(const Ray& ray) {
         auto local_ray = ray.transform(transformation.inverse());
@@ -457,7 +457,9 @@ namespace rt::shapes {
         return children.size();
     }
 
-    Triangle::Triangle(Point p1, Point p2, Point p3) : p1{std::move(p1)}, p2{std::move(p2)}, p3{std::move(p3)} {
+    Triangle::Triangle(Point p1, Point p2, Point p3, Material* material)
+            : Shape(material), p1{std::move(p1)},
+              p2{std::move(p2)}, p3{std::move(p3)} {
         e1 = this->p2 - this->p1;
         e2 = this->p3 - this->p1;
         normal = e2.cross(e1).normalize();

@@ -23,11 +23,11 @@ namespace rt::shapes {
     public:
         Matrix<4, 4> transformation;
 
-        std::unique_ptr<Material> material;
+        Material* material;
 
         Shape* parent;
 
-        Shape();
+        Shape(Material* material = new Material);
 
         virtual ~Shape() = default;
 
@@ -244,7 +244,7 @@ namespace rt::shapes {
         // Precomputed normal
         Vec normal;
 
-        Triangle(Point p1, Point p2, Point p3);
+        Triangle(Point p1, Point p2, Point p3, Material* material = new Material);
 
         Aggregate local_intersect(const Ray& ray) override;
 

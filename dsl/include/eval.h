@@ -11,11 +11,11 @@
 namespace rt::dsl::eval {
     Data to_data(const Object& object);
 
-    std::unique_ptr<Shape> to_shape(const Expr& expr, int line);
+    std::unique_ptr<Shape> to_shape(World& world, const Expr& expr, int line);
 
-    std::vector<std::unique_ptr<Shape>> to_shapes(const Expr& expr, int line);
+    std::vector<std::unique_ptr<Shape>> to_shapes(World& world, const Expr& expr, int line);
 
-    std::unique_ptr<Material> to_material(shapes::Type shape_type, const Expr& expr, int line);
+    Material* to_material(World& world, shapes::Type shape_type, const Expr& expr, int line);
 
     PointLight to_point_light(const Expr& expr, int line);
 

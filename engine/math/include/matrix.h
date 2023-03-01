@@ -37,7 +37,7 @@ namespace rt::math::matrix {
         const Table<R, C>& elems() const;
 
         /**
-         * Multiply this matrix by another matrix, provided that the former's number of columns
+         * Multiplies this matrix by another matrix, provided that the former's number of columns
          * is the same as the latter's number of rows.
          */
         template<size_t C0>

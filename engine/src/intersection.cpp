@@ -69,6 +69,6 @@ namespace rt::intersections {
     }
 
     void Aggregate::add(Intersection* intersection) {
-        elems.push_back(intersection);
+        elems.emplace_back(intersection);
     }
 }

@@ -314,7 +314,7 @@ namespace rt::shapes {
 
     void Group::add_child(std::unique_ptr<Shape> shape) {
         shape->parent = this;
-        children.push_back(std::move(shape));
+        children.emplace_back(std::move(shape));
     }
 
     void Group::add_children(const std::vector<Shape*>& shapes) {
@@ -425,11 +425,11 @@ namespace rt::shapes {
             auto child_bounds = child->parent_space_bounds();
 
             if (left_bounds.contains(child_bounds)) {
-                left.push_back(std::move(child));
+                left.emplace_back(std::move(child));
             } else if (right_bounds.contains(child_bounds)) {
-                right.push_back(std::move(child));
+                right.emplace_back(std::move(child));
             } else {
-                remaining.push_back(std::move(child));
+                remaining.emplace_back(std::move(child));
             }
         }
 

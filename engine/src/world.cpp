@@ -62,7 +62,7 @@ namespace rt {
     }
 
     World& World::add_object(std::unique_ptr<Shape>& shape) {
-        objects.push_back(std::move(shape));
+        objects.emplace_back(std::move(shape));
         return *this;
     }
 

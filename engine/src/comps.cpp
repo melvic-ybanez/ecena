@@ -52,7 +52,7 @@ namespace rt::comps {
                 containers.erase(std::remove(containers.begin(), containers.end(), i->object), containers.end());
             } else {
                 // the intersection is entering the object
-                containers.push_back(i->object);
+                containers.emplace_back(i->object);
             }
 
             if (i == &hit) {

@@ -17,8 +17,8 @@ namespace rt::tests {
         auto s2 = std::make_unique<shapes::Sphere>();
         s2->transformation = matrix::scaling(0.5, 0.5, 0.5);
 
-        world.objects.push_back(std::move(s1));
-        world.objects.push_back(std::move(s2));
+        world.objects.emplace_back(std::move(s1));
+        world.objects.emplace_back(std::move(s2));
 
         return world;
     }

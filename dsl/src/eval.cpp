@@ -122,7 +122,7 @@ namespace rt::dsl::eval {
 
         for (const auto& elem: arr->elems) {
             if (auto shape = to_shape(world, *elem, line); shape != nullptr) {
-                shapes.push_back(std::move(shape));
+                shapes.emplace_back(std::move(shape));
             }
         }
 
@@ -251,7 +251,7 @@ namespace rt::dsl::eval {
                 auto mat_str = to_str(expr, line);
                 if (*mat_str == "glass") {
                     auto material = new Material{materials::glass()};
-                    world.materials.push_back(std::unique_ptr<Material>(material));
+                    world.materials.emplace_back(std::unique_ptr<Material>(material));
                     return material;
                 };
         )
@@ -276,7 +276,7 @@ namespace rt::dsl::eval {
             else throw_unknown_field_error(field);
         }
 
-        world.materials.push_back(std::unique_ptr<Material>(material));
+        world.materials.emplace_back(std::unique_ptr<Material>(material));
 
         return material;
     }
@@ -366,22 +366,22 @@ namespace rt::dsl::eval {
             auto func = to_str(*t->elems[0], line);
             if (*func == "scale") {
                 auto values = to_num_array(*t->elems[1], 3, line);
-                transforms.push_back(matrix::scaling(values[0], values[1], values[2]));
+                transforms.emplace_back(matrix::scaling(values[0], values[1], values[2]));
             } else if (*func == "translate") {
                 auto values = to_num_array(*t->elems[1], 3, line);
-                transforms.push_back(matrix::translation(values[0], values[1], values[2]));
+                transforms.emplace_back(matrix::translation(values[0], values[1], values[2]));
             } else if (*func == "rotate_x") {
                 auto r = to_real(*t->elems[1], line);
-                transforms.push_back(matrix::rotation_x(r));
+                transforms.emplace_back(matrix::rotation_x(r));
             } else if (*func == "rotate_y") {
                 auto r = to_real(*t->elems[1], line);
-                transforms.push_back(matrix::rotation_y(r));
+                transforms.emplace_back(matrix::rotation_y(r));
             } else if (*func == "rotate_z") {
                 auto r = to_real(*t->elems[1], line);
-                transforms.push_back(matrix::rotation_z(r));
+                transforms.emplace_back(matrix::rotation_z(r));
             } else if (*func == "shear") {
                 auto values = to_num_array(*t->elems[1], 6, line);
-                transforms.push_back(
+                transforms.emplace_back(
                         matrix::shearing(values[0], values[1], values[2], values[3], values[4], values[5]));
             }
         }
@@ -444,7 +444,7 @@ namespace rt::dsl::eval {
         std::vector<T> elem_values;
 
         for (const auto& elem: arr->elems) {
-            elem_values.push_back(fn(*elem, line));
+            elem_values.emplace_back(fn(*elem, line));
         }
 
         return elem_values;

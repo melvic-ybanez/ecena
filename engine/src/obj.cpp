@@ -9,6 +9,8 @@
 #include "../../shared/include/utils.h"
 
 namespace rt::obj {
+    static std::optional<Point> parse_point(const std::string& line, const std::string& prefix);
+
     static std::optional<int> scan_int(const std::string& str);
 
     static std::optional<real> scan_real(const std::string& str);
@@ -34,6 +36,10 @@ namespace rt::obj {
         return vertices[i - 1];
     }
 
+    const Vec& Obj::normal_at(size_t i) const {
+        return normals[i - 1];
+    }
+
     const shapes::Triangle& Obj::triangle_at(size_t i, const std::string& group_name) const {
         return dynamic_cast<const shapes::Triangle&>(*group(group_name).children[i - 1]);
     }
@@ -44,7 +50,9 @@ namespace rt::obj {
 
         while (std::getline(is, line)) {
             if (auto vertex = Parser::parse_vertex(line); vertex.has_value()) {
-                obj.vertices.push_back(vertex.value());
+                obj.vertices.emplace_back(vertex.value());
+            } else if (auto normal = Parser::parse_normal(line); normal.has_value()) {
+                obj.normals.emplace_back(normal.value());
             } else if (auto face = parse_face(line); !face.empty()) {
                 for (auto& child: face) {
                     if (obj.current_group() == &obj.default_group()) {
@@ -59,19 +67,27 @@ namespace rt::obj {
         return {std::move(obj), ignored_lines_count};
     }
 
-    std::optional<Point> Parser::parse_vertex(const std::string& line) {
-        if (!starts_with(line, "v ")) return std::nullopt;
-        auto tokens = split(line.substr(2));
+    std::optional<Point> parse_point(const std::string& line, const std::string& prefix) {
+        if (!starts_with(line, prefix + " ")) return std::nullopt;
+        auto tokens = split(line.substr(prefix.size() + 1));
         if (tokens.size() != 3) return std::nullopt;
 
         std::vector<real> components;
         for (const auto& token: tokens) {
             auto comp = scan_real(token);
             if (!comp.has_value()) return std::nullopt;
-            components.push_back(comp.value());
+            components.emplace_back(comp.value());
         }
 
         return {{components[0], components[1], components[2]}};
+    }
+
+    std::optional<Point> Parser::parse_vertex(const std::string& line) {
+        return parse_point(line, "v");
+    }
+
+    std::optional<Point> Parser::parse_normal(const std::string& line) {
+        return parse_point(line, "vn");
     }
 
     std::vector<std::unique_ptr<shapes::Triangle>> Parser::parse_face(const std::string& line) {
@@ -88,7 +104,7 @@ namespace rt::obj {
 
             // note that vertices in the OBJ data are 1-indexed
             if (value > 0 && value < obj.vertices.size() + 1) {
-                vertices.push_back(obj.vertex_at(value));
+                vertices.emplace_back(obj.vertex_at(value));
             } else return {};
         }
 
@@ -96,7 +112,7 @@ namespace rt::obj {
         for (int i = 1; i < vertices.size() - 1; i++) {
             auto tri = std::make_unique<shapes::Triangle>(vertices[0], vertices[i], vertices[i + 1],
                                                           obj.current_group()->material);
-            triangles.push_back(std::move(tri));
+            triangles.emplace_back(std::move(tri));
         }
 
         return triangles;
@@ -162,9 +178,17 @@ namespace rt::obj {
         std::string input;
 
         while (std::getline(ss, input, ' ')) {
-            strs.push_back(input);
+            strs.emplace_back(input);
         }
 
         return strs;
+    }
+
+    Obj parse(std::istream& is) {
+        return Parser{}.parse(is);
+    }
+
+    std::pair<Obj, int> parse_verbose(std::istream& is) {
+        return Parser{}.parse_verbose(is);
     }
 }

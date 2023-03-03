@@ -18,6 +18,8 @@ namespace rt::obj {
 
         [[nodiscard]] const Point& vertex_at(size_t i) const;
 
+        [[nodiscard]] const Vec& normal_at(size_t t) const;
+
         [[nodiscard]] const shapes::Triangle&
         triangle_at(size_t i, const std::string& group_name = default_group_name_) const;
 
@@ -37,6 +39,7 @@ namespace rt::obj {
         friend class Parser;
 
         std::vector<Point> vertices;
+        std::vector<Vec> normals;
         mutable std::unordered_map<std::string, std::unique_ptr<shapes::NamedGroup>> groups;
 
         shapes::Group* current_group_;
@@ -45,8 +48,6 @@ namespace rt::obj {
     class Parser {
     public:
         Parser(GroupMats group_mats = {});
-
-        static std::optional<Point> parse_vertex(const std::string& line);
 
         Obj parse(std::istream& is);
 
@@ -60,10 +61,18 @@ namespace rt::obj {
 
         bool parse_group(const std::string& line);
 
+        static std::optional<Point> parse_normal(const std::string& line);
+
+        static std::optional<Point> parse_vertex(const std::string& line);
+
     private:
         Obj obj;
         GroupMats group_mats;
     };
+
+    Obj parse(std::istream& is);
+
+    std::pair<Obj, int> parse_verbose(std::istream& is);
 }
 
 #endif //ECENA_OBJ_H

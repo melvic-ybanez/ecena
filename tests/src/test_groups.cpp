@@ -155,8 +155,8 @@ namespace rt::tests::groups {
 
             shapes::Group group;
             std::vector<std::unique_ptr<Shape>> subgroup_children;
-            subgroup_children.push_back(std::unique_ptr<shapes::Sphere>(s1));
-            subgroup_children.push_back(std::unique_ptr<shapes::Sphere>(s2));
+            subgroup_children.emplace_back(std::unique_ptr<shapes::Sphere>(s1));
+            subgroup_children.emplace_back(std::unique_ptr<shapes::Sphere>(s2));
             group.make_subgroup(std::move(subgroup_children));
 
             auto subgroup = dynamic_cast<shapes::Group*>(group.children[0].get());

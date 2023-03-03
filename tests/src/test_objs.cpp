@@ -11,6 +11,8 @@ namespace rt::tests::objs {
 
     static void vertices();
 
+    static void vertex_normals();
+
     static void faces();
 
     static void groups();
@@ -21,6 +23,7 @@ namespace rt::tests::objs {
             vertices();
             faces();
             groups();
+            vertex_normals();
         });
     }
 
@@ -33,7 +36,7 @@ namespace rt::tests::objs {
                     "in a relative way,\n"
                     "and came back the previous night."
             };
-            auto [obj, ignored_lines] = obj::Parser{}.parse_verbose(obj_str);
+            auto [obj, ignored_lines] = obj::parse_verbose(obj_str);
             ASSERT_EQ(5, ignored_lines);
         });
     }
@@ -46,7 +49,7 @@ namespace rt::tests::objs {
                     "v 1 0 0\n"
                     "v 1 1 0"
             };
-            auto obj = obj::Parser{}.parse(obj_str);
+            auto obj = obj::parse(obj_str);
             ASSERT_EQ_MSG("1st", Point(-1, 1, 0), obj.vertex_at(1));
             ASSERT_EQ_MSG("2nd", Point(-1, 0.5, 0), obj.vertex_at(2));
             ASSERT_EQ_MSG("3rd", Point(1, 0, 0), obj.vertex_at(3));
@@ -65,7 +68,7 @@ namespace rt::tests::objs {
                     "f 1 2 3\n"
                     "f 1 3 4"
             };
-            auto obj = obj::Parser{}.parse(obj_str);
+            auto obj = obj::parse(obj_str);
             auto& t1 = obj.triangle_at(1);
             auto& t2 = obj.triangle_at(2);
 
@@ -84,7 +87,7 @@ namespace rt::tests::objs {
                     "\n"
                     "f 1 2 3 4 5"
             };
-            auto obj = obj::Parser{}.parse(obj_str);
+            auto obj = obj::parse(obj_str);
             auto& t1 = obj.triangle_at(1);
             auto& t2 = obj.triangle_at(2);
             auto& t3 = obj.triangle_at(3);
@@ -115,7 +118,7 @@ namespace rt::tests::objs {
 
         set("Triangles in groups", [&] {
             auto obj_str = make_stream();
-            auto obj = obj::Parser{}.parse(obj_str);
+            auto obj = obj::parse(obj_str);
             auto& t1 = obj.triangle_at(1, "FirstGroup");
             auto& t2 = obj.triangle_at(1, "SecondGroup");
 
@@ -127,12 +130,29 @@ namespace rt::tests::objs {
 
         set("Converting an OBJ file to a group", [&] {
             auto obj_str = make_stream();
-            auto obj = obj::Parser{}.parse(obj_str);
+            auto obj = obj::parse(obj_str);
             auto group = obj.to_group();
             shapes::NamedGroup first_group{"FirstGroup"};
             shapes::NamedGroup second_group{"SecondGroup"};
             ASSERT_TRUE_MSG("First group", group->contains_val(first_group));
             ASSERT_TRUE_MSG("Second group", group->contains_val(second_group));
+        });
+    }
+
+    void vertex_normals() {
+        set("Vertex normals", [] {
+            set("Vertex normal records", [] {
+                std::stringstream obj_str{
+                        "vn 0 0 1\n"
+                        "vn 0.707 0 -0.707\n"
+                        "vn 1 2 3\n"
+                };
+                auto obj = obj::parse(obj_str);
+
+                ASSERT_EQ_MSG("Normal 1", Vec(0, 0, 1), obj.normal_at(1));
+                ASSERT_EQ_MSG("Normal 2", Vec(0.707, 0, -0.707), obj.normal_at(2));
+                ASSERT_EQ_MSG("Normal 3", Vec(1, 2, 3), obj.normal_at(3));
+            });
         });
     }
 }

@@ -37,7 +37,7 @@ namespace rt::canvas {
     std::ostream& operator<<(std::ostream& out, const Canvas& canvas) {
         std::vector<std::string> row_str;
         for (const auto& row: canvas.pixels) {
-            row_str.push_back(join_to_array(row));
+            row_str.emplace_back(join_to_array(row));
         }
 
         return out << "{ pixels: " << join_to_array(row_str) << ", size: " << canvas.size << " }";

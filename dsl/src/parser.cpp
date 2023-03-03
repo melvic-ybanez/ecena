@@ -106,7 +106,7 @@ namespace rt::dsl {
     std::vector<Field> Parser::parse_fields() {
         std::vector<Field> fields;
         while (peek().type == TokenType::string) {
-            fields.push_back(parse_field());
+            fields.emplace_back(parse_field());
             if (peek().type != TokenType::right_brace)
                 consume(TokenType::comma, ",", "after a field");
         }
@@ -126,12 +126,12 @@ namespace rt::dsl {
         // now we can assume the array has some elements. Parse the first one since it's
         // a special case (not preceded by a comma)
         auto first = parse_expr();
-        elems.push_back(std::move(first));
+        elems.emplace_back(std::move(first));
 
         while (peek().type == TokenType::comma) {
             consume(TokenType::comma, ",", "after array element");
             auto elem = parse_expr();
-            elems.push_back(std::move(elem));
+            elems.emplace_back(std::move(elem));
         }
 
         consume(TokenType::right_bracket, "]", "at the end of array expression");

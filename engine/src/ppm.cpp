@@ -32,9 +32,9 @@ namespace rt {
                 auto g = math::scale(pixel.green(), max_color_);
                 auto b = math::scale(pixel.blue(), max_color_);
 
-                color_strs.push_back(std::to_string(r));
-                color_strs.push_back(std::to_string(g));
-                color_strs.push_back(std::to_string(b));
+                color_strs.emplace_back(std::to_string(r));
+                color_strs.emplace_back(std::to_string(g));
+                color_strs.emplace_back(std::to_string(b));
 
                 count++;
                 if (count == width()) color_strs.emplace_back("\n");

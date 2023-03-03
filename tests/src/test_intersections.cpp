@@ -30,6 +30,8 @@ namespace rt::tests::intersections {
 
     static void schlick();
 
+    static void with_uv();
+
     void test() {
         set("Intersections", [] {
             init();
@@ -40,6 +42,7 @@ namespace rt::tests::intersections {
             refractions();
             under_point();
             schlick();
+            with_uv();
         });
     }
 
@@ -111,7 +114,7 @@ namespace rt::tests::intersections {
                 shapes::Sphere sphere;
                 math::translate(sphere, 0, 0, 1);
                 Intersection i{5, &sphere};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
 
                 ASSERT_TRUE_MSG("Over point z", comps.over_point.z() < -math::epsilon / 2);
                 ASSERT_TRUE_MSG("Point z", comps.point.z() > comps.over_point.z());
@@ -127,7 +130,7 @@ namespace rt::tests::intersections {
                 Ray ray{{0, 0, -5},
                         {0, 0, 1}};
                 Intersection i{4, &shape};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
 
                 ASSERT_EQ_MSG("t", i.t, comps.t);
                 ASSERT_EQ_MSG("object", i.object, comps.object);
@@ -138,14 +141,14 @@ namespace rt::tests::intersections {
             scenario("The hit, when an intersection occurs on the outside", [&] {
                 Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 Intersection i{4, &shape};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
 
                 ASSERT_FALSE(comps.inside);
             });
             set("The hit, when an intersection occurs on the inside", [&] {
                 Ray ray{Point{0, 0, 0}, Vec{0, 0, 1}};
                 Intersection i{1, &shape};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
 
                 ASSERT_EQ_MSG("point", Point(0, 0, 1), comps.point);
                 ASSERT_EQ_MSG("eye vector", Vec(0, 0, -1), comps.eye_vec);
@@ -161,7 +164,7 @@ namespace rt::tests::intersections {
             Ray ray{{0, 1,                 -1},
                     {0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
             Intersection i{std::sqrt(2), &shape};
-            auto comps = comps::prepare(i, ray);
+            auto comps = comps::prepare(&i, ray);
             ASSERT_EQ(Vec(0, std::sqrt(2) / 2, std::sqrt(2) / 2), comps.reflect_vec);
         });
     }
@@ -195,7 +198,7 @@ namespace rt::tests::intersections {
                 auto index = static_cast<size_t>(data["index"][i]);
                 auto n1 = data["n1"][i];
                 auto n2 = data["n2"][i];
-                auto comps = comps::prepare(*xs[index], ray, xs);
+                auto comps = comps::prepare(xs[index], ray, xs);
                 auto index_label = "{index: " + std::to_string(index);
 
                 ASSERT_EQ_MSG(index_label + ", n1: " + std::to_string(n1) + "}", n1, comps.n1);
@@ -211,7 +214,7 @@ namespace rt::tests::intersections {
             math::translate(*shape, 0, 0, 1);
             auto i = new Intersection{5, shape.get()};
             Aggregate xs{{i}};
-            auto comps = comps::prepare(*i, ray, xs);
+            auto comps = comps::prepare(i, ray, xs);
 
             ASSERT_TRUE_MSG("Under point", comps.under_point.z() > math::epsilon / 2);
             ASSERT_TRUE_MSG("Point z-axis", comps.point.z() < comps.under_point.z());
@@ -225,7 +228,7 @@ namespace rt::tests::intersections {
                 Ray ray{Point{0, 0, std::sqrt(2) / 2}, Vec{0, 1, 0}};
                 Aggregate xs{{new Intersection{-std::sqrt(2) / 2, shape.get()},
                               new Intersection{std::sqrt(2) / 2, shape.get()}}};
-                auto comps = comps::prepare(*xs[1], ray, xs);
+                auto comps = comps::prepare(xs[1], ray, xs);
                 auto reflectance = schlick(comps);
                 ASSERT_EQ(1.0, reflectance);;
             });
@@ -233,7 +236,7 @@ namespace rt::tests::intersections {
                 auto shape = glass_sphere();
                 Ray ray{Point{0, 0, 0}, Vec{0, 1, 0}};
                 Aggregate xs{{new Intersection{-1, shape.get()}, new Intersection{1, shape.get()}}};
-                auto comps = comps::prepare(*xs[1], ray, xs);
+                auto comps = comps::prepare(xs[1], ray, xs);
 
                 auto reflectance = schlick(comps);
                 auto rounded_reflectance = std::round(reflectance * 100) / 100;
@@ -244,12 +247,21 @@ namespace rt::tests::intersections {
                 auto shape = glass_sphere();
                 Ray ray{Point{0, 0.99, -2}, Vec{0, 0, 1}};
                 Aggregate xs{{new Intersection{1.8589, shape.get()}}};
-                auto comps = comps::prepare(*xs[0], ray, xs);
+                auto comps = comps::prepare(xs[0], ray, xs);
 
                 auto reflectance = schlick(comps);
 
                 ASSERT_EQ(0.48873, std::round(reflectance * 100000) / 100000);
             });
+        });
+    }
+
+    void with_uv() {
+        set("An intersection can encapsulate `u` and `v`", [] {
+            shapes::Triangle tri{Point{0, 1, 0}, Point{-1, 0, 0}, Point{1, 0, 0}};
+            Intersection i{3.5, &tri, 0.2, 0.4};
+            ASSERT_EQ_MSG("U", 0.2, i.u);
+            ASSERT_EQ_MSG("V", 0.4, i.v);
         });
     }
 }

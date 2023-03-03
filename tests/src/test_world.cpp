@@ -65,7 +65,7 @@ namespace rt::tests::world {
                 Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 auto& shape = world.objects[0];
                 Intersection i{4, shape.get()};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
                 auto color = world.shade_hit(comps);
 
                 ASSERT_EQ(rt::Color(0.38066, 0.47583, 0.2855), color);
@@ -76,7 +76,7 @@ namespace rt::tests::world {
                 Ray ray{Point{0, 0, 0}, Vec{0, 0, 1}};
                 auto& shape = world.objects[1];
                 Intersection i{0.5, shape.get()};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
                 auto color = world.shade_hit(comps);
 
                 ASSERT_EQ(Color(0.90498, 0.90498, 0.90498), color);
@@ -94,7 +94,7 @@ namespace rt::tests::world {
 
                 Ray ray{{0, 0, 5},
                         {0, 0, 1}};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
                 auto c = world.shade_hit(comps);
 
                 ASSERT_EQ(Color(0.1, 0.1, 0.1), c);
@@ -108,7 +108,7 @@ namespace rt::tests::world {
 
                 Ray ray{Point{0, 0, -3}, Vec{0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
                 Intersection i{std::sqrt(2), shape.get()};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
 
                 world.add_object(shape);
 
@@ -130,7 +130,7 @@ namespace rt::tests::world {
 
                 Ray ray{Point{0, 0, -3}, Vec{0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
                 Aggregate xs{{new Intersection{std::sqrt(2), floor.get()}}};
-                auto comps = comps::prepare(*xs[0], ray, xs);
+                auto comps = comps::prepare(xs[0], ray, xs);
 
                 world.add_object(floor);
                 world.add_object(ball);
@@ -154,7 +154,7 @@ namespace rt::tests::world {
 
                 Ray ray{Point{0, 0, -3}, Vec{0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
                 Aggregate xs{{new Intersection{std::sqrt(2), floor.get()}}};
-                auto comps = comps::prepare(*xs[0], ray, xs);
+                auto comps = comps::prepare(xs[0], ray, xs);
 
                 world.add_object(floor);
                 world.add_object(ball);
@@ -251,7 +251,7 @@ namespace rt::tests::world {
                 shape->material->ambient = 1;
 
                 Intersection i{1, shape.get()};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
                 auto color = world.reflected_color(comps);
                 ASSERT_EQ(Color::black_, color);
             });
@@ -265,7 +265,7 @@ namespace rt::tests::world {
                 Ray ray{Point{0, 0, -3},
                         Vec{0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
                 Intersection i{std::sqrt(2), shape.get()};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
 
                 world.add_object(shape);
 
@@ -282,7 +282,7 @@ namespace rt::tests::world {
                 Ray ray{Vec{0, 0, -3},
                         Point{0, -std::sqrt(2) / 2, std::sqrt(2) / 2}};
                 Intersection i{std::sqrt(2), shape.get()};
-                auto comps = comps::prepare(i, ray);
+                auto comps = comps::prepare(&i, ray);
 
                 world.add_object(shape);
 
@@ -300,7 +300,7 @@ namespace rt::tests::world {
 
                 Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 Aggregate xs{{new Intersection{4, shape.get()}, new Intersection{6, shape.get()}}};
-                auto comps = comps::prepare(*xs[0], ray, xs);
+                auto comps = comps::prepare(xs[0], ray, xs);
 
                 auto color = world.refracted_color(comps, 5);
                 ASSERT_EQ(Color::black_, color);
@@ -313,7 +313,7 @@ namespace rt::tests::world {
 
                 Ray ray{Point{0, 0, -5}, Vec{0, 0, 1}};
                 Aggregate xs{{new Intersection{4, shape.get()}, new Intersection{6, shape.get()}}};
-                auto comps = comps::prepare(*xs[0], ray, xs);
+                auto comps = comps::prepare(xs[0], ray, xs);
 
                 auto color = world.reflected_color(comps, 0);
                 ASSERT_EQ(Color::black_, color);
@@ -328,7 +328,7 @@ namespace rt::tests::world {
                 Aggregate xs{{new Intersection{-std::sqrt(2) / 2, shape.get()},
                               new Intersection{std::sqrt(2) / 2, shape.get()}}};
 
-                auto comps = comps::prepare(*xs[1], ray, xs);
+                auto comps = comps::prepare(xs[1], ray, xs);
                 auto color = world.reflected_color(comps, 5);
                 ASSERT_EQ(Color::black_, color);
             });
@@ -346,7 +346,7 @@ namespace rt::tests::world {
                 Ray ray{Point{0, 0, 0.1}, Vec{0, 1, 0}};
                 Aggregate xs{{new Intersection{-0.9899, shape1.get()}, new Intersection{-0.4899, shape2.get()},
                               new Intersection{0.4899, shape2.get()}, new Intersection{0.9899, shape1.get()}}};
-                auto comps = comps::prepare(*xs[2], ray, xs);
+                auto comps = comps::prepare(xs[2], ray, xs);
                 auto color = world.refracted_color(comps, 5);
 
                 ASSERT_EQ(Color(0, 0.99888, 0.04725), color);

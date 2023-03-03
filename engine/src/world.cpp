@@ -41,7 +41,7 @@ namespace rt {
         auto xs = intersect(ray);
         auto hit = xs.hit();
         if (hit == nullptr) return bg_color;
-        auto comps = comps::prepare(*hit, ray, xs);
+        auto comps = comps::prepare(hit, ray, xs);
         return shade_hit(comps, remaining);
     }
 

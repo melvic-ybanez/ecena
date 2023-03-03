@@ -22,9 +22,16 @@ namespace rt::intersections {
         real t;
         Shape* object;
 
-        Intersection(real t, Shape* object);
+        // Note: u and v are only needed for triangles. See if it's worth
+        // moving these properties to a triangle-specific intersection subclass (probably not)
+        real u;
+        real v;
+
+        Intersection(real t, Shape* object, real u = 0, real v = 0);
 
         bool operator<(const Intersection& that) const;
+
+        bool operator==(const Intersection& that) const;
     };
 
     using AggregateData = std::vector<Intersection*>;

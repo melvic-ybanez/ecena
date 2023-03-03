@@ -6,6 +6,7 @@
 #include "../include/asserts.h"
 #include "../../engine/math/include/tuples.h"
 #include "../../engine/include/shapes.h"
+#include "../../engine/include/comps.h"
 
 namespace rt::tests::triangles {
     static void init();
@@ -16,12 +17,15 @@ namespace rt::tests::triangles {
 
     static void bounds();
 
+    static void smooth_triangles();
+
     void test() {
         set("Triangles", [] {
             init();
             normals();
             intersections();
             bounds();
+            smooth_triangles();
         });
     }
 
@@ -100,6 +104,41 @@ namespace rt::tests::triangles {
             shapes::Triangle triangle{p1, p2, p3};
             auto box = triangle.bounds();
             ASSERT_EQ(Bounds(Point(-3, -1, -4), Point(6, 7, 2)), box);
+        });
+    }
+
+    void smooth_triangles() {
+        shapes::SmoothTriangle tri{
+                Point{0, 1, 0}, Point{-1, 0, 0}, Point{1, 0, 0},
+                Vec{0, 1, 0}, Vec{-1, 0, 0}, Vec{1, 0, 0}
+        };
+        set("Smooth triangles", [&] {
+            set("Constructing a smooth triangle", [&] {
+                ASSERT_EQ_MSG("P1", Point(0, 1, 0), tri.p1);
+                ASSERT_EQ_MSG("P2", Point(-1, 0, 0), tri.p2);
+                ASSERT_EQ_MSG("P3", Point(1, 0, 0), tri.p3);
+                ASSERT_EQ_MSG("N1", Vec(0, 1, 0), tri.n1);
+                ASSERT_EQ_MSG("N2", Vec(-1, 0, 0), tri.n2);
+                ASSERT_EQ_MSG("N3", Vec(1, 0, 0), tri.n3);
+            });
+            set("An intersection with a smooth triangle stores u and v", [&] {
+                Ray ray{Point{-0.2, 0.3, -2}, Vec{0, 0, 1}};
+                auto xs = tri.local_intersect(ray);
+                ASSERT_EQR_MSG("U", 0.45, xs[0]->u);
+                ASSERT_EQR_MSG("V", 0.25, xs[0]->v);
+            });
+            scenario("A smooth triangle uses u and v to interpolate the normal", [&] {
+                Intersection i{1, &tri, 0.45, 0.25};
+                auto n = tri.normal_at(Point{0, 0, 0}, &i);
+                ASSERT_EQ(Vec(-0.5547, 0.83205, 0), n);
+            });
+            scenario("Preparing the normal on a smooth triangle", [&] {
+                auto i = new Intersection{1, &tri, 0.45, 0.25};
+                Ray ray{Point{-0.2, 0.3, -2}, Vec{0, 0, 1}};
+                Aggregate xs{{i}};
+                auto comps = comps::prepare(i, ray, xs);
+                ASSERT_EQ(Vec(-0.5547, 0.83205, 0), comps.normal_vec);
+            });
         });
     }
 }

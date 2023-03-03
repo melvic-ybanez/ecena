@@ -21,17 +21,25 @@ namespace rt::shapes {
     }
 
     Shape::Shape(Material* material) : transformation{math::matrix::identity<4, 4>()}, material{material},
-                                             parent{nullptr} {}
+                                       parent{nullptr} {}
 
     Aggregate Shape::intersect(const Ray& ray) {
         auto local_ray = ray.transform(transformation.inverse());
         return local_intersect(local_ray);
     }
 
-    Vec Shape::normal_at(const Point& world_point) {
+    Vec Shape::normal_at(const Point& world_point, const Intersection* hit) {
         auto local_point = world_to_object(world_point);
-        auto local_normal = local_normal_at(local_point);
+        auto local_normal = local_normal_at(local_point, hit);
         return normal_to_world(local_normal);
+    }
+
+    Vec Shape::local_normal_at(const Point& local_point, const Intersection* hit) {
+        return local_normal_at(local_point);
+    }
+
+    Vec Shape::local_normal_at(const Point& local_point) {
+        return local_normal_at(local_point, nullptr);
     }
 
     bool Shape::has_parent() const {
@@ -487,7 +495,7 @@ namespace rt::shapes {
         if (v < 0 || (u + v) > 1) return {};
 
         auto t = f * e2.dot(origin_cross_e1);
-        return {{new Intersection{t, this}}};
+        return {{new Intersection{t, this, u, v}}};
     }
 
     Type Triangle::type() const {
@@ -512,5 +520,13 @@ namespace rt::shapes {
         out << "p1: " << p1 << ", p2: " << p2 << ", p3: " << p3;
         Shape::display(out);
         return out;
+    }
+
+    SmoothTriangle::SmoothTriangle(Point p1, Point p2, Point p3, Vec n1, Vec n2, Vec n3)
+            : Triangle(std::move(p1), std::move(p2), std::move(p3)), n1{std::move(n1)}, n2{std::move(n2)},
+              n3{std::move(n3)} {}
+
+    Vec SmoothTriangle::local_normal_at(const Point& local_point, const Intersection* hit) {
+        return n2 * hit->u + n3 * hit->v + n1 * (1 - hit->u - hit->v);
     }
 }

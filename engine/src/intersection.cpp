@@ -6,7 +6,7 @@
 #include "../../engine/include/shapes.h"
 
 namespace rt::intersections {
-    Intersection::Intersection(real t, Shape* object) : t{t}, object{object} {}
+    Intersection::Intersection(real t, Shape* object, real u, real v) : t{t}, object{object}, u{u}, v{v} {}
 
     bool Intersection::operator<(const Intersection& that) const {
         return this->t < that.t;
@@ -44,6 +44,11 @@ namespace rt::intersections {
 
     std::ostream& operator<<(std::ostream& out, const Intersection& intersection) {
         return out << "{ t: " << intersection.t << ", object: " << *intersection.object << " }";
+    }
+
+    bool Intersection::operator==(const Intersection& that) const {
+        return this->t == that.t && this->object == that.object && math::compare_reals(this->u, that.u)
+               && math::compare_reals(this->v, that.v);
     }
 
     void Aggregate::combine_with(Aggregate& that) {

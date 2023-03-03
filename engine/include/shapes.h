@@ -51,7 +51,7 @@ namespace rt::shapes {
 
         Aggregate intersect(const Ray& ray);
 
-        Vec normal_at(const Point& world_point);
+        Vec normal_at(const Point& world_point, const Intersection* hit = nullptr);
 
         Point world_to_object(const Point& point) const;
 
@@ -64,7 +64,12 @@ namespace rt::shapes {
     protected:
         virtual Aggregate local_intersect(const Ray& local_ray) = 0;
 
-        virtual Vec local_normal_at(const Point& local_point) = 0;
+        // These two `local_normal_at` functions have default implementations, in which each is
+        // defined in terms of the other. This means a subclass is only required to override
+        // one of them, and the other will automatically be derived.
+        virtual Vec local_normal_at(const Point& local_point, const Intersection* hit);
+
+        virtual Vec local_normal_at(const Point& local_point);
 
     private:
         mutable std::optional<Bounds> cached_parent_space_bounds;
@@ -257,6 +262,18 @@ namespace rt::shapes {
         bool operator==(const Shape& other) const override;
 
         std::ostream& display(std::ostream& out) const override;
+    };
+
+    class SmoothTriangle : public Triangle {
+    public:
+        // normal vectors
+        Vec n1;
+        Vec n2;
+        Vec n3;
+
+        SmoothTriangle(Point p1, Point p2, Point p3, Vec n1, Vec n2, Vec n3);
+
+        Vec local_normal_at(const Point& local_point, const Intersection* hit) override;
     };
 
     std::ostream& operator<<(std::ostream& out, const Shape& shape);

@@ -8,13 +8,13 @@
 namespace rt::comps {
     static void compute_n1_and_n2(Comps& comps, const Intersection& hit, Aggregate& aggregate);
 
-    Comps prepare(const Intersection& hit, const Ray& ray, Aggregate& aggregate) {
+    Comps prepare(const Intersection* hit, const Ray& ray, Aggregate& aggregate) {
         Comps comps;
-        comps.t = hit.t;
-        comps.object = hit.object;
+        comps.t = hit->t;
+        comps.object = hit->object;
         comps.point = ray.at(comps.t);
         comps.eye_vec = -ray.direction;
-        comps.normal_vec = comps.object->normal_at(comps.point);
+        comps.normal_vec = comps.object->normal_at(comps.point, hit);
 
         if (comps.normal_vec.dot(comps.eye_vec) < 0) {
             comps.inside = true;
@@ -29,13 +29,13 @@ namespace rt::comps {
 
         comps.reflect_vec = ray.direction.reflect(comps.normal_vec);
 
-        compute_n1_and_n2(comps, hit, aggregate);
+        compute_n1_and_n2(comps, *hit, aggregate);
 
         return comps;
     }
 
-    Comps prepare(const Intersection& hit, const Ray& ray) {
-        Aggregate agg{{new Intersection(hit.t, hit.object)}};
+    Comps prepare(const Intersection* hit, const Ray& ray) {
+        Aggregate agg{{new Intersection(hit->t, hit->object)}};
         return prepare(hit, ray, agg);
     }
 

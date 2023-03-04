@@ -68,6 +68,23 @@ namespace rt::obj {
     private:
         Obj obj;
         GroupMats group_mats;
+
+        /**
+         * Parses the first variant of the face command.
+         * Format: `f <index1> <index2> <index3>`
+         * Example: `f 1 2 3`
+         */
+        std::vector<std::unique_ptr<shapes::Triangle>> parse_face1(const std::vector<std::string>& tokens);
+
+        /**
+         * Parses the second variant of the face command.
+         * Format: `f <component1> <component2> <component3>`, where each `component` is of the
+         * form `<index>/[texture]/<normal_index>`.
+         * Examples:
+         *     `f 1/2/3 2/3/4 2/4/5`
+         *     `f 1//3 2//4 3//5`
+         */
+        std::vector<std::unique_ptr<shapes::Triangle>> parse_face2(const std::vector<std::string>& tokens);
     };
 
     Obj parse(std::istream& is);

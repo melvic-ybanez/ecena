@@ -261,7 +261,7 @@ namespace rt::shapes {
 
         bool operator==(const Shape& other) const override;
 
-        std::ostream& display(std::ostream& out) const override;
+        virtual std::ostream& display(std::ostream& out) const override;
     };
 
     class SmoothTriangle : public Triangle {
@@ -273,7 +273,13 @@ namespace rt::shapes {
 
         SmoothTriangle(Point p1, Point p2, Point p3, Vec n1, Vec n2, Vec n3);
 
+        SmoothTriangle(Point p1, Point p2, Point p3);
+
         Vec local_normal_at(const Point& local_point, const Intersection* hit) override;
+
+        bool operator==(const Shape& other) const override;
+
+        std::ostream& display(std::ostream& out) const override;
     };
 
     std::ostream& operator<<(std::ostream& out, const Shape& shape);

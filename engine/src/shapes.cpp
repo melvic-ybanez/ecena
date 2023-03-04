@@ -526,7 +526,22 @@ namespace rt::shapes {
             : Triangle(std::move(p1), std::move(p2), std::move(p3)), n1{std::move(n1)}, n2{std::move(n2)},
               n3{std::move(n3)} {}
 
+    SmoothTriangle::SmoothTriangle(Point p1, Point p2, Point p3)
+            : Triangle(std::move(p1), std::move(p2), std::move(p3)), n1{normal}, n2{normal}, n3{normal} {}
+
     Vec SmoothTriangle::local_normal_at(const Point& local_point, const Intersection* hit) {
         return n2 * hit->u + n3 * hit->v + n1 * (1 - hit->u - hit->v);
+    }
+
+    bool SmoothTriangle::operator==(const Shape& other) const {
+        if (!Triangle::operator==(other)) return false;
+        auto& that = dynamic_cast<const SmoothTriangle&>(other);
+        return this->n1 == that.n1 && this->n2 == that.n2 && this->n3 == that.n3;
+    }
+
+    std::ostream& SmoothTriangle::display(std::ostream& out) const {
+        out << "n1: " << n1 << ", n2: " << n2 << ", n3: " << n3;
+        Triangle::display(out);
+        return out;
     }
 }

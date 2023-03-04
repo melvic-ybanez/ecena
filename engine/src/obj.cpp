@@ -15,7 +15,7 @@ namespace rt::obj {
 
     static std::optional<real> scan_real(const std::string& str);
 
-    static std::vector<std::string> split(const std::string& str);
+    static std::vector<std::string> split(const std::string& str, char c = ' ');
 
     Obj::Obj() {
         groups[default_group_name_] = std::make_unique<shapes::NamedGroup>(default_group_name_);
@@ -94,24 +94,84 @@ namespace rt::obj {
         if (!starts_with(line, "f ")) return {};
         auto tokens = split(line.substr(2));
 
-        std::vector<Point> vertices;
+        if (auto face = parse_face1(tokens); !face.empty()) return face;
+
+        auto face = parse_face2(tokens);
+        return face;
+    }
+
+    std::vector<std::unique_ptr<shapes::Triangle>> Parser::parse_face1(const std::vector<std::string>& tokens) {
+        std::vector<int> vertex_indices;
         std::vector<std::unique_ptr<shapes::Triangle>> triangles;
 
         for (const auto& token: tokens) {
-            auto vertex_index = scan_int(token);
-            if (!vertex_index.has_value()) return {};
-            auto value = vertex_index.value();
+            auto maybe_vertex_index = scan_int(token);
+            if (!maybe_vertex_index.has_value()) return {};
+            auto vertex_index = maybe_vertex_index.value();
 
             // note that vertices in the OBJ data are 1-indexed
-            if (value > 0 && value < obj.vertices.size() + 1) {
-                vertices.emplace_back(obj.vertex_at(value));
+            if (vertex_index > 0 && vertex_index < obj.vertices.size() + 1) {
+                vertex_indices.emplace_back(vertex_index);
             } else return {};
         }
 
         // perform fan triangulation
-        for (int i = 1; i < vertices.size() - 1; i++) {
-            auto tri = std::make_unique<shapes::Triangle>(vertices[0], vertices[i], vertices[i + 1],
-                                                          obj.current_group()->material);
+        for (int i = 1; i < vertex_indices.size() - 1; i++) {
+            auto tri = std::make_unique<shapes::Triangle>(
+                    obj.vertex_at(vertex_indices[0]),
+                    obj.vertex_at(vertex_indices[i]),
+                    obj.vertex_at(vertex_indices[i + 1]));
+            tri->material = obj.current_group()->material;
+            triangles.emplace_back(std::move(tri));
+        }
+
+        return triangles;
+    }
+
+    std::vector<std::unique_ptr<shapes::Triangle>> Parser::parse_face2(const std::vector<std::string>& tokens) {
+        std::vector<int> vertex_indices;
+        std::vector<int> normal_indices;
+        std::vector<std::unique_ptr<shapes::Triangle>> triangles;
+
+        for (const auto& token: tokens) {
+            auto parts = split(token, '/');
+
+            if (parts.size() != 3) return {};
+
+            auto maybe_vertex_index = scan_int(parts[0]);
+            if (!maybe_vertex_index.has_value()) return {};
+            auto vertex_index = maybe_vertex_index.value();
+
+            if (!parts[1].empty()) {
+                auto maybe_texture = scan_int(parts[1]);
+                if (!maybe_texture.has_value()) return {};
+            }
+
+            auto maybe_normal_vertex = scan_int(parts[2]);
+            if (!maybe_normal_vertex.has_value()) return {};
+            auto normal_index = maybe_normal_vertex.value();
+
+            // note that vertices in the OBJ data are 1-indexed
+            if (vertex_index > 0 && vertex_index <= obj.vertices.size()) {
+                vertex_indices.emplace_back(vertex_index);
+            } else return {};
+
+            // normal vertices are also 1-indexed
+            if (normal_index > 0 && normal_index <= obj.normals.size()) {
+                normal_indices.emplace_back(normal_index);
+            } else return {};
+        }
+
+        // perform fan triangulation
+        for (int i = 1; i < vertex_indices.size() - 1; i++) {
+            auto tri = std::make_unique<shapes::SmoothTriangle>(
+                    obj.vertex_at(vertex_indices[0]),
+                    obj.vertex_at(vertex_indices[i]),
+                    obj.vertex_at(vertex_indices[i + 1]),
+                    obj.normal_at(normal_indices[0]),
+                    obj.normal_at(normal_indices[i]),
+                    obj.normal_at(normal_indices[i + 1]));
+            tri->material = obj.current_group()->material;
             triangles.emplace_back(std::move(tri));
         }
 
@@ -172,12 +232,12 @@ namespace rt::obj {
         return std::nullopt;
     }
 
-    std::vector<std::string> split(const std::string& str) {
+    std::vector<std::string> split(const std::string& str, char sep) {
         std::stringstream ss{str};
         std::vector<std::string> strs;
         std::string input;
 
-        while (std::getline(ss, input, ' ')) {
+        while (std::getline(ss, input, sep)) {
             strs.emplace_back(input);
         }
 

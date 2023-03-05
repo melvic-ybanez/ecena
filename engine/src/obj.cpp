@@ -17,6 +17,8 @@ namespace rt::obj {
 
     static std::vector<std::string> split(const std::string& str, char c = ' ');
 
+    static int check_prefix(const std::string& line, const std::string& prefix);
+
     Obj::Obj() {
         groups[default_group_name_] = std::make_unique<shapes::NamedGroup>(default_group_name_);
         current_group_ = groups[default_group_name_].get();
@@ -49,6 +51,7 @@ namespace rt::obj {
         int ignored_lines_count = 0;
 
         while (std::getline(is, line)) {
+            replace_all(line, "\r", "");
             if (auto vertex = Parser::parse_vertex(line); vertex.has_value()) {
                 obj.vertices.emplace_back(vertex.value());
             } else if (auto normal = Parser::parse_normal(line); normal.has_value()) {
@@ -68,8 +71,9 @@ namespace rt::obj {
     }
 
     std::optional<Point> parse_point(const std::string& line, const std::string& prefix) {
-        if (!starts_with(line, prefix + " ")) return std::nullopt;
-        auto tokens = split(line.substr(prefix.size() + 1));
+        auto space_count = check_prefix(line, prefix);
+        if (!space_count) return std::nullopt;
+        auto tokens = split(line.substr(prefix.size() + space_count));
         if (tokens.size() != 3) return std::nullopt;
 
         std::vector<real> components;
@@ -91,8 +95,9 @@ namespace rt::obj {
     }
 
     std::vector<std::unique_ptr<shapes::Triangle>> Parser::parse_face(const std::string& line) {
-        if (!starts_with(line, "f ")) return {};
-        auto tokens = split(line.substr(2));
+        auto space_count = check_prefix(line, "f");
+        if (!space_count) return {};
+        auto tokens = split(line.substr(space_count + 1));
 
         if (auto face = parse_face1(tokens); !face.empty()) return face;
 
@@ -179,8 +184,9 @@ namespace rt::obj {
     }
 
     bool Parser::parse_group(const std::string& line) {
-        if (!starts_with(line, "g ")) return false;
-        auto name = line.substr(2);
+        auto space_count = check_prefix(line, "g");
+        if (!space_count) return false;
+        auto name = line.substr(space_count + 1);
         auto group = std::make_unique<shapes::NamedGroup>(name);
 
         if (group_mats.find(name) != group_mats.end()) {
@@ -250,5 +256,17 @@ namespace rt::obj {
 
     std::pair<Obj, int> parse_verbose(std::istream& is) {
         return Parser{}.parse_verbose(is);
+    }
+
+    int check_prefix(const std::string& line, const std::string& prefix) {
+        if (!starts_with(line, prefix)) return 0;
+        int space_count = 0;
+        auto rest = line.substr(prefix.size());
+
+        while (rest[0] == ' ') {
+            space_count++;
+            rest = rest.substr(1);
+        }
+        return space_count;
     }
 }
